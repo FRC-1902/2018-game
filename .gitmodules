@@ -1,0 +1,3 @@
+[submodule "BCNLib"]
+	path = BCNLib
+	url = https://github.com/FRC-1902/BCNLib.git
