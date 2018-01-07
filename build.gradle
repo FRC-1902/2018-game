@@ -49,15 +49,16 @@ jar {
     println 'JAR located at ' + jar.archivePath
 }
 
-task deploy(dependsOn: 'jar') << {
+task deploy(dependsOn: 'jar') {
     description = "Deploy the user program to the roboRIO"
-    println 'Team is ' + team
+    doLast {
+        println 'Team is ' + team
 
-    ssh.run {
-        session(remotes.roboRIO) {
-            put jar.archivePath, '/home/lvuser'
-            put '/rioFiles/robotCommand', '/home/lvuser'
-            execute '. /etc/profile.d/natinst-path.sh; /usr/local/frc/bin/frcKillRobot.sh -t -r'
+        ssh.run {
+            session(remotes.roboRIO) {
+                put jar.archivePath, '/home/lvuser'
+                execute '. /etc/profile.d/natinst-path.sh; /usr/local/frc/bin/frcKillRobot.sh -t -r'
+            }
         }
     }
 }
