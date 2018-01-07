@@ -25,9 +25,9 @@ public class TestRobot extends RobotCore {
 
         i = System.currentTimeMillis();
 
-        one.setPower((i / 1000) % 2 == 0 ? 0 : 1);
+        one.setPower((i / 900) % 2 == 0 ? 0 : 1);
         two.setPower(Math.sin(i / 500d));
-        three.setPower((i / 1000) % 2 == 0 ? -0.3 : 0.3);
+        three.setPower((i / 1000) % 2 == 0 ? 0.5 : 1);
         pwm.setPower(1);
     }
 }
