@@ -6,6 +6,7 @@ import com.explodingbacon.bcnlib.actuators.MotorGroup;
 import com.explodingbacon.bcnlib.controllers.LogitechController;
 import com.explodingbacon.bcnlib.framework.RobotCore;
 import com.explodingbacon.bcnlib.utils.Utils;
+import com.explodingbacon.powerup.core.command.DriveCommand;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Talon;
@@ -39,24 +40,24 @@ public class Robot extends RobotCore {
     @Override
     public void teleopInit() {
         super.teleopInit();
-        oi.
+        OI.runCommand(new DriveCommand());
     }
 
     @Override
     public void teleopPeriodic() {
 
-        if (c.leftTrigger.get()) {
+        if (OI.driver.leftTrigger.get()) {
             arm.setPower(.7);
-        } else if (c.rightTrigger.get()) {
+        } else if (OI.driver.rightTrigger.get()) {
             arm.setPower(-.7);
         } else {
             arm.setPower(0);
         }
 
-        if (c.rightBumper.get()) {
+        if (OI.driver.rightBumper.get()) {
             intakeTop.setPower(-1);
             intakeBottom.setPower(1);
-        } else if (c.leftBumper.get()) {
+        } else if (OI.driver.leftBumper.get()) {
             intakeTop.setPower(1);
             intakeBottom.setPower(-1);
         } else {
@@ -69,14 +70,14 @@ public class Robot extends RobotCore {
     public void testInit() {
         super.testInit();
         try {
-             for (Motor m : left.getMotors()) {
+             for (Motor m : drive.leftDrive.getMotors()) {
                  System.out.println("Left");
                  m.setPower(0.5);
                  Thread.sleep(500);
                  m.setPower(0);
                  Thread.sleep(250);
              }
-            for (Motor m : right.getMotors()) {
+            for (Motor m : drive.rightDrive.getMotors()) {
                  System.out.println("Right");
                 m.setPower(0.5);
                 Thread.sleep(500);

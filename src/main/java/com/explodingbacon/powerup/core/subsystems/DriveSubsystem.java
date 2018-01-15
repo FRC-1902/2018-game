@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DriveSubsystem extends Subsystem {
 
-    private MotorGroup leftDrive, rightDrive;
+    public MotorGroup leftDrive, rightDrive;
 
     public DriveSubsystem() {
         rightDrive = new MotorGroup(new Motor(WPI_TalonSRX.class, TestMap.RIGHT_FRONT), new Motor(WPI_TalonSRX.class, TestMap.RIGHT_BACK));
