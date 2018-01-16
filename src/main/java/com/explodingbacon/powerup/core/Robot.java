@@ -3,14 +3,14 @@ package com.explodingbacon.powerup.core;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.actuators.MotorGroup;
-import com.explodingbacon.bcnlib.controllers.LogitechController;
 import com.explodingbacon.bcnlib.framework.RobotCore;
-import com.explodingbacon.bcnlib.utils.Utils;
 import com.explodingbacon.powerup.core.command.DriveCommand;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.VictorSP;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Robot extends RobotCore {
 
@@ -30,11 +30,12 @@ public class Robot extends RobotCore {
         oi = new OI();
         drive = new DriveSubsystem();
 
-        arm = new MotorGroup(new Motor(WPI_TalonSRX.class, TestMap.ARM_1), new Motor(VictorSP.class, TestMap.ARM_2));
-        arm.setReversed(true);
+        //arm = new MotorGroup(new Motor(VictorSP.class, 2));
+        arm = new MotorGroup(new Motor(VictorSP.class, Map.ARM_A), new Motor(WPI_TalonSRX.class, Map.ARM_B));
 
-        intakeTop = new MotorGroup(new Motor(VictorSP.class, TestMap.INTAKE_TOP));
-        intakeBottom = new MotorGroup(new Motor(VictorSP.class, TestMap.INTAKE_BOTTOM));
+        intakeTop = new MotorGroup(new Motor(VictorSP.class, Map.INTAKE_TOP));
+        intakeBottom = new MotorGroup(new Motor(VictorSP.class, Map.INTAKE_BOTTOM));
+
     }
 
     @Override
@@ -47,17 +48,17 @@ public class Robot extends RobotCore {
     public void teleopPeriodic() {
 
         if (OI.driver.leftTrigger.get()) {
-            arm.setPower(.7);
+            arm.setPower(.7); //.7
         } else if (OI.driver.rightTrigger.get()) {
             arm.setPower(-.7);
         } else {
             arm.setPower(0);
         }
 
-        if (OI.driver.rightBumper.get()) {
+        if (OI.driver.leftBumper.get()) {
             intakeTop.setPower(-1);
             intakeBottom.setPower(1);
-        } else if (OI.driver.leftBumper.get()) {
+        } else if (OI.driver.rightBumper.get()) {
             intakeTop.setPower(1);
             intakeBottom.setPower(-1);
         } else {
@@ -70,6 +71,26 @@ public class Robot extends RobotCore {
     public void testInit() {
         super.testInit();
         try {
+            List<Motor> motors = new ArrayList<>();
+            for (int i=0; i<9; i++) {
+                System.out.println("about to move: " + i);
+                Thread.sleep(3000);
+                Motor m = new Motor(VictorSP.class, i);
+                motors.add(m);
+                m.setPower(0.4);
+                Thread.sleep(500);
+                m.setPower(0);
+            }
+            for (int i=0; i<5; i++) {
+                System.out.println("about to move: " + i);
+                Thread.sleep(3000);
+                Motor m = new Motor(WPI_TalonSRX.class, i);
+                motors.add(m);
+                m.setPower(0.4);
+                Thread.sleep(500);
+                m.setPower(0);
+            }
+            /*
              for (Motor m : drive.leftDrive.getMotors()) {
                  System.out.println("Left");
                  m.setPower(0.5);
@@ -84,6 +105,7 @@ public class Robot extends RobotCore {
                 m.setPower(0);
                 Thread.sleep(250);
             }
+            */
         } catch (Exception e) {
             e.printStackTrace();
         }

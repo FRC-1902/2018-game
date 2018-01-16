@@ -7,11 +7,8 @@ import com.explodingbacon.powerup.core.Robot;
 
 public class DriveCommand extends Command {
 
-
     @Override
-    public void onInit() {
-
-    }
+    public void onInit() { }
 
     @Override
     public void onLoop() {
@@ -27,9 +24,7 @@ public class DriveCommand extends Command {
     }
 
     @Override
-    public void onStop() {
-
-    }
+    public void onStop() {}
 
     @Override
     public boolean isFinished() {
