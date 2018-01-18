@@ -32,8 +32,10 @@ public class Robot extends RobotCore {
 
         //arm = new MotorGroup(new Motor(VictorSP.class, 2));
         arm = new MotorGroup(new Motor(VictorSP.class, Map.ARM_A), new Motor(WPI_TalonSRX.class, Map.ARM_B));
+        arm.setInverts(false, false);
 
         intakeTop = new MotorGroup(new Motor(VictorSP.class, Map.INTAKE_TOP));
+        intakeTop.setReversed(true);
         intakeBottom = new MotorGroup(new Motor(VictorSP.class, Map.INTAKE_BOTTOM));
 
     }
