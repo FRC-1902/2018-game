@@ -1,6 +1,5 @@
 package com.explodingbacon.powerup.core.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.actuators.MotorGroup;
 import com.explodingbacon.bcnlib.framework.Subsystem;
@@ -14,10 +13,13 @@ public class DriveSubsystem extends Subsystem {
     public MotorGroup leftDrive, rightDrive;
 
     public DriveSubsystem() {
-        rightDrive = new MotorGroup(new Motor(VictorSP.class, Map.RIGHT_DRIVE_BACK), new Motor(VictorSP.class, Map.RIGHT_DRIVE_FRONT));
+        rightDrive = new MotorGroup(new Motor(VictorSP.class, Map.RIGHT_DRIVE_A), new Motor(VictorSP.class, Map.RIGHT_DRIVE_B),
+                new Motor(VictorSP.class, Map.RIGHT_DRIVE_C));
 
-        leftDrive = new MotorGroup(new Motor(WPI_TalonSRX.class, Map.LEFT_DRIVE_BACK), new Motor(WPI_TalonSRX.class, Map.LEFT_DRIVE_FRONT));
-        leftDrive.setReversed(true);
+        rightDrive.setReversed(true);
+
+        leftDrive = new MotorGroup(new Motor(VictorSP.class, Map.LEFT_DRIVE_A), new Motor(VictorSP.class, Map.LEFT_DRIVE_B),
+                new Motor(VictorSP.class, Map.LEFT_DRIVE_C));
     }
 
     public void tankDrive(double left, double right) {
