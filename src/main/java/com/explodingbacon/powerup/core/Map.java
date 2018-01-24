@@ -22,4 +22,12 @@ public class Map {
 
     public static final int CLIMBER_A = 11;
     public static final int CLIMBER_B = 11;
+
+
+    public static final int RIGHT_ENCODER_A = 0;
+    public static final int RIGHT_ENCODER_B = 1;
+
+    public static final int LEFT_ENCODER_A = 2;
+    public static final int LEFT_ENCODER_B = 3;
+
 }
