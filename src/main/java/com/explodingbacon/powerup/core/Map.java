@@ -30,4 +30,7 @@ public class Map {
     public static final int LEFT_ENCODER_A = 2;
     public static final int LEFT_ENCODER_B = 3;
 
+    public static final int ARM_ENCODER_A = 11;
+    public static final int ARM_ENCODER_B = 11;
+
 }

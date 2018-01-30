@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.actuators.MotorGroup;
 import com.explodingbacon.bcnlib.framework.RobotCore;
+import com.explodingbacon.powerup.core.command.ArmCommand;
 import com.explodingbacon.powerup.core.command.ClimberCommand;
 import com.explodingbacon.powerup.core.command.DriveCommand;
 import com.explodingbacon.powerup.core.command.QuNeoDrive;
@@ -11,8 +12,10 @@ import com.explodingbacon.powerup.core.networktest.Server;
 import com.explodingbacon.powerup.core.networktest.quneo.QuNeo;
 import com.explodingbacon.powerup.core.networktest.quneo.QuNeoColor;
 import com.explodingbacon.powerup.core.networktest.quneo.inputs.Pad;
+import com.explodingbacon.powerup.core.subsystems.ArmSubsystem;
 import com.explodingbacon.powerup.core.subsystems.ClimberSubsystem;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
+import com.explodingbacon.powerup.core.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.VictorSP;
 
@@ -23,6 +26,8 @@ public class Robot extends RobotCore {
 
     public static DriveSubsystem drive;
     public static ClimberSubsystem climber;
+    public static ArmSubsystem arm;
+    public static IntakeSubsystem intake;
 
     public static QuNeo quneo;
     public static Server server;
@@ -42,6 +47,8 @@ public class Robot extends RobotCore {
 
         oi = new OI();
         drive = new DriveSubsystem();
+        intake = new IntakeSubsystem();
+        arm = new ArmSubsystem();
 
         //quneo = new QuNeo();
         //server = new Server();
