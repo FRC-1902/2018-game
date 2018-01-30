@@ -33,23 +33,35 @@ public class DriveCommand extends Command {
 
         y=-y;
 
+        double nonScaledY = y;
+
         x = Math.pow(x, 2) * Utils.sign(x);
         y = Math.pow(y, 2) * Utils.sign(y);
 
-        if(Robot.drive.getRate() < 250 && System.currentTimeMillis()- noShift > 250){
-            Robot.drive.shift.set(false);
-            Robot.drive.light.set(false);
-            noShift = System.currentTimeMillis();
+        if(System.currentTimeMillis()- noShift > 250) {
+            if (x == 0 && Math.abs(nonScaledY) > .75 && Robot.drive.getRate() < 450/4) { //collision
+                    Robot.drive.shift.set(false);
+                Robot.drive.light.set(false);
+                noShift = System.currentTimeMillis();
+            } else if (Math.abs(nonScaledY) <= .4 || Utils.sign(nonScaledY) != Utils.sign(Robot.drive.getRateNotAbs())) { //driver slowing down
+                Robot.drive.shift.set(false);
+                Robot.drive.light.set(false);
+                noShift = System.currentTimeMillis();
+            } else if (OI.driver.rightTrigger.get()) { //manual shift
+                Robot.drive.shift.set(false);
+                Robot.drive.light.set(false);
+                noShift = System.currentTimeMillis();
+            }
         }
-        if (Robot.drive.getRate() > 450) {
-            if (System.currentTimeMillis()- noShift > 250) {
+        if (Robot.drive.getRate() > 450/2) { //accelerating
+            if (x == 0 && Math.abs(nonScaledY) > .75 && System.currentTimeMillis()- noShift > 250) {
                 if (!Robot.drive.shift.get()) stopStart = System.currentTimeMillis();
                 Robot.drive.shift.set(true);
                 Robot.drive.light.set(true);
                 noShift = System.currentTimeMillis();
             }
         }
-        if (stopStart != 0 && System.currentTimeMillis() - stopStart <= 100) {
+        if (stopStart != 0 && System.currentTimeMillis() - stopStart <= 200) {
             if (Math.abs(y) > 0.2) {
                 y = 0.2 * Utils.sign(y);
             }

@@ -65,6 +65,10 @@ public class DriveSubsystem extends Subsystem {
         return (Math.abs(rightDriveEncoder.getRate() + leftDriveEncoder.getRate()))/2;
     }
 
+    public double getRateNotAbs() {
+        return (rightDriveEncoder.getRate() + leftDriveEncoder.getRate())/2;
+    }
+
     public void tankDrive(double left, double right) {
         leftDrive.setPower(left);
         rightDrive.setPower(right);

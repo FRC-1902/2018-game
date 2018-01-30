@@ -6,6 +6,11 @@ import com.explodingbacon.bcnlib.actuators.MotorGroup;
 import com.explodingbacon.bcnlib.framework.RobotCore;
 import com.explodingbacon.powerup.core.command.ClimberCommand;
 import com.explodingbacon.powerup.core.command.DriveCommand;
+import com.explodingbacon.powerup.core.command.QuNeoDrive;
+import com.explodingbacon.powerup.core.networktest.Server;
+import com.explodingbacon.powerup.core.networktest.quneo.QuNeo;
+import com.explodingbacon.powerup.core.networktest.quneo.QuNeoColor;
+import com.explodingbacon.powerup.core.networktest.quneo.inputs.Pad;
 import com.explodingbacon.powerup.core.subsystems.ClimberSubsystem;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -18,7 +23,12 @@ public class Robot extends RobotCore {
 
     public static DriveSubsystem drive;
     public static ClimberSubsystem climber;
+
+    public static QuNeo quneo;
+    public static Server server;
     private OI oi;
+
+    public static Pad forward, back, left, right;
 
     public Robot(IterativeRobot r) {
         super(r);
@@ -32,6 +42,9 @@ public class Robot extends RobotCore {
 
         oi = new OI();
         drive = new DriveSubsystem();
+
+        //quneo = new QuNeo();
+        //server = new Server();
         //climber = new ClimberSubsystem();
 
         //arm = new MotorGroup(new Motor(VictorSP.class, 2));
@@ -47,6 +60,7 @@ public class Robot extends RobotCore {
     @Override
     public void teleopInit() {
         super.teleopInit();
+        //OI.runCommand(new QuNeoDrive());
         OI.runCommand(new DriveCommand());
         //OI.runCommand(new ClimberCommand());
     }
