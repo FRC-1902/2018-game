@@ -4,10 +4,15 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.actuators.MotorGroup;
 import com.explodingbacon.bcnlib.framework.RobotCore;
+import com.explodingbacon.bcnlib.utils.Utils;
+import com.explodingbacon.powerup.core.command.ArmCommand;
 import com.explodingbacon.powerup.core.command.ClimberCommand;
 import com.explodingbacon.powerup.core.command.DriveCommand;
+import com.explodingbacon.powerup.core.command.IntakeCommand;
+import com.explodingbacon.powerup.core.subsystems.ArmSubsystem;
 import com.explodingbacon.powerup.core.subsystems.ClimberSubsystem;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
+import com.explodingbacon.powerup.core.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.VictorSP;
 
@@ -18,13 +23,15 @@ public class Robot extends RobotCore {
 
     public static DriveSubsystem drive;
     public static ClimberSubsystem climber;
+    public static ArmSubsystem arm;
+    public static IntakeSubsystem intake;
     private OI oi;
 
     public Robot(IterativeRobot r) {
         super(r);
     }
 
-    MotorGroup arm, intakeTop, intakeBottom;
+    MotorGroup intakeTop, intakeBottom;
 
     @Override
     public void robotInit() {
@@ -32,6 +39,8 @@ public class Robot extends RobotCore {
 
         oi = new OI();
         drive = new DriveSubsystem();
+        arm = new ArmSubsystem();
+        intake = new IntakeSubsystem();
         //climber = new ClimberSubsystem();
 
         //arm = new MotorGroup(new Motor(VictorSP.class, 2));
@@ -48,7 +57,9 @@ public class Robot extends RobotCore {
     public void teleopInit() {
         super.teleopInit();
         OI.runCommand(new DriveCommand());
-        //OI.runCommand(new ClimberCommand());
+        OI.runCommand(new ClimberCommand());
+        OI.runCommand(new IntakeCommand());
+        OI.runCommand(new ArmCommand());
     }
 
     @Override
@@ -77,29 +88,20 @@ public class Robot extends RobotCore {
     @Override
     public void testInit() {
         super.testInit();
-        try {
-            List<Motor> motors = new ArrayList<>();
-            for (int i=0; i<9; i++) {
-                System.out.println("about to move: " + i);
-                Thread.sleep(3000);
-                Motor m = new Motor(VictorSP.class, i);
-                motors.add(m);
-                m.setPower(0.4);
+        int mid = 0;
+        for (Motor m : drive.rightDrive.getMotors()) {
+            try {
+                System.out.println(mid + " upcoming");
+                drive.rightDriveEncoder.reset();
+                Thread.sleep(2000);
+                m.setPower(1);
                 Thread.sleep(500);
                 m.setPower(0);
+                System.out.println(mid + ": " + drive.rightDriveEncoder.get());
+                mid++;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            /*
-            for (int i=0; i<5; i++) {
-                System.out.println("about to move: " + i);
-                Thread.sleep(3000);
-                Motor m = new Motor(WPI_TalonSRX.class, i);
-                motors.add(m);
-                m.setPower(0.4);
-                Thread.sleep(500);
-                m.setPower(0);
-            }*/
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

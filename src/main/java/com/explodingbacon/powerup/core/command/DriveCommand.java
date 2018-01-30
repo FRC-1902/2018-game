@@ -36,13 +36,14 @@ public class DriveCommand extends Command {
         x = Math.pow(x, 2) * Utils.sign(x);
         y = Math.pow(y, 2) * Utils.sign(y);
 
-        if(Robot.drive.getRate() < 250 && System.currentTimeMillis()- noShift > 250){
+        /*
+        if((Robot.drive.getRate() < 250 && System.currentTimeMillis()- noShift > 250) || (y==0 && x==0) || (OI.driver.rightTrigger.get())){
             Robot.drive.shift.set(false);
             Robot.drive.light.set(false);
             noShift = System.currentTimeMillis();
         }
-        if (Robot.drive.getRate() > 450) {
-            if (System.currentTimeMillis()- noShift > 250) {
+        if (Robot.drive.getRate() > 450 ) {
+            if (System.currentTimeMillis()- noShift > 250 && !OI.driver.rightTrigger.get()) {
                 if (!Robot.drive.shift.get()) stopStart = System.currentTimeMillis();
                 Robot.drive.shift.set(true);
                 Robot.drive.light.set(true);
@@ -58,6 +59,12 @@ public class DriveCommand extends Command {
             }
         } else {
             stopStart = 0;
+        }*/
+
+        if (OI.driver.rightTrigger.get()) {
+            Robot.drive.shift.set(false);
+        } else {
+            Robot.drive.shift.set(true);
         }
 
         /*

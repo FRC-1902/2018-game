@@ -16,23 +16,19 @@ public class ClimberSubsystem extends Subsystem {
     public Motor climbMotorA = new Motor(VictorSP.class, Map.CLIMBER_A);
     public Motor climbMotorB = new Motor(VictorSP.class, Map.CLIMBER_B);
 
-    public void climberOut(boolean a) {
-        while (a) {
+    public void climb(boolean a, boolean b) {
+        if (a) {
             climbMotorA.setPower(1.0);
             climbMotorB.setPower(-1.0);
-        }
-    }
-
-    public void climberIn(boolean b) {
-        while (b) {
+        } else if (b){
             climbMotorA.setPower(-1.0);
             climbMotorB.setPower(1.0);
+        } else {
+            climbMotorA.setPower(0);
+            climbMotorB.setPower(0);
         }
     }
 
-    public void climb(boolean boo) {
-
-    }
 
     @Override
     public void enabledInit() {
