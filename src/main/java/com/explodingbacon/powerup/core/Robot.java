@@ -79,7 +79,7 @@ public class Robot extends RobotCore {
 
     @Override
     public void teleopPeriodic() {
-
+        System.out.println("pot: " + intake.test.get());
         /*if (OI.driver.leftTrigger.get()) {
             arm.setPower(.7); //.7
         } else if (OI.driver.rightTrigger.get()) {
