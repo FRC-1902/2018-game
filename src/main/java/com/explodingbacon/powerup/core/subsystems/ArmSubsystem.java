@@ -16,8 +16,15 @@ import java.util.List;
 public class ArmSubsystem extends Subsystem {
 
     MotorGroup arm;
+
     Encoder armEncoder;
     PIDController armPID;
+
+    final int FLOOR_FRONT = 0, SWITCH_FRONT = 0, SWITCH_BACK = 0, FLOOR_BACK = 0;
+
+    int target = FLOOR_FRONT;
+    public boolean front = true;
+    public boolean floor = true;
 
     int positionOne;
     int positionTwo;
@@ -36,7 +43,43 @@ public class ArmSubsystem extends Subsystem {
         positionThree = 0;
         positionFour = 0;
 
-        armPID.setTarget(0);
+        armPID.setTarget(target);
+    }
+
+    public void setState(boolean front, boolean floor) {
+        this.front = front;
+        this.floor = floor;
+
+        int pos;
+        if (this.front) {
+            if (this.floor) {
+                pos = FLOOR_FRONT;
+            } else {
+                pos = SWITCH_FRONT;
+            }
+        } else {
+            if (this.floor) {
+                pos = FLOOR_BACK;
+            } else {
+                pos = SWITCH_BACK;
+            }
+        }
+        if (target != pos) {
+            target = pos;
+            armPID.setTarget(target);
+        }
+    }
+
+    public void setFloor(boolean floor) {
+        setState(front, floor);
+    }
+
+    public void setSide(boolean front) {
+        setState(front, floor);
+    }
+
+    public void flipSide() {
+        setSide(!front);
     }
 
 

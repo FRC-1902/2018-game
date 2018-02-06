@@ -1,13 +1,11 @@
 package com.explodingbacon.powerup.core;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.actuators.MotorGroup;
 import com.explodingbacon.bcnlib.framework.RobotCore;
-import com.explodingbacon.powerup.core.command.ArmCommand;
-import com.explodingbacon.powerup.core.command.ClimberCommand;
-import com.explodingbacon.powerup.core.command.DriveCommand;
-import com.explodingbacon.powerup.core.command.QuNeoDrive;
+import com.explodingbacon.powerup.core.command.*;
 import com.explodingbacon.powerup.core.networktest.Server;
 import com.explodingbacon.powerup.core.networktest.quneo.QuNeo;
 import com.explodingbacon.powerup.core.networktest.quneo.QuNeoColor;
@@ -16,6 +14,7 @@ import com.explodingbacon.powerup.core.subsystems.ArmSubsystem;
 import com.explodingbacon.powerup.core.subsystems.ClimberSubsystem;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
 import com.explodingbacon.powerup.core.subsystems.IntakeSubsystem;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.VictorSP;
 
@@ -33,22 +32,27 @@ public class Robot extends RobotCore {
     public static Server server;
     private OI oi;
 
+    Compressor compressor;
+
     public static Pad forward, back, left, right;
 
     public Robot(IterativeRobot r) {
         super(r);
     }
 
-    MotorGroup arm, intakeTop, intakeBottom;
 
     @Override
     public void robotInit() {
         super.robotInit();
 
+        compressor = new Compressor();
+
+        compressor.setClosedLoopControl(false);
+
         oi = new OI();
         drive = new DriveSubsystem();
         intake = new IntakeSubsystem();
-        arm = new ArmSubsystem();
+        //arm = new ArmSubsystem();
 
         //quneo = new QuNeo();
         //server = new Server();
@@ -69,6 +73,7 @@ public class Robot extends RobotCore {
         super.teleopInit();
         //OI.runCommand(new QuNeoDrive());
         OI.runCommand(new DriveCommand());
+        OI.runCommand(new IntakeCommand());
         //OI.runCommand(new ClimberCommand());
     }
 
@@ -99,16 +104,31 @@ public class Robot extends RobotCore {
     public void testInit() {
         super.testInit();
         try {
-            List<Motor> motors = new ArrayList<>();
-            for (int i=0; i<9; i++) {
-                System.out.println("about to move: " + i);
+            for (Motor m : Robot.drive.leftDrive.getMotors()) {
+                System.out.println("about to move: ");
                 Thread.sleep(3000);
-                Motor m = new Motor(VictorSP.class, i);
-                motors.add(m);
                 m.setPower(0.4);
                 Thread.sleep(500);
                 m.setPower(0);
             }
+            for (Motor m : Robot.drive.rightDrive.getMotors()) {
+                System.out.println("about to move: ");
+                Thread.sleep(3000);
+                m.setPower(0.4);
+                Thread.sleep(500);
+                m.setPower(0);
+            }
+            /*
+            List<Motor> motors = new ArrayList<>();
+            for (int i=0; i<9; i++) {
+                System.out.println("about to move: " + i);
+                Thread.sleep(3000);
+                Motor m = new Motor(WPI_VictorSPX.class, i);
+                motors.add(m);
+                m.setPower(0.4);
+                Thread.sleep(500);
+                m.setPower(0);
+            }*/
             /*
             for (int i=0; i<5; i++) {
                 System.out.println("about to move: " + i);

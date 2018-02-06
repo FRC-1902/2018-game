@@ -1,5 +1,6 @@
 package com.explodingbacon.powerup.core.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.explodingbacon.bcnlib.actuators.FakeMotor;
 import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.actuators.MotorGroup;
@@ -36,13 +37,13 @@ public class DriveSubsystem extends Subsystem {
 
         rotatePID = new PIDController(rotatePIDOutput, gyro, .1,.1,.1);
 
-        rightDrive = new MotorGroup(new Motor(VictorSP.class, Map.RIGHT_DRIVE_A), new Motor(VictorSP.class, Map.RIGHT_DRIVE_B),
-                new Motor(VictorSP.class, Map.RIGHT_DRIVE_C));
+        rightDrive = new MotorGroup(new Motor(WPI_VictorSPX.class, Map.RIGHT_DRIVE_A), new Motor(WPI_VictorSPX.class, Map.RIGHT_DRIVE_B),
+                new Motor(WPI_VictorSPX.class, Map.RIGHT_DRIVE_C));
 
         rightDrive.setReversed(true);
 
-        leftDrive = new MotorGroup(new Motor(VictorSP.class, Map.LEFT_DRIVE_A), new Motor(VictorSP.class, Map.LEFT_DRIVE_B),
-                new Motor(VictorSP.class, Map.LEFT_DRIVE_C));
+        leftDrive = new MotorGroup(new Motor(WPI_VictorSPX.class, Map.LEFT_DRIVE_A), new Motor(WPI_VictorSPX.class, Map.LEFT_DRIVE_B),
+                new Motor(WPI_VictorSPX.class, Map.LEFT_DRIVE_C));
 
         rightPositionPIDOutput = new FakeMotor();
         leftPositionPIDOutput = new FakeMotor();

@@ -38,6 +38,7 @@ public class DriveCommand extends Command {
         x = Math.pow(x, 2) * Utils.sign(x);
         y = Math.pow(y, 2) * Utils.sign(y);
 
+        /*
         if(System.currentTimeMillis()- noShift > 250) {
             if (x == 0 && Math.abs(nonScaledY) > .75 && Robot.drive.getRate() < 450/4) { //collision
                     Robot.drive.shift.set(false);
@@ -71,24 +72,9 @@ public class DriveCommand extends Command {
         } else {
             stopStart = 0;
         }
+        */
 
-        /*
-        if (OI.driver.rightTrigger.get()) {
-            Robot.drive.shift.set(false);
-        } else {
-            if (!Robot.drive.shift.get()) stopStart = System.currentTimeMillis();
-            Robot.drive.shift.set(true);
-            if (System.currentTimeMillis() - stopStart <= 100) {
-                if (Math.abs(y) > 0.2) {
-                    y = 0.2 * Utils.sign(y);
-                }
-                if (Math.abs(x) > 0.2) {
-                    x = 0.2 * Utils.sign(x);
-                }
-            } else {
-                stopStart = 0;
-            }
-        }*/
+        Robot.drive.shift.set(OI.driver.rightTrigger.get());
 
         Robot.drive.tankDrive(y + x, y - x);
 

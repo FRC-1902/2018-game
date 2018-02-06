@@ -13,8 +13,13 @@ public class ClimberSubsystem extends Subsystem {
     //Time, encoders?
     //User control? While pressed?
 
-    public Motor climbMotorA = new Motor(VictorSP.class, Map.CLIMBER_A);
-    public Motor climbMotorB = new Motor(VictorSP.class, Map.CLIMBER_B);
+    public Motor climbMotorA;
+    public Motor climbMotorB;
+
+    public ClimberSubsystem() {
+        climbMotorA = new Motor(VictorSP.class, Map.CLIMBER_A);
+        climbMotorB = new Motor(VictorSP.class, Map.CLIMBER_B);
+    }
 
     public void climb(boolean a, boolean b) {
         if (a) {
