@@ -17,9 +17,9 @@ public class DriveCommand extends Command {
 
     @Override
     public void onLoop() {
-        System.out.println("Right: " + Robot.drive.rightDriveEncoder.get() + ", " + Robot.drive.rightDriveEncoder.getRate());
+       // System.out.println("Right: " + Robot.drive.rightDriveEncoder.get() + ", " + Robot.drive.rightDriveEncoder.getRate());
 
-        System.out.println("LEft: " + Robot.drive.leftDriveEncoder.get() + ", " + Robot.drive.leftDriveEncoder.getRate());
+        //System.out.println("LEft: " + Robot.drive.leftDriveEncoder.get() + ", " + Robot.drive.leftDriveEncoder.getRate());
 
         /*if (Robot.drive.getRate() > 390) {
             Robot.drive.shift.set(true);
@@ -74,7 +74,7 @@ public class DriveCommand extends Command {
         }
         */
 
-        Robot.drive.shift.set(OI.driver.rightTrigger.get());
+        Robot.drive.shift.set(!OI.driver.y.get());
 
         Robot.drive.tankDrive(y + x, y - x);
 

@@ -14,9 +14,7 @@ import com.explodingbacon.powerup.core.subsystems.ArmSubsystem;
 import com.explodingbacon.powerup.core.subsystems.ClimberSubsystem;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
 import com.explodingbacon.powerup.core.subsystems.IntakeSubsystem;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,16 +45,17 @@ public class Robot extends RobotCore {
 
         compressor = new Compressor();
 
-        compressor.setClosedLoopControl(false);
+        //compressor.setClosedLoopControl(false);
 
         oi = new OI();
         drive = new DriveSubsystem();
         intake = new IntakeSubsystem();
-        //arm = new ArmSubsystem();
+        arm = new ArmSubsystem();
+        //climber = new ClimberSubsystem();
+
 
         //quneo = new QuNeo();
         //server = new Server();
-        //climber = new ClimberSubsystem();
 
         //arm = new MotorGroup(new Motor(VictorSP.class, 2));
         //arm = new MotorGroup(new Motor(VictorSP.class, Map.ARM_A), new Motor(WPI_TalonSRX.class, Map.ARM_B));
@@ -69,17 +68,26 @@ public class Robot extends RobotCore {
     }
 
     @Override
+    public void disabledPeriodic() {
+        //System.out.println("get: " + intake.test.getForPID());
+
+    }
+
+    @Override
     public void teleopInit() {
         super.teleopInit();
         //OI.runCommand(new QuNeoDrive());
         OI.runCommand(new DriveCommand());
         OI.runCommand(new IntakeCommand());
+        OI.runCommand(new ArmCommand());
         //OI.runCommand(new ClimberCommand());
     }
 
     @Override
     public void teleopPeriodic() {
-        System.out.println("pot: " + intake.test.get());
+        //System.out.println("get: " + intake.test.getForPID());
+
+        //intake.test.
         /*if (OI.driver.leftTrigger.get()) {
             arm.setPower(.7); //.7
         } else if (OI.driver.rightTrigger.get()) {
@@ -104,20 +112,14 @@ public class Robot extends RobotCore {
     public void testInit() {
         super.testInit();
         try {
-            for (Motor m : Robot.drive.leftDrive.getMotors()) {
+            for (Motor m : Robot.arm.arm.getMotors()) {
                 System.out.println("about to move: ");
                 Thread.sleep(3000);
                 m.setPower(0.4);
-                Thread.sleep(500);
+                Thread.sleep(300);
                 m.setPower(0);
             }
-            for (Motor m : Robot.drive.rightDrive.getMotors()) {
-                System.out.println("about to move: ");
-                Thread.sleep(3000);
-                m.setPower(0.4);
-                Thread.sleep(500);
-                m.setPower(0);
-            }
+
             /*
             List<Motor> motors = new ArrayList<>();
             for (int i=0; i<9; i++) {

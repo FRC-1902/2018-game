@@ -2,6 +2,9 @@ package com.explodingbacon.powerup.core;
 
 public class Map {
 
+    //SOLENOIDS
+
+    public static final int SHIFT = 0;
 
     //CAN
 
@@ -18,7 +21,6 @@ public class Map {
 
     // PWM
 
-
     public static final int ARM_A = 0;
     public static int ARM_B = 1;
 
@@ -27,13 +29,15 @@ public class Map {
     public static final int CLIMBER_B = 3;
 
 
-    public static final int RIGHT_ENCODER_A = 0;
-    public static final int RIGHT_ENCODER_B = 1;
+    public static final int DRIVE_RIGHT_ENCODER_A = 0;
+    public static final int DRIVE_RIGHT_ENCODER_B = 1;
 
-    public static final int LEFT_ENCODER_A = 2;
-    public static final int LEFT_ENCODER_B = 3;
+    public static final int DRIVE_LEFT_ENCODER_A = 2;
+    public static final int DRIVE_LEFT_ENCODER_B = 3;
 
-    public static final int ARM_ENCODER_A = 6;
-    public static final int ARM_ENCODER_B = 7;
+
+    // ANALOG
+
+    public static final int ARM_ENCODER = 0;
 
 }

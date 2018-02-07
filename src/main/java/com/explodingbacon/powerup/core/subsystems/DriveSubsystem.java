@@ -10,7 +10,6 @@ import com.explodingbacon.bcnlib.framework.Subsystem;
 import com.explodingbacon.bcnlib.sensors.BNOGyro;
 import com.explodingbacon.bcnlib.sensors.Encoder;
 import com.explodingbacon.powerup.core.Map;
-import edu.wpi.first.wpilibj.VictorSP;
 
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class DriveSubsystem extends Subsystem {
 
         gyro = new BNOGyro(true);
 
-        shift = new Solenoid(0);
+        shift = new Solenoid(Map.SHIFT);
         light = new Solenoid(1);
 
         rotatePID = new PIDController(rotatePIDOutput, gyro, .1,.1,.1);
@@ -49,8 +48,8 @@ public class DriveSubsystem extends Subsystem {
         leftPositionPIDOutput = new FakeMotor();
         rotatePIDOutput = new FakeMotor();
 
-        rightDriveEncoder = new Encoder(Map.RIGHT_ENCODER_A, Map.RIGHT_ENCODER_B);
-        leftDriveEncoder = new Encoder(Map.LEFT_ENCODER_A, Map.LEFT_ENCODER_B);
+        rightDriveEncoder = new Encoder(Map.DRIVE_RIGHT_ENCODER_A, Map.DRIVE_RIGHT_ENCODER_B);
+        leftDriveEncoder = new Encoder(Map.DRIVE_LEFT_ENCODER_A, Map.DRIVE_LEFT_ENCODER_B);
 
         rightDriveEncoder.setReversed(true);
 

@@ -7,6 +7,7 @@ import com.explodingbacon.bcnlib.framework.PIDController;
 import com.explodingbacon.bcnlib.framework.Subsystem;
 import com.explodingbacon.bcnlib.sensors.AbstractEncoder;
 import com.explodingbacon.bcnlib.sensors.Encoder;
+import com.explodingbacon.powerup.core.AnalogSensor;
 import com.explodingbacon.powerup.core.Map;
 import com.explodingbacon.powerup.core.OI;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -15,9 +16,9 @@ import java.util.List;
 
 public class ArmSubsystem extends Subsystem {
 
-    MotorGroup arm;
+    public MotorGroup arm;
 
-    Encoder armEncoder;
+    AnalogSensor armEncoder;
     PIDController armPID;
 
     final int FLOOR_FRONT = 0, SWITCH_FRONT = 0, SWITCH_BACK = 0, FLOOR_BACK = 0;
@@ -34,16 +35,16 @@ public class ArmSubsystem extends Subsystem {
     public ArmSubsystem() {
 
         arm = new MotorGroup(new Motor(VictorSP.class, Map.ARM_A), new Motor(VictorSP.class, Map.ARM_B));
-        armEncoder = new Encoder(Map.ARM_ENCODER_A, Map.ARM_ENCODER_B);
+        armEncoder = new AnalogSensor(Map.ARM_ENCODER);
         armPID = new PIDController(arm, armEncoder, .1, .1, .1);
-        armEncoder.setPIDMode(AbstractEncoder.PIDMode.POSITION);
+        //armEncoder.setPIDMode(AbstractEncoder.PIDMode.POSITION);
 
         positionOne = 0;
         positionTwo = 0;
         positionThree = 0;
         positionFour = 0;
 
-        armPID.setTarget(target);
+        //armPID.setTarget(target);
     }
 
     public void setState(boolean front, boolean floor) {
@@ -93,7 +94,7 @@ public class ArmSubsystem extends Subsystem {
 
     public void toPosition (boolean buttonOnePressed, boolean buttomTwoPressed, boolean buttonThreePressed, boolean buttonFourPressed) {
 
-        int armPosition = armEncoder.get();
+        double armPosition = armEncoder.getForPID();
 
         if (buttonOnePressed) {
             if (armPosition != positionOne) {
