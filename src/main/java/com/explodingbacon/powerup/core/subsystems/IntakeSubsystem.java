@@ -30,8 +30,8 @@ public class IntakeSubsystem extends Subsystem {
             intakeMotorA.setPower(-1.0);
             intakeMotorB.setPower(1.0);
         } else {
-            intakeMotorA.setPower(0.3);
-            intakeMotorB.setPower(-0.3);
+            intakeMotorA.setPower(0);//3
+            intakeMotorB.setPower(0); //-3
         }
     }
 

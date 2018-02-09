@@ -28,7 +28,7 @@ public class OI extends AbstractOI {
         armPositionTwo = manipulator.x;
         armPositionThree = manipulator.a;
         armPositionFour = manipulator.b;
-        intakeInButton = driver.rightBumper;//manipulator.rightBumper;
-        intakeOutButton = driver.leftBumper;//manipulator.leftBumper;
+        intakeInButton = manipulator.rightBumper;//manipulator.rightBumper;
+        intakeOutButton = manipulator.leftBumper;//manipulator.leftBumper;
     }
 }

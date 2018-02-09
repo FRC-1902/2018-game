@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.actuators.MotorGroup;
 import com.explodingbacon.bcnlib.framework.RobotCore;
+import com.explodingbacon.bcnlib.utils.Utils;
 import com.explodingbacon.powerup.core.command.*;
 import com.explodingbacon.powerup.core.networktest.Server;
 import com.explodingbacon.powerup.core.networktest.quneo.QuNeo;
@@ -15,6 +16,7 @@ import com.explodingbacon.powerup.core.subsystems.ClimberSubsystem;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
 import com.explodingbacon.powerup.core.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +46,6 @@ public class Robot extends RobotCore {
         super.robotInit();
 
         compressor = new Compressor();
-
         //compressor.setClosedLoopControl(false);
 
         oi = new OI();
@@ -53,6 +54,9 @@ public class Robot extends RobotCore {
         arm = new ArmSubsystem();
         //climber = new ClimberSubsystem();
 
+        SmartDashboard.putNumber("kP", 0.001);
+        SmartDashboard.putNumber("kI", 0);
+        SmartDashboard.putNumber("kD", 0);
 
         //quneo = new QuNeo();
         //server = new Server();
@@ -68,8 +72,13 @@ public class Robot extends RobotCore {
     }
 
     @Override
+    public void disabledInit() {
+        arm.armPID.disable();
+    }
+
+    @Override
     public void disabledPeriodic() {
-        //System.out.println("get: " + intake.test.getForPID());
+        System.out.println("get: " + arm.armEncoder.getForPID());
 
     }
 
@@ -81,11 +90,18 @@ public class Robot extends RobotCore {
         OI.runCommand(new IntakeCommand());
         OI.runCommand(new ArmCommand());
         //OI.runCommand(new ClimberCommand());
+
+        arm.armPID.enable();
+        //arm.armPID.disable();
     }
 
     @Override
     public void teleopPeriodic() {
-        //System.out.println("get: " + intake.test.getForPID());
+        System.out.println("get: " + arm.armEncoder.getForPID());
+
+        /*double arm = OI.driver.getRightTrigger() - OI.driver.getLeftTrigger();
+        arm = Utils.deadzone(arm, 0.1);
+        Robot.arm.arm.setPower(arm*.75);*/
 
         //intake.test.
         /*if (OI.driver.leftTrigger.get()) {
@@ -111,38 +127,17 @@ public class Robot extends RobotCore {
     @Override
     public void testInit() {
         super.testInit();
-        try {
-            for (Motor m : Robot.arm.arm.getMotors()) {
-                System.out.println("about to move: ");
-                Thread.sleep(3000);
-                m.setPower(0.4);
-                Thread.sleep(300);
-                m.setPower(0);
-            }
 
-            /*
-            List<Motor> motors = new ArrayList<>();
-            for (int i=0; i<9; i++) {
-                System.out.println("about to move: " + i);
-                Thread.sleep(3000);
-                Motor m = new Motor(WPI_VictorSPX.class, i);
-                motors.add(m);
-                m.setPower(0.4);
-                Thread.sleep(500);
-                m.setPower(0);
-            }*/
-            /*
-            for (int i=0; i<5; i++) {
-                System.out.println("about to move: " + i);
-                Thread.sleep(3000);
-                Motor m = new Motor(WPI_TalonSRX.class, i);
-                motors.add(m);
-                m.setPower(0.4);
-                Thread.sleep(500);
-                m.setPower(0);
-            }*/
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        OI.runCommand(new ArmCommand());
+        //OI.runCommand(new ClimberCommand());
+        Robot.arm.armPID.reTune(SmartDashboard.getNumber("kP", 0), SmartDashboard.getNumber("kI", 0),
+                SmartDashboard.getNumber("kD", 0));
+
+        arm.armPID.enable();
+
+    }
+
+    public void testPeriodic() {
+        arm.armPID.logVerbose();
     }
 }

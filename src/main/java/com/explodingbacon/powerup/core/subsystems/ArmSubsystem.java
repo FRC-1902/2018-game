@@ -18,12 +18,12 @@ public class ArmSubsystem extends Subsystem {
 
     public MotorGroup arm;
 
-    AnalogSensor armEncoder;
-    PIDController armPID;
+    public AnalogSensor armEncoder;
+    public PIDController armPID;
 
-    final int FLOOR_FRONT = 0, SWITCH_FRONT = 0, SWITCH_BACK = 0, FLOOR_BACK = 0;
+    final int FLOOR_FRONT = 640, SWITCH_FRONT = 1120-560+FLOOR_FRONT, SWITCH_BACK = 2235-560+FLOOR_FRONT, FLOOR_BACK = 2750-560+FLOOR_FRONT;
 
-    int target = FLOOR_FRONT;
+    int target = SWITCH_FRONT;
     public boolean front = true;
     public boolean floor = true;
 
@@ -36,7 +36,8 @@ public class ArmSubsystem extends Subsystem {
 
         arm = new MotorGroup(new Motor(VictorSP.class, Map.ARM_A), new Motor(VictorSP.class, Map.ARM_B));
         armEncoder = new AnalogSensor(Map.ARM_ENCODER);
-        armPID = new PIDController(arm, armEncoder, .1, .1, .1);
+        armPID = new PIDController(arm, armEncoder, .001, 0, 0);
+        armPID.setInputInverted(true);
         //armEncoder.setPIDMode(AbstractEncoder.PIDMode.POSITION);
 
         positionOne = 0;
@@ -44,7 +45,8 @@ public class ArmSubsystem extends Subsystem {
         positionThree = 0;
         positionFour = 0;
 
-        //armPID.setTarget(target);
+        //armPID.enable();
+        armPID.setTarget(target);
     }
 
     public void setState(boolean front, boolean floor) {
