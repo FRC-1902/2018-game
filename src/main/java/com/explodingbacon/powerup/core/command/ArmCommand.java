@@ -26,13 +26,11 @@ public class ArmCommand extends Command {
             floor = true;
         }
 
-        boolean reverse = OI.manipulator.rightTrigger.get();
+        boolean reverse = Math.abs(OI.manipulator.getRightTrigger()) > 0.1;
         if (reverse && !didFlip) {
             front = !front;
-            didFlip = true;
-        } else if (!reverse) {
-            didFlip = false;
         }
+        didFlip = reverse;
 
         Robot.arm.setState(front, floor);
 
@@ -47,6 +45,6 @@ public class ArmCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return !Robot.isEnabled();
     }
 }

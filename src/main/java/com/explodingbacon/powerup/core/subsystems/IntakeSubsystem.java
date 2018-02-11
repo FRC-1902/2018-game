@@ -16,23 +16,30 @@ public class IntakeSubsystem extends Subsystem {
     public IntakeSubsystem() {
         intakeMotorA = new Motor(WPI_VictorSPX.class, Map.INTAKE_TOP);
         intakeMotorB = new Motor(WPI_VictorSPX.class, Map.INTAKE_BOTTOM);
-        //test.setAccumulatorInitialValue(0);
-        //test.setAccumulatorCenter(2048);
-        //test.setAccumulatorDeadband(10);
-        //test.resetAccumulator();
     }
 
     public void intake(boolean intakeButton, boolean outtakeButton) {
         if (intakeButton) {
-            intakeMotorA.setPower(1.0);
-            intakeMotorB.setPower(-1.0);
+            setIntake(1, true);
+            //intakeMotorA.setPower(1.0);
+            //intakeMotorB.setPower(-1.0);
         } else if (outtakeButton) {
-            intakeMotorA.setPower(-1.0);
-            intakeMotorB.setPower(1.0);
+            setIntake(1, false);
+            //intakeMotorA.setPower(-1.0);
+            //intakeMotorB.setPower(1.0);
         } else {
-            intakeMotorA.setPower(0);//3
-            intakeMotorB.setPower(0); //-3
+            //setIntake(0, true);
+            setIntake(0.2, true);
+
+            //intakeMotorA.setPower(0);//3
+            //intakeMotorB.setPower(0); //-3
         }
+    }
+
+    private void setIntake(double pow, boolean in) {
+        double dir = in ? 1 : -1;
+        intakeMotorA.setPower(pow * dir);
+        intakeMotorB.setPower(-pow * dir);
     }
 
 

@@ -73,7 +73,7 @@ public class Robot extends RobotCore {
 
     @Override
     public void disabledInit() {
-        arm.armPID.disable();
+        //arm.armPID.disable();
     }
 
     @Override
@@ -92,7 +92,6 @@ public class Robot extends RobotCore {
         //OI.runCommand(new ClimberCommand());
 
         arm.armPID.enable();
-        //arm.armPID.disable();
     }
 
     @Override
