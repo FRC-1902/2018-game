@@ -23,6 +23,8 @@ import java.util.List;
 
 public class Robot extends RobotCore {
 
+    public static boolean MAIN_ROBOT = false;
+
     public static DriveSubsystem drive;
     public static ClimberSubsystem climber;
     public static ArmSubsystem arm;
