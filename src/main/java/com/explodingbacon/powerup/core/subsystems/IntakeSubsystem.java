@@ -13,6 +13,8 @@ public class IntakeSubsystem extends Subsystem {
     Motor intakeMotorA;
     Motor intakeMotorB;
 
+    boolean passiveIntake = false;
+
     public IntakeSubsystem() {
         intakeMotorA = new Motor(WPI_VictorSPX.class, Map.INTAKE_TOP);
         intakeMotorB = new Motor(WPI_VictorSPX.class, Map.INTAKE_BOTTOM);
@@ -28,12 +30,12 @@ public class IntakeSubsystem extends Subsystem {
             //intakeMotorA.setPower(-1.0);
             //intakeMotorB.setPower(1.0);
         } else {
-            //setIntake(0, true);
-            setIntake(0.2, true);
-
-            //intakeMotorA.setPower(0);//3
-            //intakeMotorB.setPower(0); //-3
+            setIntake(passiveIntake ? 0.2 : 0, true);
         }
+    }
+
+    public void setPassiveIntake(boolean on) {
+        passiveIntake = on;
     }
 
     private void setIntake(double pow, boolean in) {

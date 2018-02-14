@@ -10,6 +10,7 @@ import com.explodingbacon.bcnlib.sensors.Encoder;
 import com.explodingbacon.powerup.core.AnalogSensor;
 import com.explodingbacon.powerup.core.Map;
 import com.explodingbacon.powerup.core.OI;
+import com.explodingbacon.powerup.core.Robot;
 import edu.wpi.first.wpilibj.VictorSP;
 
 import java.util.List;
@@ -21,11 +22,14 @@ public class ArmSubsystem extends Subsystem {
     public AnalogSensor armEncoder;
     public PIDController armPID;
 
-    final int FLOOR_FRONT = 449, SWITCH_FRONT = 1120+-560+FLOOR_FRONT, SWITCH_BACK = 2235-560+FLOOR_FRONT, FLOOR_BACK = 2780-560+FLOOR_FRONT;
+    final int FLOOR_FRONT = Robot.MAIN_ROBOT ? 449 : 449, SWITCH_FRONT = 1120+-560+FLOOR_FRONT, SWITCH_BACK = 2235-560+FLOOR_FRONT, FLOOR_BACK = 2780-560+FLOOR_FRONT;
 
-    double target = SWITCH_FRONT;
+    public static final double MAX_OFFSET = 60;
+
+    double target;
     public boolean front = true;
     public boolean floor = true;
+    public double targetOff = 0;
 
     int positionOne;
     int positionTwo;
@@ -70,8 +74,13 @@ public class ArmSubsystem extends Subsystem {
         }
         if (target != pos) {
             target = pos;
-            armPID.setTarget(target);
+            armPID.setTarget(target+targetOff);
         }
+    }
+
+    public void setOffset(double offset) {
+        targetOff = offset;
+        armPID.setTarget(target+targetOff);
     }
 
     public void setFloor(boolean floor) {

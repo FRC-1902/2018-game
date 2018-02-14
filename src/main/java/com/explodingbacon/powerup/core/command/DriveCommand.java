@@ -17,17 +17,6 @@ public class DriveCommand extends Command {
 
     @Override
     public void onLoop() {
-       // System.out.println("Right: " + Robot.drive.rightDriveEncoder.get() + ", " + Robot.drive.rightDriveEncoder.getRate());
-
-        //System.out.println("LEft: " + Robot.drive.leftDriveEncoder.get() + ", " + Robot.drive.leftDriveEncoder.getRate());
-
-        /*if (Robot.drive.getRate() > 390) {
-            Robot.drive.shift.set(true);
-        } else if(Robot.drive.getRate() < 300){
-            Robot.drive.shift.set(false);
-        }*/
-
-
         double y = Utils.deadzone(OI.driver.getY(), 0.1);
         double x = Utils.deadzone(OI.driver.getX2(), 0.1);
 
@@ -74,7 +63,7 @@ public class DriveCommand extends Command {
         }
         */
 
-        Robot.drive.shift.set(!OI.driver.y.get());
+        Robot.drive.shift.set(!OI.driver.isRightTriggerPressed());
 
         Robot.drive.tankDrive(y + x, y - x);
 

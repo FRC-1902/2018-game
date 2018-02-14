@@ -29,11 +29,11 @@ public class Map {
     public static final int CLIMBER_B = Robot.MAIN_ROBOT ? 3 : 3;
 
 
-    public static final int DRIVE_RIGHT_ENCODER_A = 0;
-    public static final int DRIVE_RIGHT_ENCODER_B = 1;
+    public static final int DRIVE_RIGHT_ENCODER_A = Robot.MAIN_ROBOT ? 2 : 2;
+    public static final int DRIVE_RIGHT_ENCODER_B = Robot.MAIN_ROBOT ? 3 : 3;
 
-    public static final int DRIVE_LEFT_ENCODER_A = 2;
-    public static final int DRIVE_LEFT_ENCODER_B = 3;
+    public static final int DRIVE_LEFT_ENCODER_A = Robot.MAIN_ROBOT ? 0 : 0;
+    public static final int DRIVE_LEFT_ENCODER_B = Robot.MAIN_ROBOT ? 1 : 1;
 
 
     // ANALOG

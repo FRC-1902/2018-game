@@ -35,6 +35,7 @@ public class DriveSubsystem extends Subsystem {
         light = new Solenoid(1);
 
         rotatePID = new PIDController(rotatePIDOutput, gyro, .1,.1,.1);
+        rotatePID.setFinishedTolerance(1);
 
         rightDrive = new MotorGroup(new Motor(WPI_VictorSPX.class, Map.RIGHT_DRIVE_A), new Motor(WPI_VictorSPX.class, Map.RIGHT_DRIVE_B),
                 new Motor(WPI_VictorSPX.class, Map.RIGHT_DRIVE_C));

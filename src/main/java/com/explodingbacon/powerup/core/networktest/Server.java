@@ -118,7 +118,7 @@ public class Server extends Communicator {
                     p.setColorOff();
                 }
             }
-
+/*
             Robot.forward = pads[2][0];
             Robot.forward.onNotePress(data -> {
                 System.out.println("pressed");
@@ -132,7 +132,7 @@ public class Server extends Communicator {
             Robot.right.setColor(QuNeoColor.ORANGE, 1);
 
             Robot.back = pads[2][1];
-            Robot.back.setColor(QuNeoColor.GREEN, 1);
+            Robot.back.setColor(QuNeoColor.GREEN, 1);*/
 
             //AnimationHandler.doAnimation(pads, .4, true, "one.png", "nine.png", "zero.png", "two.png");
         }

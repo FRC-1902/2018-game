@@ -4,6 +4,7 @@ import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.framework.Command;
 import com.explodingbacon.bcnlib.framework.Log;
 import com.explodingbacon.bcnlib.framework.PIDController;
+import com.explodingbacon.bcnlib.utils.Utils;
 import com.explodingbacon.powerup.core.Robot;
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -13,7 +14,6 @@ public class AutonomousCommand extends Command {
     PIDController rotatePID;
 
     public AutonomousCommand() {
-
         pidOutput = Robot.drive.rotatePIDOutput;
         rotatePID = Robot.drive.rotatePID;
     }
@@ -28,12 +28,14 @@ public class AutonomousCommand extends Command {
             Log.d("GO RIGHT");
         }
         try {
+            double angle = 0;
             boolean left = s.charAt(0) == 'L';
             //Robot.intake.setIntake(false);
 
             driveDistance(12, 0.5);
             Thread.sleep(220);
 
+            /*
             double angle = left ? 360-30 : 30;
             rotatePID.setTarget(angle);
             rotatePID.enable();
@@ -45,15 +47,11 @@ public class AutonomousCommand extends Command {
             Robot.drive.tankDrive(0,0);
             Thread.sleep(100);
 
-            driveDistance(184, 1);
+            driveDistance(184, 1);*/
 
-            rotatePID.setTarget(0);
-            rotatePID.enable();
-            while (!rotatePID.isDone() && Robot.isAutonomous()) {
-                Robot.drive.tankDrive(pidOutput.getPower(), -pidOutput.getPower());
-                Thread.sleep(5);
-            }
-            rotatePID.disable();
+            driveDistanceAtAngle(184, 1, 45);
+
+            turnToAngle(0);
 
             driveDistance(24, 0.7);
             Thread.sleep(200);
@@ -66,19 +64,14 @@ public class AutonomousCommand extends Command {
             driveDistance(12, -0.7);
 
             angle = left ? 90 : 270;
-            rotatePID.setTarget(angle);
-            rotatePID.enable();
-            while (!rotatePID.isDone() && Robot.isAutonomous()) {
-                Robot.drive.tankDrive(pidOutput.getPower(), -pidOutput.getPower());
-                Thread.sleep(5);
-            }
-            rotatePID.disable();
+            turnToAngle(angle);
 
             //Robot.intake.setIntake(true)
             Robot.drive.tankDrive(0.5f,0.5f);
             Thread.sleep(1000);
             //Robot.intake.setIntake(false);
 
+            /*
             driveDistance(20, -0.7);
 
             //Has cube, backing up to exchange
@@ -93,12 +86,30 @@ public class AutonomousCommand extends Command {
             }
             Robot.drive.tankDrive(-1,-1);
             Thread.sleep(700);
+            */
             Robot.drive.tankDrive(0, 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public void turnToAngle(double angle) {
+        rotatePID.setTarget(angle);
+        rotatePID.enable();
+        while (!rotatePID.isDone() && Robot.isAutonomous()) {
+            Robot.drive.tankDrive(pidOutput.getPower(), -pidOutput.getPower());
+            try {
+                Thread.sleep(5);
+            } catch (Exception e) {}
+        }
+        rotatePID.disable();
+    }
+
+    public void driveDistance(double inches, double speed) {
+        driveDistanceAtAngle(inches, speed, Robot.drive.gyro.getForPID());
+    }
+
+    /*
     public void driveDistance(double inches, double speed) {
         resetEncs();
         Robot.drive.tankDrive(speed, speed);
@@ -106,6 +117,47 @@ public class AutonomousCommand extends Command {
             try {
                 Thread.sleep(5);
             } catch (Exception e) {}
+        }
+        Robot.drive.tankDrive(0,0);
+    }*/
+
+    public void driveDistanceAtAngle(double inches, double speed, double angle) {
+        driveAtAngle(inches, 0, speed, angle);
+    }
+
+    public void driveTimeAtAngle(long milliseconds, double speed, double angle) {
+        driveAtAngle(0, milliseconds, speed, angle);
+    }
+
+    public void driveAtAngle(double inches, long milliseconds, double speed, double angle) {
+        resetEncs();
+        Robot.drive.rotatePID.setTarget(angle);
+        Robot.drive.rotatePID.enable();
+        long startTime = System.currentTimeMillis();
+        boolean keepGoing = true;
+        while (keepGoing && Robot.isAutonomous()) {
+            double pidOut = Robot.drive.rotatePIDOutput.getPower() * 0.75;
+            double left = speed + pidOut;
+            double right = speed - pidOut;
+
+            double max = Utils.maxDouble(Math.abs(left), Math.abs(right));
+            left /= max;
+            right /= max;
+
+            Robot.drive.tankDrive(left, right);
+
+            if (inches == 0) {
+                keepGoing = System.currentTimeMillis() - startTime <= milliseconds;
+            } else {
+                keepGoing = Math.abs(encAverage()) < inches(inches);
+            }
+
+            if (keepGoing) {
+                try {
+                    Thread.sleep(5);
+                } catch (Exception e) {
+                }
+            }
         }
         Robot.drive.tankDrive(0,0);
     }

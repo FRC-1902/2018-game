@@ -6,10 +6,9 @@ import com.explodingbacon.powerup.core.OI;
 import com.explodingbacon.powerup.core.Robot;
 
 public class ClimberCommand extends Command {
-    @Override
-    public void onInit() {
 
-    }
+    @Override
+    public void onInit() { }
 
     @Override
     public void onLoop() {
@@ -24,6 +23,6 @@ public class ClimberCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return !Robot.isEnabled();
     }
 }

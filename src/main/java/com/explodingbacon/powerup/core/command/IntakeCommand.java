@@ -5,6 +5,7 @@ import com.explodingbacon.powerup.core.OI;
 import com.explodingbacon.powerup.core.Robot;
 
 public class IntakeCommand extends Command {
+
     @Override
     public void onInit() {
 
@@ -13,7 +14,7 @@ public class IntakeCommand extends Command {
     @Override
     public void onLoop() {
         Robot.intake.intake(OI.intakeInButton.get(), OI.intakeOutButton.get());
-
+        Robot.intake.setPassiveIntake(OI.intakePassiveButton.get());
     }
 
     @Override
@@ -23,6 +24,6 @@ public class IntakeCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return !Robot.isEnabled();
     }
 }

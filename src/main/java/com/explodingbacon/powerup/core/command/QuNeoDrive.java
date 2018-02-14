@@ -15,13 +15,13 @@ public class QuNeoDrive extends Command {
     @Override
     public void onLoop() {
 
-        double y = Robot.forward.getPressure() - Robot.back.getPressure();
+        /*double y = Robot.forward.getPressure() - Robot.back.getPressure();
         double x = Robot.right.getPressure() - Robot.left.getPressure();
 
         y = Utils.deadzone(y, 0.1);
         x = Utils.deadzone(x, 0.1);
 
-        Robot.drive.tankDrive(y + x, y - x);
+        Robot.drive.tankDrive(y + x, y - x);*/
     }
 
     @Override
