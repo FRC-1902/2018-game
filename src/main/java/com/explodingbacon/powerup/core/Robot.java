@@ -77,6 +77,11 @@ public class Robot extends RobotCore {
         //server = new Server();
 
         Robot.drive.gyro.rezero();
+
+        Log.d("12 inches: " + DriveSubsystem.inchesToClicks(12));
+        Log.d("6 inches: " + DriveSubsystem.inchesToClicks(6));
+
+
         if (MAIN_ROBOT) {
             Log.i("PIGXEL mode.");
         } else {
@@ -93,15 +98,21 @@ public class Robot extends RobotCore {
 
     @Override
     public void disabledPeriodic() {
-        Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
+        //Log.d("Arm: " + Robot.arm.armEncoder.getForPID());
+        //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
         if (!MAIN_ROBOT) {
-           Log.d("Gyro: " + Robot.drive.gyro.getForPID());
+           //Log.d("Gyro: " + Robot.drive.gyro.getForPID());
         }
     }
 
     @Override
+    public void autonomousInit() {
+        super.autonomousInit();
+        OI.runCommand(new AutonomousCommand());
+    }
+
+    @Override
     public void teleopInit() {
-        super.teleopInit();
         //OI.runCommand(new QuNeoDrive());
         OI.runCommand(new DriveCommand());
         OI.runCommand(new IntakeCommand());
@@ -115,6 +126,7 @@ public class Robot extends RobotCore {
 
     @Override
     public void teleopPeriodic() {
+        //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
 
         /*double arm = OI.driver.getRightTrigger() - OI.driver.getLeftTrigger();
         arm = Utils.deadzone(arm, 0.1);
@@ -124,17 +136,32 @@ public class Robot extends RobotCore {
 
     @Override
     public void testInit() {
-        super.testInit();
-
-        OI.runCommand(new ArmCommand());
-        Robot.arm.armPID.reTune(SmartDashboard.getNumber("kP", 0), SmartDashboard.getNumber("kI", 0),
+        //OI.runCommand(new ArmCommand());
+        drive.rotatePID.reTune(SmartDashboard.getNumber("kP", 0), SmartDashboard.getNumber("kI", 0),
                 SmartDashboard.getNumber("kD", 0));
 
-        arm.armPID.enable();
-
+        drive.rotatePID.enable();
     }
 
+    @Override
     public void testPeriodic() {
-        arm.armPID.logVerbose();
+        if (OI.driver.y.get()) {
+            drive.rotatePID.setTarget(0);
+        } else if (OI.driver.b.get()) {
+            drive.rotatePID.setTarget(90);
+        } else if (OI.driver.a.get()) {
+            drive.rotatePID.setTarget(180);
+        } else if (OI.driver.x.get()) {
+            drive.rotatePID.setTarget(270);
+        }
+        double out = drive.rotatePIDOutput.getPower();
+        //Log.d("Out: " + out);
+
+        //Robot.drive.leftDrive.setPower(1);
+        //Robot.drive.rightDrive.setPower(-1);
+
+        Robot.drive.shift.set(true);
+        Robot.drive.tankDrive(out, -out);
+        drive.rotatePID.logVerbose();
     }
 }

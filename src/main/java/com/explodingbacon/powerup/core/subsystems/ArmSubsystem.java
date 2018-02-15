@@ -22,9 +22,9 @@ public class ArmSubsystem extends Subsystem {
     public AnalogSensor armEncoder;
     public PIDController armPID;
 
-    final int FLOOR_FRONT = Robot.MAIN_ROBOT ? 449 : 449, SWITCH_FRONT = 1120+-560+FLOOR_FRONT, SWITCH_BACK = 2235-560+FLOOR_FRONT, FLOOR_BACK = 2780-560+FLOOR_FRONT;
+    final int FLOOR_FRONT = Robot.MAIN_ROBOT ? 449 : 460, SWITCH_FRONT = 1120+-560+FLOOR_FRONT, SWITCH_BACK = 2235-560+FLOOR_FRONT, FLOOR_BACK = 2780+100-560+FLOOR_FRONT;
 
-    public static final double MAX_OFFSET = 60;
+    public static final double MAX_OFFSET = 220;
 
     double target;
     public boolean front = true;

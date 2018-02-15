@@ -75,6 +75,6 @@ public class DriveCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return !Robot.isEnabled() || Robot.isAutonomous();
+        return !Robot.isEnabled() || !Robot.isTeleop();
     }
 }

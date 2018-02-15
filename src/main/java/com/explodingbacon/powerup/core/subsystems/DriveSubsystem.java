@@ -10,6 +10,7 @@ import com.explodingbacon.bcnlib.framework.Subsystem;
 import com.explodingbacon.bcnlib.sensors.BNOGyro;
 import com.explodingbacon.bcnlib.sensors.Encoder;
 import com.explodingbacon.powerup.core.Map;
+import com.explodingbacon.powerup.core.Robot;
 
 import java.util.List;
 
@@ -34,8 +35,12 @@ public class DriveSubsystem extends Subsystem {
         shift = new Solenoid(Map.SHIFT);
         light = new Solenoid(1);
 
-        rotatePID = new PIDController(rotatePIDOutput, gyro, .1,.1,.1);
-        rotatePID.setFinishedTolerance(1);
+        rightPositionPIDOutput = new FakeMotor();
+        leftPositionPIDOutput = new FakeMotor();
+        rotatePIDOutput = new FakeMotor();
+
+        rotatePID = new PIDController(rotatePIDOutput, gyro, .0085,0.001,0);
+        rotatePID.setRotational(true);
 
         rightDrive = new MotorGroup(new Motor(WPI_VictorSPX.class, Map.RIGHT_DRIVE_A), new Motor(WPI_VictorSPX.class, Map.RIGHT_DRIVE_B),
                 new Motor(WPI_VictorSPX.class, Map.RIGHT_DRIVE_C));
@@ -45,9 +50,6 @@ public class DriveSubsystem extends Subsystem {
         leftDrive = new MotorGroup(new Motor(WPI_VictorSPX.class, Map.LEFT_DRIVE_A), new Motor(WPI_VictorSPX.class, Map.LEFT_DRIVE_B),
                 new Motor(WPI_VictorSPX.class, Map.LEFT_DRIVE_C));
 
-        rightPositionPIDOutput = new FakeMotor();
-        leftPositionPIDOutput = new FakeMotor();
-        rotatePIDOutput = new FakeMotor();
 
         rightDriveEncoder = new Encoder(Map.DRIVE_RIGHT_ENCODER_A, Map.DRIVE_RIGHT_ENCODER_B);
         leftDriveEncoder = new Encoder(Map.DRIVE_LEFT_ENCODER_A, Map.DRIVE_LEFT_ENCODER_B);
@@ -57,9 +59,6 @@ public class DriveSubsystem extends Subsystem {
 
         //positionPIDRight = new PIDController(rightPositionPIDOutput, rightDriveEncoder, .1, .1, .1);
         //positionPIDLeft = new PIDController(leftPositionPIDOutput, leftDriveEncoder, .1, .1, .1);
-
-        rotatePID.setRotational(true);
-
     }
 
     public double getRate() {
@@ -81,6 +80,36 @@ public class DriveSubsystem extends Subsystem {
 
     public double getRightVelocityInchesPerSec(){
          return -1;
+    }
+
+    /**
+     * Converts inches to strafe encoder clicks.
+     *
+     * @param inches The inches to be converted.
+     * @return The encoder clicks equivalent to the inches provided.
+     */
+    public static double inchesToClicks(double inches) {
+        return inchesToRotations(inches) * 360;
+    }
+
+    public static double inchesPerSecondToRpm(double inches_per_second) {
+        return inchesToRotations(inches_per_second) * 60;
+    }
+
+    public static double inchesToRotations(double inches) {
+        return inches / (Math.PI * 6);
+}
+
+    public static double clicksToInches(double clicks) {
+        return rotationsToInches(clicks / 360);
+    }
+
+    private static double rpmToInchesPerSecond(double rpm) {
+        return rotationsToInches(rpm) / 60;
+    }
+
+    public static double rotationsToInches(double rotations) {
+        return rotations * (Math.PI * 6);
     }
 
     @Override
