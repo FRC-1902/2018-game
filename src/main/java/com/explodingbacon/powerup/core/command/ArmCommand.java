@@ -15,7 +15,7 @@ public class ArmCommand extends Command {
 
     @Override
     public void onLoop() {
-        if (Robot.MAIN_ROBOT) {
+        if (false) {
             double arm = OI.manipulator.getRightTrigger() - OI.manipulator.getLeftTrigger();
             arm = Utils.deadzone(arm, 0.1);
             Robot.arm.arm.setPower(arm*.75);

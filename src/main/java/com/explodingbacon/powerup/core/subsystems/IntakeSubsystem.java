@@ -5,6 +5,7 @@ import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.framework.Subsystem;
 import com.explodingbacon.powerup.core.AnalogSensor;
 import com.explodingbacon.powerup.core.Map;
+import com.explodingbacon.powerup.core.Robot;
 import edu.wpi.first.wpilibj.*;
 import java.util.List;
 
@@ -16,8 +17,9 @@ public class IntakeSubsystem extends Subsystem {
     boolean passiveIntake = false;
 
     public IntakeSubsystem() {
-        intakeMotorA = new Motor(WPI_VictorSPX.class, Map.INTAKE_TOP);
-        intakeMotorB = new Motor(WPI_VictorSPX.class, Map.INTAKE_BOTTOM);
+        Class intakeMotorClass = Robot.MAIN_ROBOT ? VictorSP.class : WPI_VictorSPX.class;
+        intakeMotorA = new Motor(intakeMotorClass, Map.INTAKE_TOP);
+        intakeMotorB = new Motor(intakeMotorClass, Map.INTAKE_BOTTOM);
     }
 
     public void intake(boolean intakeButton, boolean outtakeButton) {

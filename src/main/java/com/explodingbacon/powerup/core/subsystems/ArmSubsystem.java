@@ -22,7 +22,7 @@ public class ArmSubsystem extends Subsystem {
     public AnalogSensor armEncoder;
     public PIDController armPID;
 
-    final int FLOOR_FRONT = Robot.MAIN_ROBOT ? 449 : 460, SWITCH_FRONT = 1120+-560+FLOOR_FRONT, SWITCH_BACK = 2235-560+FLOOR_FRONT, FLOOR_BACK = 2780+100-560+FLOOR_FRONT;
+    final int FLOOR_FRONT = Robot.MAIN_ROBOT ? 925 : 460, SWITCH_FRONT = 1120+-560+FLOOR_FRONT, SWITCH_BACK = 2235-560+FLOOR_FRONT, FLOOR_BACK = 2780+100-560+FLOOR_FRONT;
 
     public static final double MAX_OFFSET = 220;
 
@@ -39,6 +39,10 @@ public class ArmSubsystem extends Subsystem {
     public ArmSubsystem() {
 
         arm = new MotorGroup(new Motor(VictorSP.class, Map.ARM_A), new Motor(VictorSP.class, Map.ARM_B));
+        if (Robot.MAIN_ROBOT) {
+            arm.setInverts(false, true);
+        }
+
         armEncoder = new AnalogSensor(Map.ARM_ENCODER);
         armPID = new PIDController(arm, armEncoder, .001, 0, 0);
         armPID.setInputInverted(true);
@@ -50,7 +54,7 @@ public class ArmSubsystem extends Subsystem {
         positionFour = 0;
 
         //armPID.enable();
-        target = armEncoder.getForPID();
+        setState(true, false);
         armPID.setTarget(target);
     }
 
@@ -58,8 +62,11 @@ public class ArmSubsystem extends Subsystem {
         this.front = front;
         this.floor = floor;
 
+        boolean workingFront = front;
+        if (Robot.MAIN_ROBOT) workingFront = !workingFront;
+
         int pos;
-        if (this.front) {
+        if (workingFront) {
             if (this.floor) {
                 pos = FLOOR_FRONT;
             } else {

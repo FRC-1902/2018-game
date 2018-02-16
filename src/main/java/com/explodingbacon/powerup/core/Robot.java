@@ -21,6 +21,7 @@ Jeffrey S
 
 package com.explodingbacon.powerup.core;
 
+import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.framework.Log;
 import com.explodingbacon.bcnlib.framework.RobotCore;
 import com.explodingbacon.powerup.core.command.*;
@@ -36,7 +37,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends RobotCore {
 
-    public static boolean MAIN_ROBOT = false;
+    public static boolean MAIN_ROBOT = true;
 
     public static DriveSubsystem drive;
     public static ClimberSubsystem climber;
@@ -98,11 +99,9 @@ public class Robot extends RobotCore {
 
     @Override
     public void disabledPeriodic() {
-        //Log.d("Arm: " + Robot.arm.armEncoder.getForPID());
-        //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
-        if (!MAIN_ROBOT) {
-           //Log.d("Gyro: " + Robot.drive.gyro.getForPID());
-        }
+        Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
+        Log.d("Gyro: " + drive.gyro.getForPID());
+        Log.d("Arm: " + arm.armEncoder.getForPID());
     }
 
     @Override
@@ -113,20 +112,17 @@ public class Robot extends RobotCore {
 
     @Override
     public void teleopInit() {
-        //OI.runCommand(new QuNeoDrive());
         OI.runCommand(new DriveCommand());
         OI.runCommand(new IntakeCommand());
         OI.runCommand(new ArmCommand());
         //OI.runCommand(new ClimberCommand());
 
-        if (!MAIN_ROBOT) {
-            arm.armPID.enable();
-        }
+        arm.armPID.enable();
+
     }
 
     @Override
     public void teleopPeriodic() {
-        //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
 
         /*double arm = OI.driver.getRightTrigger() - OI.driver.getLeftTrigger();
         arm = Utils.deadzone(arm, 0.1);
@@ -136,16 +132,21 @@ public class Robot extends RobotCore {
 
     @Override
     public void testInit() {
-        //OI.runCommand(new ArmCommand());
-        drive.rotatePID.reTune(SmartDashboard.getNumber("kP", 0), SmartDashboard.getNumber("kI", 0),
-                SmartDashboard.getNumber("kD", 0));
+        if (!MAIN_ROBOT) {
+            //OI.runCommand(new ArmCommand());
+            drive.rotatePID.reTune(SmartDashboard.getNumber("kP", 0), SmartDashboard.getNumber("kI", 0),
+                    SmartDashboard.getNumber("kD", 0));
 
-        drive.rotatePID.enable();
+            drive.rotatePID.enable();
+        } else {
+            drive.shift.set(true);
+            arm.arm.testEachWait(0.5, 0.5);
+        }
     }
 
     @Override
     public void testPeriodic() {
-        if (OI.driver.y.get()) {
+        /*if (OI.driver.y.get()) {
             drive.rotatePID.setTarget(0);
         } else if (OI.driver.b.get()) {
             drive.rotatePID.setTarget(90);
@@ -162,6 +163,6 @@ public class Robot extends RobotCore {
 
         Robot.drive.shift.set(true);
         Robot.drive.tankDrive(out, -out);
-        drive.rotatePID.logVerbose();
+        drive.rotatePID.logVerbose();*/
     }
 }
