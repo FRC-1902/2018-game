@@ -1,6 +1,7 @@
 package com.explodingbacon.powerup.core.command;
 
 import com.explodingbacon.bcnlib.framework.Command;
+import com.explodingbacon.bcnlib.framework.Log;
 import com.explodingbacon.bcnlib.utils.Utils;
 import com.explodingbacon.powerup.core.OI;
 import com.explodingbacon.powerup.core.Robot;
@@ -27,30 +28,20 @@ public class DriveCommand extends Command {
         x = Math.pow(x, 2) * Utils.sign(x);
         y = Math.pow(y, 2) * Utils.sign(y);
 
-        /*
-        if(System.currentTimeMillis()- noShift > 250) {
-            if (x == 0 && Math.abs(nonScaledY) > .75 && Robot.drive.getRate() < 450/4) { //collision
-                    Robot.drive.shift.set(false);
-                Robot.drive.light.set(false);
-                noShift = System.currentTimeMillis();
-            } else if (Math.abs(nonScaledY) <= .4 || Utils.sign(nonScaledY) != Utils.sign(Robot.drive.getRateNotAbs())) { //driver slowing down
-                Robot.drive.shift.set(false);
-                Robot.drive.light.set(false);
-                noShift = System.currentTimeMillis();
-            } else if (OI.driver.rightTrigger.get()) { //manual shift
-                Robot.drive.shift.set(false);
-                Robot.drive.light.set(false);
-                noShift = System.currentTimeMillis();
+
+        //Robot.drive.tankDrive(y + x, y - x);
+
+        boolean driverShift = OI.driver.isRightTriggerPressed();
+        if (driverShift == Robot.drive.shift.get()) { //actually unequal
+            Log.d("Driver shifting");
+            Robot.drive.shift.set(!driverShift);
+            if (driverShift) {
+                stopStart = System.currentTimeMillis();
+            } else {
+                stopStart = 0;
             }
         }
-        if (Robot.drive.getRate() > 450/2) { //accelerating
-            if (x == 0 && Math.abs(nonScaledY) > .75 && System.currentTimeMillis()- noShift > 250) {
-                if (!Robot.drive.shift.get()) stopStart = System.currentTimeMillis();
-                Robot.drive.shift.set(true);
-                Robot.drive.light.set(true);
-                noShift = System.currentTimeMillis();
-            }
-        }
+
         if (stopStart != 0 && System.currentTimeMillis() - stopStart <= 200) {
             if (Math.abs(y) > 0.2) {
                 y = 0.2 * Utils.sign(y);
@@ -61,12 +52,37 @@ public class DriveCommand extends Command {
         } else {
             stopStart = 0;
         }
-        */
 
-        Robot.drive.shift.set(!OI.driver.isRightTriggerPressed());
+        double left = y + x, right = y - x;
 
-        Robot.drive.tankDrive(y + x, y - x);
+        if (x == 0/* && y != 0*/) {
+            if (!Robot.drive.rotatePID.isEnabled()) {
+                Robot.drive.rotatePID.enable();
+                Robot.drive.rotatePID.setTarget(Robot.drive.gyro.getForPID());
+                Log.d("Enabling drive forward assist");
+            }
+            double pidOut = Robot.drive.rotatePIDOutput.getPower() * 1;
+            left += pidOut;
+            right -= pidOut;
 
+            double max = Utils.maxDouble(Math.abs(left), Math.abs(right));
+            left /= max;
+            right /= max;
+
+            left *= Math.abs(y);
+            right *= Math.abs(y);
+        } else {
+            if (Robot.drive.rotatePID.isEnabled()) {
+                Robot.drive.rotatePID.disable();
+                Log.d("Disabled drive forward assist");
+            }
+        }
+
+        Robot.drive.tankDrive(left, right);
+
+
+        //Robot.compressor.setClosedLoopControl(!OI.driver.isLeftTriggerPressed());
+        //Robot.drive.shift.set(!OI.driver.isRightTriggerPressed());
 
     }
 

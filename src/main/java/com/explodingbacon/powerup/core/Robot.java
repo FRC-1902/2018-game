@@ -21,13 +21,11 @@ Jeffrey S
 
 package com.explodingbacon.powerup.core;
 
-import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.framework.Log;
 import com.explodingbacon.bcnlib.framework.RobotCore;
 import com.explodingbacon.powerup.core.command.*;
 import com.explodingbacon.powerup.core.networktest.Server;
 import com.explodingbacon.powerup.core.networktest.quneo.QuNeo;
-import com.explodingbacon.powerup.core.networktest.quneo.inputs.Pad;
 import com.explodingbacon.powerup.core.subsystems.ArmSubsystem;
 import com.explodingbacon.powerup.core.subsystems.ClimberSubsystem;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
@@ -48,7 +46,7 @@ public class Robot extends RobotCore {
     public static Server server;
     private OI oi;
 
-    Compressor compressor;
+    public static Compressor compressor;
 
     //public static Pad forward, back, left, right;
 
@@ -62,7 +60,6 @@ public class Robot extends RobotCore {
         super.robotInit();
 
         compressor = new Compressor();
-        //compressor.setClosedLoopControl(false);
 
         oi = new OI();
         drive = new DriveSubsystem();
@@ -79,10 +76,6 @@ public class Robot extends RobotCore {
 
         Robot.drive.gyro.rezero();
 
-        Log.d("12 inches: " + DriveSubsystem.inchesToClicks(12));
-        Log.d("6 inches: " + DriveSubsystem.inchesToClicks(6));
-
-
         if (MAIN_ROBOT) {
             Log.i("PIGXEL mode.");
         } else {
@@ -92,16 +85,14 @@ public class Robot extends RobotCore {
 
     @Override
     public void disabledInit() {
-        if (MAIN_ROBOT) {
-            arm.armPID.disable();
-        }
+        arm.armPID.disable();
     }
 
     @Override
     public void disabledPeriodic() {
-        Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
-        Log.d("Gyro: " + drive.gyro.getForPID());
-        Log.d("Arm: " + arm.armEncoder.getForPID());
+        //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
+        //Log.d("Gyro: " + drive.gyro.getForPID());
+        Log.d("Arm: " + arm.getPosition() + ", rel: " + arm.getPositionRelative());
     }
 
     @Override
@@ -137,7 +128,10 @@ public class Robot extends RobotCore {
             drive.rotatePID.reTune(SmartDashboard.getNumber("kP", 0), SmartDashboard.getNumber("kI", 0),
                     SmartDashboard.getNumber("kD", 0));
 
-            drive.rotatePID.enable();
+            drive.rotatePID.disable();
+
+            drive.leftDrive.testEachWait(0.5,0.5);
+            drive.rightDrive.testEachWait(0.5,0.5);
         } else {
             drive.shift.set(true);
             arm.arm.testEachWait(0.5, 0.5);

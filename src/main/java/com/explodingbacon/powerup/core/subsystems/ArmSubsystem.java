@@ -5,7 +5,6 @@ import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.actuators.MotorGroup;
 import com.explodingbacon.bcnlib.framework.PIDController;
 import com.explodingbacon.bcnlib.framework.Subsystem;
-import com.explodingbacon.bcnlib.sensors.AbstractEncoder;
 import com.explodingbacon.bcnlib.sensors.Encoder;
 import com.explodingbacon.powerup.core.AnalogSensor;
 import com.explodingbacon.powerup.core.Map;
@@ -22,7 +21,10 @@ public class ArmSubsystem extends Subsystem {
     public AnalogSensor armEncoder;
     public PIDController armPID;
 
-    final int FLOOR_FRONT = Robot.MAIN_ROBOT ? 925 : 460, SWITCH_FRONT = 1120+-560+FLOOR_FRONT, SWITCH_BACK = 2235-560+FLOOR_FRONT, FLOOR_BACK = 2780+100-560+FLOOR_FRONT;
+    final int FLOOR_FRONT = Robot.MAIN_ROBOT ? 1120 : 460,
+            SWITCH_FRONT = 1120+-560+FLOOR_FRONT+100,
+            SWITCH_BACK = 2235-560-100+FLOOR_FRONT+(Robot.MAIN_ROBOT ? 150 : 0),
+            FLOOR_BACK = 2780+100-560+FLOOR_FRONT+(Robot.MAIN_ROBOT ? 40 : 0);
 
     public static final double MAX_OFFSET = 220;
 
@@ -81,13 +83,13 @@ public class ArmSubsystem extends Subsystem {
         }
         if (target != pos) {
             target = pos;
-            armPID.setTarget(target+targetOff);
+            armPID.setTarget(target+(Robot.MAIN_ROBOT ? -targetOff : targetOff));
         }
     }
 
     public void setOffset(double offset) {
         targetOff = offset;
-        armPID.setTarget(target+targetOff);
+        armPID.setTarget(target+(Robot.MAIN_ROBOT ? -targetOff : targetOff));
     }
 
     public void setFloor(boolean floor) {
@@ -100,6 +102,14 @@ public class ArmSubsystem extends Subsystem {
 
     public void flipSide() {
         setSide(!front);
+    }
+
+    public double getPosition() {
+        return armEncoder.getForPID();
+    }
+
+    public double getPositionRelative() {
+        return armEncoder.getForPID() - FLOOR_FRONT;
     }
 
 

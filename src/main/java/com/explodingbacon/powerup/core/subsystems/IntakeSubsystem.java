@@ -25,12 +25,8 @@ public class IntakeSubsystem extends Subsystem {
     public void intake(boolean intakeButton, boolean outtakeButton) {
         if (intakeButton) {
             setIntake(1, true);
-            //intakeMotorA.setPower(1.0);
-            //intakeMotorB.setPower(-1.0);
         } else if (outtakeButton) {
-            setIntake(1, false);
-            //intakeMotorA.setPower(-1.0);
-            //intakeMotorB.setPower(1.0);
+            setIntake(0.7, false); //formerly 1.0
         } else {
             setIntake(passiveIntake ? 0.2 : 0, true);
         }
