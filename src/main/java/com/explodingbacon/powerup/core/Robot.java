@@ -118,6 +118,7 @@ public class Robot extends RobotCore {
 
     @Override
     public void teleopPeriodic() {
+        Log.d("Left: " + Robot.drive.leftDriveEncoder.getRate() + ", Right: " + Robot.drive.rightDriveEncoder.getRate());
 
         /*double arm = OI.driver.getRightTrigger() - OI.driver.getLeftTrigger();
         arm = Utils.deadzone(arm, 0.1);

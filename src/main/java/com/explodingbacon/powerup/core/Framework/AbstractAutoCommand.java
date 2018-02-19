@@ -81,6 +81,12 @@ public abstract class AbstractAutoCommand extends Command {
             if (inches == 0) {
                 keepGoing = System.currentTimeMillis() - startTime <= milliseconds;
             } else {
+                if (Math.abs(Robot.drive.rightDriveEncoder.getRate()) <= 2) {
+                    Log.wtf("RIGHT DRIVE ENCODER NOT READING");
+                }
+                if (Math.abs(Robot.drive.leftDriveEncoder.getRate()) <= 2) {
+                    Log.wtf("LEFT DRIVE ENCODER NOT READING");
+                }
                 keepGoing = Math.abs(encAverage()) < inches(inches);
             }
 

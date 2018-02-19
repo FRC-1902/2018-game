@@ -39,53 +39,54 @@ public class AutonomousCommand extends AbstractAutoCommand {
             boolean left = s.charAt(0) == 'L';
             //Robot.intake.setIntake(false);
 
-            driveDistance(12, 0.5);
-            Thread.sleep(200);
+            driveDistance(8, 0.5);
+            sleep(200);
 
 
-            angle = left ? 360-55 : 40;
-            driveDistanceAtAngle(60, 0.7, angle); //.6 sped, 96 inches
+            angle = left ? 360-55 : 30;
+            driveDistanceAtAngle(left ? 96 : 96, 1, angle); //.9
 
-            driveDistanceAtAngle(40, 0.5, 0);
+
+            driveDistanceAtAngle(54-(!left ? 21 : 0), 0.5, 0);
+
 
             //eject cube 1
-            Robot.intake.intake(false, true);
-            Thread.sleep(350);
+            Robot.intake.setIntake(0.5, false);
+            sleep(350);
+            Robot.intake.setIntake(0, false);
 
-            Robot.intake.intake(false, false);
             //scored cube, going to get another one from 10 stack
 
-            driveDistanceAtAngle(2, -0.45, 0);
+            final double backFromSwitch = 12;// +(!left ? 12+7 : 0);
+
+            driveDistanceAtAngle(backFromSwitch, -0.45, 0);
 
             turnToAngle(left ? 90 : 360-90);
-            //driveDistanceAtAngle(24, -0.7, 0);
 
-            Thread.sleep(100); //250
 
             Robot.arm.setState(true, true);
 
-            Thread.sleep(300);
 
             Robot.intake.setIntake(1, true);
-            driveDistance(30, 0.5);
-            Robot.intake.setIntake(0, true);
+            driveDistance(48, 0.4);
+            Robot.intake.setIntake(0.3, true);
 
-            //Thread.sleep(5000);
-            driveDistance(30, -0.6);
+            driveDistance(31, -0.6);
 
             Robot.arm.setState(true, false);
             turnToAngle(0);
 
-            driveDistanceAtAngle(2, -0.45, 0);
+            Robot.intake.setIntake(0, true);
+
+            driveDistanceAtAngle(backFromSwitch, 0.45, 0);
 
 
             //Eject cube 2
-            Robot.intake.intake(false, true);
-            Thread.sleep(350);
+            Robot.intake.setIntake(0.5, false);
+            sleep(350);
+            Robot.intake.setIntake(0, false);
 
-            Robot.intake.intake(false, false);
-
-            Thread.sleep(5000);
+            sleep(5000);
 
             //back up for cube 3
             driveDistance(5, -0.7);
