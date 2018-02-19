@@ -3,6 +3,7 @@ package com.explodingbacon.powerup.core.subsystems;
 import com.explodingbacon.bcnlib.actuators.FakeMotor;
 import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.actuators.MotorGroup;
+import com.explodingbacon.bcnlib.framework.Log;
 import com.explodingbacon.bcnlib.framework.PIDController;
 import com.explodingbacon.bcnlib.framework.Subsystem;
 import com.explodingbacon.bcnlib.sensors.Encoder;
@@ -21,10 +22,7 @@ public class ArmSubsystem extends Subsystem {
     public AnalogSensor armEncoder;
     public PIDController armPID;
 
-    final int FLOOR_FRONT = Robot.MAIN_ROBOT ? 1120 : 460,
-            SWITCH_FRONT = 1120+-560+FLOOR_FRONT+100,
-            SWITCH_BACK = 2235-560-100+FLOOR_FRONT+(Robot.MAIN_ROBOT ? 150 : 0),
-            FLOOR_BACK = 2780+100-560+FLOOR_FRONT+(Robot.MAIN_ROBOT ? 40 : 0);
+    public static double FLOOR_FRONT=0, SWITCH_FRONT, SWITCH_BACK, FLOOR_BACK;
 
     public static final double MAX_OFFSET = 220;
 
@@ -55,9 +53,19 @@ public class ArmSubsystem extends Subsystem {
         positionThree = 0;
         positionFour = 0;
 
+        initPresets();
+
         //armPID.enable();
         setState(true, false);
         armPID.setTarget(target);
+    }
+
+    public void initPresets() {
+        if (FLOOR_FRONT == 0)
+            FLOOR_FRONT = Robot.MAIN_ROBOT ? 1120 : 1411;
+        SWITCH_FRONT = FLOOR_FRONT + 658;
+        FLOOR_BACK = FLOOR_FRONT + 2303;
+        SWITCH_BACK = FLOOR_BACK - 658;
     }
 
     public void setState(boolean front, boolean floor) {
@@ -67,7 +75,7 @@ public class ArmSubsystem extends Subsystem {
         boolean workingFront = front;
         if (Robot.MAIN_ROBOT) workingFront = !workingFront;
 
-        int pos;
+        double pos;
         if (workingFront) {
             if (this.floor) {
                 pos = FLOOR_FRONT;

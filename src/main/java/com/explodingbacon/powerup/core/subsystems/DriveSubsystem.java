@@ -19,14 +19,14 @@ public class DriveSubsystem extends Subsystem {
     public MotorGroup leftDrive, rightDrive;
     public PIDController positionPIDRight;
     public PIDController positionPIDLeft;
-    public PIDController rotatePID;
+    public PIDController rotatePID, rotateDrivingPID;
     public Encoder rightDriveEncoder;
     public Encoder leftDriveEncoder;
     public BNOGyro gyro;
 
     public Solenoid shift, light;
 
-    public FakeMotor rightPositionPIDOutput, leftPositionPIDOutput, rotatePIDOutput;
+    public FakeMotor rightPositionPIDOutput, leftPositionPIDOutput, rotatePIDOutput, rotateDrivingPIDOutput;
 
     public DriveSubsystem() {
 
@@ -38,9 +38,13 @@ public class DriveSubsystem extends Subsystem {
         rightPositionPIDOutput = new FakeMotor();
         leftPositionPIDOutput = new FakeMotor();
         rotatePIDOutput = new FakeMotor();
+        rotateDrivingPIDOutput = new FakeMotor();
 
         rotatePID = new PIDController(rotatePIDOutput, gyro, .0085,0.001,0);
         rotatePID.setRotational(true);
+
+        rotateDrivingPID = new PIDController(rotateDrivingPIDOutput, gyro, .0085,0,0);
+        rotateDrivingPID.setRotational(true);
 
         rightDrive = new MotorGroup(new Motor(WPI_VictorSPX.class, Map.RIGHT_DRIVE_A), new Motor(WPI_VictorSPX.class, Map.RIGHT_DRIVE_B),
                 new Motor(WPI_VictorSPX.class, Map.RIGHT_DRIVE_C));

@@ -55,13 +55,13 @@ public class DriveCommand extends Command {
 
         double left = y + x, right = y - x;
 
-        if (x == 0/* && y != 0*/) {
-            if (!Robot.drive.rotatePID.isEnabled()) {
-                Robot.drive.rotatePID.enable();
-                Robot.drive.rotatePID.setTarget(Robot.drive.gyro.getForPID());
+        if (false && x == 0/* && y != 0*/) {
+            if (!Robot.drive.rotateDrivingPID.isEnabled()) {
+                Robot.drive.rotateDrivingPID.enable();
+                Robot.drive.rotateDrivingPID.setTarget(Robot.drive.gyro.getForPID());
                 Log.d("Enabling drive forward assist");
             }
-            double pidOut = Robot.drive.rotatePIDOutput.getPower() * 1;
+            double pidOut = Robot.drive.rotateDrivingPIDOutput.getPower() * 1;
             left += pidOut;
             right -= pidOut;
 
@@ -72,8 +72,8 @@ public class DriveCommand extends Command {
             left *= Math.abs(y);
             right *= Math.abs(y);
         } else {
-            if (Robot.drive.rotatePID.isEnabled()) {
-                Robot.drive.rotatePID.disable();
+            if (Robot.drive.rotateDrivingPID.isEnabled()) {
+                Robot.drive.rotateDrivingPID.disable();
                 Log.d("Disabled drive forward assist");
             }
         }

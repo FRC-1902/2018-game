@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 
 public class AnalogSensor implements PIDSource {
 
+
     private AnalogInput input;
 
     public AnalogSensor(int channel) {

@@ -12,8 +12,14 @@ public class ArmCommand extends Command {
 
     boolean didFlip = false;
 
+
     @Override
     public void onLoop() {
+        if (false) { //if front limit switch == true
+            ArmSubsystem.FLOOR_FRONT = Robot.arm.getPosition();
+            Robot.arm.initPresets();
+        }
+
         boolean floor = Robot.arm.floor, front = Robot.arm.front;
 
         if (OI.armPositionOne.get()) {

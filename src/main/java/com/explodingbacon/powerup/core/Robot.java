@@ -17,6 +17,7 @@ Varun A
 Natalie B
 Ruth P
 Jeffrey S
+Sebastian V
  */
 
 package com.explodingbacon.powerup.core;
@@ -35,7 +36,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends RobotCore {
 
-    public static boolean MAIN_ROBOT = true;
+    public static boolean MAIN_ROBOT = false;
 
     public static DriveSubsystem drive;
     public static ClimberSubsystem climber;
@@ -90,13 +91,16 @@ public class Robot extends RobotCore {
 
     @Override
     public void disabledPeriodic() {
-        //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
-        //Log.d("Gyro: " + drive.gyro.getForPID());
-        Log.d("Arm: " + arm.getPosition() + ", rel: " + arm.getPositionRelative());
+        Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
+        Log.d("Gyro: " + drive.gyro.getForPID());
+        //Log.d("Arm: " + arm.getPosition() + ", rel: " + arm.getPositionRelative());
     }
 
     @Override
     public void autonomousInit() {
+        SmartDashboard.putBoolean("Start at Left", true);
+        SmartDashboard.putBoolean("Back up from switch", true);
+
         super.autonomousInit();
         OI.runCommand(new AutonomousCommand());
     }
@@ -130,8 +134,9 @@ public class Robot extends RobotCore {
 
             drive.rotatePID.disable();
 
-            drive.leftDrive.testEachWait(0.5,0.5);
-            drive.rightDrive.testEachWait(0.5,0.5);
+            arm.arm.testEachWait(0.5, 0.5);
+            //drive.leftDrive.testEachWait(0.5,0.5);
+            //drive.rightDrive.testEachWait(0.5,0.5);
         } else {
             drive.shift.set(true);
             arm.arm.testEachWait(0.5, 0.5);
