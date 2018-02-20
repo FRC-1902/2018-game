@@ -18,15 +18,15 @@ public class AutonomousCommand extends AbstractAutoCommand {
     public AutonomousCommand() {
         pidOutput = Robot.drive.rotatePIDOutput;
         rotatePID = Robot.drive.rotatePID;
-        passPID(rotatePID , pidOutput);
+        passPID(rotatePID, pidOutput, Robot.drive.rotateInPlacePID, Robot.drive.rotateInPlacePIDOutput);
     }
 
     @Override
     public void onInit() {
+        Robot.drive.shift.set(true);
         Robot.drive.gyro.rezero();
         Robot.arm.armPID.enable();
         Robot.arm.setState(true, false);
-        Robot.drive.shift.set(true);
         String s = DriverStation.getInstance().getGameSpecificMessage();
         if (s.charAt(0) == 'L') {
             Log.d("GO LEFT");
@@ -34,7 +34,7 @@ public class AutonomousCommand extends AbstractAutoCommand {
             Log.d("GO RIGHT");
         }
         try {
-            //Thread.sleep(500);
+            Thread.sleep(300); //300
             double angle = 0;
             boolean left = s.charAt(0) == 'L';
             //Robot.intake.setIntake(false);
@@ -47,17 +47,15 @@ public class AutonomousCommand extends AbstractAutoCommand {
             driveDistanceAtAngle(left ? 96 : 96, 1, angle); //.9
 
 
-            driveDistanceAtAngle(54-(!left ? 21 : 0), 0.5, 0);
+            driveDistanceAtAngle(54-(!left ? 23 : 0), 0.5, 0);
 
 
             //eject cube 1
-            Robot.intake.setIntake(0.5, false);
-            sleep(350);
-            Robot.intake.setIntake(0, false);
+            outtake();
 
             //scored cube, going to get another one from 10 stack
 
-            final double backFromSwitch = 12;// +(!left ? 12+7 : 0);
+            final double backFromSwitch = 12 + (Robot.MAIN_ROBOT ? 0 : 0); //3
 
             driveDistanceAtAngle(backFromSwitch, -0.45, 0);
 
@@ -67,59 +65,55 @@ public class AutonomousCommand extends AbstractAutoCommand {
             Robot.arm.setState(true, true);
 
 
-            Robot.intake.setIntake(1, true);
+            intake();
             driveDistance(48, 0.4);
             Robot.intake.setIntake(0.3, true);
 
-            driveDistance(31, -0.6);
+            driveDistance(31, -0.6); //TODO: drive at 90/360-90
 
             Robot.arm.setState(true, false);
-            turnToAngle(0);
+            turnToAngle(left ? 5 : 360-8);
 
-            Robot.intake.setIntake(0, true);
+            stopIntake();
 
-            driveDistanceAtAngle(backFromSwitch, 0.45, 0);
-
+            driveDistanceAtAngle(backFromSwitch, 0.45, left ? 5 : 360-8);
 
             //Eject cube 2
-            Robot.intake.setIntake(0.5, false);
-            sleep(350);
-            Robot.intake.setIntake(0, false);
+            outtake();
 
-            sleep(5000);
-
-            //back up for cube 3
-            driveDistance(5, -0.7);
-            Robot.arm.setState(true, true);
 
             //turn for cube 3
-            angle = left ? 67 : 360 - 67;
+            angle = left ? 90 : 360 - 90;
+            Robot.arm.setState(true, true);
             turnToAngle(angle);
 
+            //Robot.arm.setState(true, true);
+            //sleep(300);
+
             //get cube 3
-            Robot.intake.intake(true, false);
+            intake();
 
-            driveDistance(27, 0.6);
-            Thread.sleep(250);
-            Robot.intake.intake(false, false);
+            driveDistance(27, 0.5); //TODO: drive at 90/360-90
+            Robot.intake.setIntake(0.4, true);
 
-            /*
-            driveDistance(20, -0.7);
+            driveDistance(23, -0.6);
 
-            //Has cube, backing up to exchange
+            Robot.arm.setState(true, false);
 
-            if (left) {
-                Robot.drive.tankDrive(-0.5f, 0.5f);
-            } else {
-                Robot.drive.tankDrive(0.5f, -0.5f);
-            }
-            while (Math.abs((left ? 360-10 : 30)-Robot.drive.gyro.getForPID()) > 5) {
-                Thread.sleep(5);
-            }
-            Robot.drive.tankDrive(-1,-1);
-            Thread.sleep(700);
-            */
-            Robot.drive.tankDrive(0, 0);
+            angle = left ? 5 : 360-5;
+            turnToAngle(left ? 5 : angle);
+
+            stopIntake();
+
+            driveDistanceAtAngle(4, 0.6, angle);
+
+            //Eject cube 3
+            outtake();
+
+            driveDistanceAtAngle(24, -1, 0);
+            Robot.arm.setState(true, true);
+
+            //Robot.drive.tankDrive(0, 0);
         } catch (Exception e) {
             e.printStackTrace();
         }

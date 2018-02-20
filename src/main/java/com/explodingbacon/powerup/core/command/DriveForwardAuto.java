@@ -17,7 +17,7 @@ public class DriveForwardAuto extends AbstractAutoCommand {
     public DriveForwardAuto(){
         pidOutput = Robot.drive.rotatePIDOutput;
         rotatePID = Robot.drive.rotatePID;
-        passPID(rotatePID, pidOutput);
+        passPID(rotatePID, pidOutput, Robot.drive.rotateInPlacePID, Robot.drive.rotateDrivingPIDOutput);
     }
 
     @Override
@@ -45,9 +45,11 @@ public class DriveForwardAuto extends AbstractAutoCommand {
             driveDistance(130, 0.8);
             sleep(100);
             if (left == startAtLeft) {
-                Robot.intake.intake(false, true);
+                Robot.intake.setIntake(-1, false);
+                //Robot.intake.intake(false, true);
                 sleep(100);
-                Robot.intake.intake(false, false);
+                Robot.intake.setIntake(0, false);
+                //Robot.intake.intake(false, false);
 
                 if (backUp) {
                     driveDistance(30, -0.8);

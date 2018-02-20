@@ -36,7 +36,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends RobotCore {
 
-    public static boolean MAIN_ROBOT = false;
+    public static boolean MAIN_ROBOT = true;
 
     public static DriveSubsystem drive;
     public static ClimberSubsystem climber;
@@ -91,9 +91,10 @@ public class Robot extends RobotCore {
 
     @Override
     public void disabledPeriodic() {
+        //Log.d("Front: " + arm.frontLimit.get() + ", back: " + arm.backLimit.get());
         Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
-        Log.d("Gyro: " + drive.gyro.getForPID());
-        //Log.d("Arm: " + arm.getPosition() + ", rel: " + arm.getPositionRelative());
+        //Log.d("Gyro: " + drive.gyro.getForPID());
+        //Log.d("Arm: " + arm.getPosition());
     }
 
     @Override

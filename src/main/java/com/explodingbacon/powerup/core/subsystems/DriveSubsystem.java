@@ -19,14 +19,14 @@ public class DriveSubsystem extends Subsystem {
     public MotorGroup leftDrive, rightDrive;
     public PIDController positionPIDRight;
     public PIDController positionPIDLeft;
-    public PIDController rotatePID, rotateDrivingPID;
+    public PIDController rotatePID, rotateInPlacePID, rotateDrivingPID;
     public Encoder rightDriveEncoder;
     public Encoder leftDriveEncoder;
     public BNOGyro gyro;
 
     public Solenoid shift, light;
 
-    public FakeMotor rightPositionPIDOutput, leftPositionPIDOutput, rotatePIDOutput, rotateDrivingPIDOutput;
+    public FakeMotor rightPositionPIDOutput, leftPositionPIDOutput, rotatePIDOutput, rotateDrivingPIDOutput, rotateInPlacePIDOutput;
 
     public DriveSubsystem() {
 
@@ -39,9 +39,13 @@ public class DriveSubsystem extends Subsystem {
         leftPositionPIDOutput = new FakeMotor();
         rotatePIDOutput = new FakeMotor();
         rotateDrivingPIDOutput = new FakeMotor();
+        rotateInPlacePIDOutput = new FakeMotor();
 
         rotatePID = new PIDController(rotatePIDOutput, gyro, .0085,0.001,0);
         rotatePID.setRotational(true);
+
+        rotateInPlacePID = new PIDController(rotateInPlacePIDOutput, gyro, .0095,0.001,0);
+        rotateInPlacePID.setRotational(true);
 
         rotateDrivingPID = new PIDController(rotateDrivingPIDOutput, gyro, .0085,0,0);
         rotateDrivingPID.setRotational(true);
@@ -60,6 +64,9 @@ public class DriveSubsystem extends Subsystem {
         leftDriveEncoder = new Encoder(Map.DRIVE_LEFT_ENCODER_A, Map.DRIVE_LEFT_ENCODER_B);
 
         rightDriveEncoder.setReversed(true);
+        if (Robot.MAIN_ROBOT) {
+            leftDriveEncoder.setReversed(true);
+        }
 
 
         //positionPIDRight = new PIDController(rightPositionPIDOutput, rightDriveEncoder, .1, .1, .1);

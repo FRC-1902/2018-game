@@ -6,6 +6,7 @@ import com.explodingbacon.bcnlib.actuators.MotorGroup;
 import com.explodingbacon.bcnlib.framework.Log;
 import com.explodingbacon.bcnlib.framework.PIDController;
 import com.explodingbacon.bcnlib.framework.Subsystem;
+import com.explodingbacon.bcnlib.sensors.DigitalInput;
 import com.explodingbacon.bcnlib.sensors.Encoder;
 import com.explodingbacon.powerup.core.AnalogSensor;
 import com.explodingbacon.powerup.core.Map;
@@ -20,21 +21,21 @@ public class ArmSubsystem extends Subsystem {
     public MotorGroup arm;
 
     public AnalogSensor armEncoder;
+
+    public DigitalInput frontLimit, backLimit;
+
     public PIDController armPID;
 
-    public static double FLOOR_FRONT=0, SWITCH_FRONT, SWITCH_BACK, FLOOR_BACK;
+    public static double FLOOR_FRONT=0, SWITCH_FRONT, SWITCH_BACK, FLOOR_BACK=0;
 
     public static final double MAX_OFFSET = 220;
 
     double target;
     public boolean front = true;
     public boolean floor = true;
+    public boolean ohHeckMode = false;
     public double targetOff = 0;
 
-    int positionOne;
-    int positionTwo;
-    int positionThree;
-    int positionFour;
 
     public ArmSubsystem() {
 
@@ -46,12 +47,10 @@ public class ArmSubsystem extends Subsystem {
         armEncoder = new AnalogSensor(Map.ARM_ENCODER);
         armPID = new PIDController(arm, armEncoder, .001, 0, 0);
         armPID.setInputInverted(true);
-        //armEncoder.setPIDMode(AbstractEncoder.PIDMode.POSITION);
 
-        positionOne = 0;
-        positionTwo = 0;
-        positionThree = 0;
-        positionFour = 0;
+        frontLimit = new DigitalInput(Map.ARM_LIMIT_FRONT);
+        backLimit = new DigitalInput(Map.ARM_LIMIT_BACK);
+
 
         initPresets();
 
@@ -62,9 +61,11 @@ public class ArmSubsystem extends Subsystem {
 
     public void initPresets() {
         if (FLOOR_FRONT == 0)
-            FLOOR_FRONT = Robot.MAIN_ROBOT ? 1120 : 1411;
+            FLOOR_FRONT = Robot.MAIN_ROBOT ? 232 : 1411;
         SWITCH_FRONT = FLOOR_FRONT + 658;
-        FLOOR_BACK = FLOOR_FRONT + 2303;
+
+        if (FLOOR_BACK == 0)
+            FLOOR_BACK = FLOOR_FRONT + 2303 + (Robot.MAIN_ROBOT ? 50 : 0);
         SWITCH_BACK = FLOOR_BACK - 658;
     }
 
@@ -93,6 +94,12 @@ public class ArmSubsystem extends Subsystem {
             target = pos;
             armPID.setTarget(target+(Robot.MAIN_ROBOT ? -targetOff : targetOff));
         }
+    }
+
+    public void ohHeck() {
+        target = (SWITCH_FRONT + SWITCH_BACK)/2;
+        armPID.setTarget(target);
+        ohHeckMode = true;
     }
 
     public void setOffset(double offset) {
@@ -126,51 +133,6 @@ public class ArmSubsystem extends Subsystem {
     }
     public void moveDirectionB() {
         arm.setPower(-1.0);
-    }
-
-
-    public void toPosition (boolean buttonOnePressed, boolean buttomTwoPressed, boolean buttonThreePressed, boolean buttonFourPressed) {
-
-        double armPosition = armEncoder.getForPID();
-
-        if (buttonOnePressed) {
-            if (armPosition != positionOne) {
-                if (armPosition < positionOne) {
-                    moveDirectionA();
-                }
-
-            } else {
-                moveDirectionB();
-            }
-
-        } else if (buttomTwoPressed) {
-            if (armPosition != positionTwo ) {
-                if (armPosition < positionTwo) {
-                    moveDirectionA();
-                }else {
-                    moveDirectionB();
-                }
-            }
-
-        } else if (buttonThreePressed) {
-            if (armPosition != positionThree){
-                if (armPosition < positionThree){
-                    moveDirectionA();
-                }else {
-                    moveDirectionB();
-                }
-            }
-
-        } else if (buttonFourPressed) {
-            if (armPosition != positionFour) {
-                if (armPosition < positionFour){
-                    moveDirectionA();
-                }else{
-                    moveDirectionB();
-                }
-            }
-
-        }
     }
 
     @Override

@@ -9,12 +9,14 @@ import com.explodingbacon.powerup.core.Robot;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
 
 public abstract class AbstractAutoCommand extends Command {
-    PIDController rotatePID;
-    Motor pidOutput;
+    PIDController rotatePID, rotateInPlace;
+    Motor pidOutput, rotateInPlaceOutput;
 
-    public void passPID(PIDController rotatePID ,Motor pidOutput){
+    public void passPID(PIDController rotatePID, Motor pidOutput, PIDController rotateInPlace, Motor rotateInPlaceOutput){
         this.rotatePID = rotatePID;
         this.pidOutput = pidOutput;
+        this.rotateInPlace = rotateInPlace;
+        this.rotateInPlaceOutput = rotateInPlaceOutput;
     }
 
     public void turnToAngle(double angle) {
@@ -22,16 +24,16 @@ public abstract class AbstractAutoCommand extends Command {
     }
 
     public void turnToAngle(double angle, double deadzone) {
-        rotatePID.setFinishedTolerance(deadzone);
-        rotatePID.setTarget(angle);
-        rotatePID.enable();
-        while (!rotatePID.isDone() && Robot.isAutonomous()) {
-            Robot.drive.tankDrive(pidOutput.getPower(), -pidOutput.getPower());
+        rotateInPlace.setFinishedTolerance(deadzone);
+        rotateInPlace.setTarget(angle);
+        rotateInPlace.enable();
+        while (!rotateInPlace.isDone() && Robot.isAutonomous()) {
+            Robot.drive.tankDrive(rotateInPlaceOutput.getPower(), -rotateInPlaceOutput.getPower());
             try {
                 Thread.sleep(5);
             } catch (Exception e) {}
         }
-        rotatePID.disable();
+        rotateInPlace.disable();
     }
 
     public void driveDistance(double inches, double speed) {
@@ -82,10 +84,10 @@ public abstract class AbstractAutoCommand extends Command {
                 keepGoing = System.currentTimeMillis() - startTime <= milliseconds;
             } else {
                 if (Math.abs(Robot.drive.rightDriveEncoder.getRate()) <= 2) {
-                    Log.wtf("RIGHT DRIVE ENCODER NOT READING");
+                    //Log.wtf("RIGHT DRIVE ENCODER NOT READING");
                 }
                 if (Math.abs(Robot.drive.leftDriveEncoder.getRate()) <= 2) {
-                    Log.wtf("LEFT DRIVE ENCODER NOT READING");
+                    //Log.wtf("LEFT DRIVE ENCODER NOT READING");
                 }
                 keepGoing = Math.abs(encAverage()) < inches(inches);
             }
@@ -113,6 +115,20 @@ public abstract class AbstractAutoCommand extends Command {
     public double encAverage() {
         double avg = (Robot.drive.rightDriveEncoder.getForPID() + Robot.drive.leftDriveEncoder.getForPID())/2;
         return avg;
+    }
+
+    public void intake() {
+        Robot.intake.setIntake(0.5, 1, true);
+    }
+
+    public void stopIntake() {
+        Robot.intake.setIntake(0, true);
+    }
+
+    public void outtake() {
+        Robot.intake.setIntake(0.4, false);
+        sleep(350);
+        stopIntake();
     }
 
     public void sleep(long millis){

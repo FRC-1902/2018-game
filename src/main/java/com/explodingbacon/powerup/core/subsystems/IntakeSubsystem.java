@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.framework.Log;
 import com.explodingbacon.bcnlib.framework.Subsystem;
+import com.explodingbacon.bcnlib.utils.Utils;
 import com.explodingbacon.powerup.core.AnalogSensor;
 import com.explodingbacon.powerup.core.Map;
 import com.explodingbacon.powerup.core.Robot;
@@ -24,37 +25,14 @@ public class IntakeSubsystem extends Subsystem {
         //setPassiveIntake(true);
     }
 
-    public void intake(boolean intakeButton, boolean outtakeButton) {
-        if (intakeButton) {
-            setIntake(1, true); //1
-        } else if (outtakeButton) {
-            double pow = Robot.arm.floor ? 1 : 0.7; //formerly always 1.0
-            setIntake(pow, false);
-        } else {
-            boolean moving = Math.abs(Robot.arm.armPID.getCurrentError()) > 180;
-            //Log.d("Moving: " + moving);
-            setIntake(moving ? 0.2 : 0, true);
-        }
-    }
-
-    public void setPassiveIntake(boolean on) {
-        passiveIntake = on;
-    }
-
     public void setIntake(double pow, boolean in) {
+        setIntake(pow, pow, in);
+    }
+
+    public void setIntake(double powTop, double powBot, boolean in) {
         double dir = in ? 1 : -1;
-
-        double topChange = 1;
-        double bottomChange = 1;
-        Log.d("Front: " + Robot.arm.front);
-        if (Robot.arm.front) {
-            topChange = in && pow != 0.2 ? .5 : 1;
-        } else {
-            bottomChange = in && pow != 0.2 ? .5 : 1;
-        }
-
-        intakeMotorA.setPower(pow * dir * topChange);
-        intakeMotorB.setPower(-pow * dir * bottomChange);
+        intakeMotorA.setPower((Robot.arm.front ? powTop : powBot) * dir);
+        intakeMotorB.setPower(-1 * (!Robot.arm.front ? powTop : powBot) * dir);
     }
 
 
