@@ -76,12 +76,11 @@ public class AutonomousCommand extends AbstractAutoCommand {
 
             stopIntake();
 
-            driveDistanceAtAngle(backFromSwitch, 0.45, left ? 5 : 360-8);
+            driveDistanceAtAngle(backFromSwitch+5, 0.45, left ? 5 : 360-8);
 
             //Eject cube 2
             outtake();
-
-
+            
             //turn for cube 3
             angle = left ? 90 : 360 - 90;
             Robot.arm.setState(true, true);
@@ -93,10 +92,10 @@ public class AutonomousCommand extends AbstractAutoCommand {
             //get cube 3
             intake();
 
-            driveDistance(27, 0.5); //TODO: drive at 90/360-90
+            driveDistance(27+5, 0.5); //TODO: drive at 90/360-90?
             Robot.intake.setIntake(0.4, true);
 
-            driveDistance(23, -0.6);
+            driveDistance(23+5, -0.6);
 
             Robot.arm.setState(true, false);
 
@@ -105,7 +104,7 @@ public class AutonomousCommand extends AbstractAutoCommand {
 
             stopIntake();
 
-            driveDistanceAtAngle(4, 0.6, angle);
+            driveDistanceAtAngle(8, 0.7, angle);
 
             //Eject cube 3
             outtake();

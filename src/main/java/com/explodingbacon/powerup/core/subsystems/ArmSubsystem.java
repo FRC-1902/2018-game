@@ -26,7 +26,7 @@ public class ArmSubsystem extends Subsystem {
 
     public PIDController armPID;
 
-    public static double FLOOR_FRONT=0, SWITCH_FRONT, SWITCH_BACK, FLOOR_BACK=0;
+    public static Double FLOOR_FRONT=null, SWITCH_FRONT, SWITCH_BACK, FLOOR_BACK=null;
 
     public static final double MAX_OFFSET = 220;
 
@@ -49,7 +49,9 @@ public class ArmSubsystem extends Subsystem {
         armPID.setInputInverted(true);
 
         frontLimit = new DigitalInput(Map.ARM_LIMIT_FRONT);
+        frontLimit.setReversed(true);
         backLimit = new DigitalInput(Map.ARM_LIMIT_BACK);
+        backLimit.setReversed(true);
 
 
         initPresets();
@@ -60,13 +62,23 @@ public class ArmSubsystem extends Subsystem {
     }
 
     public void initPresets() {
-        if (FLOOR_FRONT == 0)
-            FLOOR_FRONT = Robot.MAIN_ROBOT ? 232 : 1411;
-        SWITCH_FRONT = FLOOR_FRONT + 658;
+        initPresets(false);
+    }
 
-        if (FLOOR_BACK == 0)
-            FLOOR_BACK = FLOOR_FRONT + 2303 + (Robot.MAIN_ROBOT ? 50 : 0);
-        SWITCH_BACK = FLOOR_BACK - 658;
+    public void initPresets(boolean frontRelative) {
+        if (FLOOR_FRONT == null && !frontRelative) {
+            FLOOR_FRONT = Robot.MAIN_ROBOT ? 1392 : 1411d;
+        }
+
+        if (FLOOR_BACK == null)
+            FLOOR_BACK = FLOOR_FRONT + 2296;
+
+        if (FLOOR_FRONT == null && frontRelative) {
+            FLOOR_FRONT = FLOOR_BACK - 2296;
+        }
+
+        SWITCH_BACK = FLOOR_BACK - 610;
+        SWITCH_FRONT = FLOOR_FRONT + 610;
     }
 
     public void setState(boolean front, boolean floor) {

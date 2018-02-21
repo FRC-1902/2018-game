@@ -66,7 +66,9 @@ public class Robot extends RobotCore {
         drive = new DriveSubsystem();
         intake = new IntakeSubsystem();
         arm = new ArmSubsystem();
-        //climber = new ClimberSubsystem();
+        if (!MAIN_ROBOT) {
+            climber = new ClimberSubsystem();
+        }
 
         SmartDashboard.putNumber("kP", 0.001);
         SmartDashboard.putNumber("kI", 0);
@@ -91,10 +93,10 @@ public class Robot extends RobotCore {
 
     @Override
     public void disabledPeriodic() {
-        //Log.d("Front: " + arm.frontLimit.get() + ", back: " + arm.backLimit.get());
-        Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
+        Log.d("Front: " + arm.frontLimit.get() + ", back: " + arm.backLimit.get());
+        //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
         //Log.d("Gyro: " + drive.gyro.getForPID());
-        //Log.d("Arm: " + arm.getPosition());
+        Log.d("Arm: " + arm.getPosition());
     }
 
     @Override
@@ -102,7 +104,7 @@ public class Robot extends RobotCore {
         SmartDashboard.putBoolean("Start at Left", true);
         SmartDashboard.putBoolean("Back up from switch", true);
 
-        super.autonomousInit();
+        OI.runCommand(new ArmSafetyCommand());
         OI.runCommand(new AutonomousCommand());
     }
 
@@ -111,7 +113,15 @@ public class Robot extends RobotCore {
         OI.runCommand(new DriveCommand());
         OI.runCommand(new IntakeCommand());
         OI.runCommand(new ArmCommand());
-        //OI.runCommand(new ClimberCommand());
+        if (!ArmSafetyCommand.ACTIVE) {
+            Log.i("init teleop safety command");
+            OI.runCommand(new ArmSafetyCommand());
+        } else {
+            Log.i("Not enabling teleop safety commend due to safety command still running");
+        }
+        if (!MAIN_ROBOT) {
+            OI.runCommand(new ClimberCommand());
+        }
 
         arm.armPID.enable();
 
@@ -119,29 +129,19 @@ public class Robot extends RobotCore {
 
     @Override
     public void teleopPeriodic() {
-        Log.d("Left: " + Robot.drive.leftDriveEncoder.getRate() + ", Right: " + Robot.drive.rightDriveEncoder.getRate());
+        Log.d("Arm: " + arm.getPosition());
 
-        /*double arm = OI.driver.getRightTrigger() - OI.driver.getLeftTrigger();
-        arm = Utils.deadzone(arm, 0.1);
-        Robot.arm.arm.setPower(arm*.75);*/
-
+        // Log.d("Left: " + Robot.drive.leftDriveEncoder.getRate() + ", Right: " + Robot.drive.rightDriveEncoder.getRate());
     }
 
     @Override
     public void testInit() {
         if (!MAIN_ROBOT) {
-            //OI.runCommand(new ArmCommand());
-            drive.rotatePID.reTune(SmartDashboard.getNumber("kP", 0), SmartDashboard.getNumber("kI", 0),
-                    SmartDashboard.getNumber("kD", 0));
-
-            drive.rotatePID.disable();
-
-            arm.arm.testEachWait(0.5, 0.5);
-            //drive.leftDrive.testEachWait(0.5,0.5);
-            //drive.rightDrive.testEachWait(0.5,0.5);
+            climber.winch.testEachWait(0.5, 0.5);
         } else {
             drive.shift.set(true);
-            arm.arm.testEachWait(0.5, 0.5);
+            drive.leftDrive.testEachWait(0.5,0.5);
+            drive.rightDrive.testEachWait(0.5,0.5);
         }
     }
 

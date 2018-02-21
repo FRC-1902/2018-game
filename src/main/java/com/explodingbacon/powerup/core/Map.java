@@ -5,6 +5,7 @@ public class Map {
     //SOLENOIDS
 
     public static final int SHIFT = Robot.MAIN_ROBOT ? 0 : 0;
+    public static final int CLIMBER = Robot.MAIN_ROBOT ? -1 : -1;
 
     //CAN
 
@@ -28,7 +29,7 @@ public class Map {
 
 
     public static final int CLIMBER_A = Robot.MAIN_ROBOT ? 2 : 2;
-    public static final int CLIMBER_B = Robot.MAIN_ROBOT ? 4 : 3;
+    public static final int CLIMBER_B = Robot.MAIN_ROBOT ? 3 : 3;
 
 
     //DIO
