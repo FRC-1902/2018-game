@@ -42,6 +42,8 @@ public class ArmSubsystem extends Subsystem {
         arm = new MotorGroup(new Motor(VictorSP.class, Map.ARM_A), new Motor(VictorSP.class, Map.ARM_B));
         if (Robot.MAIN_ROBOT) {
             arm.setInverts(false, true);
+        } else {
+            //arm = new MotorGroup(new FakeMotor());
         }
 
         armEncoder = new AnalogSensor(Map.ARM_ENCODER);
@@ -67,7 +69,7 @@ public class ArmSubsystem extends Subsystem {
 
     public void initPresets(boolean frontRelative) {
         if (FLOOR_FRONT == null && !frontRelative) {
-            FLOOR_FRONT = Robot.MAIN_ROBOT ? 1392 : 1411d;
+            FLOOR_FRONT = Robot.MAIN_ROBOT ? 1392 : 635d;
         }
 
         if (FLOOR_BACK == null)

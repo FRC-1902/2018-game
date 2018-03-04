@@ -79,7 +79,25 @@ public class DriveCommand extends Command {
             }
         }
 
-        Robot.drive.tankDrive(left, right);
+        if (OI.positionHoldButton.get()) {
+            if (!Robot.drive.positionPID.isEnabled()) {
+                Robot.drive.positionPID.setTarget(Robot.drive.driveEncoderAvg.get());
+                Robot.drive.positionPID.enable();
+                Log.d("enable position hold");
+            }
+            double out = Robot.drive.positionPIDOutput.getPower();
+            //Log.d("Out: " + out);
+            Robot.drive.tankDrive(out, out);
+        } else {
+            if (Robot.drive.positionPID.isEnabled()) {
+                Robot.drive.positionPID.disable();
+                Log.d("disable position hold");
+            }
+
+            Robot.drive.tankDrive(left, right);
+        }
+
+        //Robot.drive.tankDrive(left, right);
 
 
         //Robot.compressor.setClosedLoopControl(!OI.driver.isLeftTriggerPressed());

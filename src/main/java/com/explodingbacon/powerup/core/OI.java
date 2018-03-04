@@ -9,8 +9,10 @@ public class OI extends AbstractOI {
 
     public static XboxController driver;
     public static XboxController manipulator;
+    public static Button positionHoldButton;
     public static Button climberOutButton;
     public static Button climberUpButton;
+    public static Button climberWinchButton;
     public static Button armPositionOne;
     public static Button armPositionTwo;
     public static Button armPositionThree;
@@ -24,9 +26,12 @@ public class OI extends AbstractOI {
         driver = new XboxController(0);
         manipulator = new XboxController(1);
 
+        positionHoldButton = driver.y;
+
         climberOutButton = manipulator.select;
         climberUpButton = manipulator.start;
         climberPistonButton = driver.a;
+        climberWinchButton = driver.y;
 
         armPositionOne = manipulator.y;
         armPositionTwo = manipulator.x;

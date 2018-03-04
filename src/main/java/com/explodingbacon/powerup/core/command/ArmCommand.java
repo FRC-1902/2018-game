@@ -14,6 +14,9 @@ public class ArmCommand extends Command {
 
     double flipOffset = 0;
     boolean didFlip = false;
+    boolean doSwitchThrow = false;
+    public static boolean forceOuttake = false;
+    long outtakeStart = 0;
 
     @Override
     public void onLoop() {
@@ -34,6 +37,25 @@ public class ArmCommand extends Command {
 
         if ((OI.driver.isLeftTriggerPressed() || OI.manipulator.isLeftTriggerPressed()) && !Robot.arm.ohHeckMode) {
             Robot.arm.ohHeck();
+        }
+
+        if (OI.driver.rightBumper.get() && Robot.arm.floor && false) {
+            Robot.arm.setState(!Robot.arm.front, !Robot.arm.floor);
+            doSwitchThrow = true;
+            Log.d("throw");
+        }
+
+        if (doSwitchThrow && Math.abs(Robot.arm.armPID.getCurrentError()) < 1050) { //900
+            Log.d("outtake");
+            forceOuttake = true;
+            if (outtakeStart == 0) outtakeStart = System.currentTimeMillis();
+        }
+
+        if (doSwitchThrow && outtakeStart != 0 && System.currentTimeMillis() - outtakeStart >= 1200) {
+            Log.d("stop");
+            outtakeStart = 0;
+            forceOuttake = false;
+            doSwitchThrow = false;
         }
 
         boolean pressedButton = false;
@@ -65,6 +87,8 @@ public class ArmCommand extends Command {
             Robot.arm.setState(front, floor);
             Robot.arm.ohHeckMode = false;
         }
+
+        if (pressedButton) doSwitchThrow = false;
 
         double offset = flipOffset;
 

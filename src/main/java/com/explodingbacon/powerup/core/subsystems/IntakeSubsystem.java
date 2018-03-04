@@ -22,6 +22,10 @@ public class IntakeSubsystem extends Subsystem {
         Class intakeMotorClass = Robot.MAIN_ROBOT ? VictorSP.class : WPI_VictorSPX.class;
         intakeMotorA = new Motor(intakeMotorClass, Map.INTAKE_TOP);
         intakeMotorB = new Motor(intakeMotorClass, Map.INTAKE_BOTTOM);
+        if (!Robot.MAIN_ROBOT) {
+            intakeMotorA.setReversed(true);
+            intakeMotorB.setReversed(true);
+        }
         //setPassiveIntake(true);
     }
 

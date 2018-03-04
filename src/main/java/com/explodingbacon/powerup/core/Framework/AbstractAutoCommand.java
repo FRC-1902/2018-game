@@ -24,33 +24,24 @@ public abstract class AbstractAutoCommand extends Command {
     }
 
     public void turnToAngle(double angle, double deadzone) {
-        rotateInPlace.setFinishedTolerance(deadzone);
-        rotateInPlace.setTarget(angle);
-        rotateInPlace.enable();
-        while (!rotateInPlace.isDone() && Robot.isAutonomous()) {
-            Robot.drive.tankDrive(rotateInPlaceOutput.getPower(), -rotateInPlaceOutput.getPower());
-            try {
-                Thread.sleep(5);
-            } catch (Exception e) {}
+        if (auto()) {
+            rotateInPlace.setFinishedTolerance(deadzone);
+            rotateInPlace.setTarget(angle);
+            rotateInPlace.enable();
+            while (!rotateInPlace.isDone() && auto()) {
+                Robot.drive.tankDrive(rotateInPlaceOutput.getPower(), -rotateInPlaceOutput.getPower());
+                try {
+                    Thread.sleep(5);
+                } catch (Exception e) {
+                }
+            }
+            rotateInPlace.disable();
         }
-        rotateInPlace.disable();
     }
 
     public void driveDistance(double inches, double speed) {
         driveDistanceAtAngle(inches, speed, Robot.drive.gyro.getForPID());
     }
-
-    /*
-    public void driveDistance(double inches, double speed) {
-        resetEncs();
-        Robot.drive.tankDrive(speed, speed);
-        while (Math.abs(encAverage()) < inches(inches) && Robot.isAutonomous()) {
-            try {
-                Thread.sleep(5);
-            } catch (Exception e) {}
-        }
-        Robot.drive.tankDrive(0,0);
-    }*/
 
     public void driveDistanceAtAngle(double inches, double speed, double angle) {
         driveAtAngle(inches, 0, speed, angle);
@@ -61,46 +52,48 @@ public abstract class AbstractAutoCommand extends Command {
     }
 
     public void driveAtAngle(double inches, long milliseconds, double speed, double angle) {
-        resetEncs();
-        Robot.drive.rotatePID.setTarget(angle);
-        Robot.drive.rotatePID.enable();
-        long startTime = System.currentTimeMillis();
-        boolean keepGoing = true;
-        while (keepGoing && Robot.isAutonomous()) {
-            double pidOut = Robot.drive.rotatePIDOutput.getPower() * 1;
-            double left = speed + pidOut;
-            double right = speed - pidOut;
+        if (auto()) {
+            resetEncs();
+            Robot.drive.rotatePID.setTarget(angle);
+            Robot.drive.rotatePID.enable();
+            long startTime = System.currentTimeMillis();
+            boolean keepGoing = true;
+            while (keepGoing && auto()) {
+                double pidOut = Robot.drive.rotatePIDOutput.getPower() * 1;
+                double left = speed + pidOut;
+                double right = speed - pidOut;
 
-            double max = Utils.maxDouble(Math.abs(left), Math.abs(right));
-            left /= max;
-            right /= max;
+                double max = Utils.maxDouble(Math.abs(left), Math.abs(right));
+                left /= max;
+                right /= max;
 
-            left *= Math.abs(speed);
-            right *= Math.abs(speed);
+                left *= Math.abs(speed);
+                right *= Math.abs(speed);
 
-            Robot.drive.tankDrive(left, right);
+                Robot.drive.tankDrive(left, right);
 
-            if (inches == 0) {
-                keepGoing = System.currentTimeMillis() - startTime <= milliseconds;
-            } else {
-                if (Math.abs(Robot.drive.rightDriveEncoder.getRate()) <= 2) {
-                    //Log.wtf("RIGHT DRIVE ENCODER NOT READING");
+                if (inches == 0) {
+                    keepGoing = System.currentTimeMillis() - startTime <= milliseconds;
+                } else {
+                    if (Math.abs(Robot.drive.rightDriveEncoder.getRate()) <= 2) {
+                        //Log.wtf("RIGHT DRIVE ENCODER NOT READING");
+                    }
+                    if (Math.abs(Robot.drive.leftDriveEncoder.getRate()) <= 2) {
+                        //Log.wtf("LEFT DRIVE ENCODER NOT READING");
+                    }
+                    keepGoing = Math.abs(encAverage()) < inches(inches);
                 }
-                if (Math.abs(Robot.drive.leftDriveEncoder.getRate()) <= 2) {
-                    //Log.wtf("LEFT DRIVE ENCODER NOT READING");
+
+                if (keepGoing) {
+                    try {
+                        Thread.sleep(5);
+                    } catch (Exception e) {
+                    }
                 }
-                keepGoing = Math.abs(encAverage()) < inches(inches);
             }
-
-            if (keepGoing) {
-                try {
-                    Thread.sleep(5);
-                } catch (Exception e) {
-                }
-            }
+            Robot.drive.rotatePID.disable();
+            Robot.drive.tankDrive(0, 0);
         }
-        Robot.drive.rotatePID.disable();
-        Robot.drive.tankDrive(0,0);
     }
 
     public double inches(double inches) {
@@ -137,5 +130,9 @@ public abstract class AbstractAutoCommand extends Command {
         } catch(Exception e){
             Log.d("Sleep failed at " + e.getMessage());
         }
+    }
+
+    public boolean auto() {
+        return Robot.isEnabled() && Robot.isAutonomous();
     }
 }

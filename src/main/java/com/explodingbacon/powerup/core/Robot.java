@@ -24,32 +24,33 @@ package com.explodingbacon.powerup.core;
 
 import com.explodingbacon.bcnlib.framework.Log;
 import com.explodingbacon.bcnlib.framework.RobotCore;
+import com.explodingbacon.powerup.core.Framework.AbstractAutoCommand;
 import com.explodingbacon.powerup.core.command.*;
-import com.explodingbacon.powerup.core.networktest.Server;
-import com.explodingbacon.powerup.core.networktest.quneo.QuNeo;
 import com.explodingbacon.powerup.core.subsystems.ArmSubsystem;
 import com.explodingbacon.powerup.core.subsystems.ClimberSubsystem;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
 import com.explodingbacon.powerup.core.subsystems.IntakeSubsystem;
+import com.sun.javafx.util.Utils;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends RobotCore {
 
-    public static boolean MAIN_ROBOT = true;
+    public static boolean MAIN_ROBOT = false;
 
     public static DriveSubsystem drive;
     public static ClimberSubsystem climber;
     public static ArmSubsystem arm;
     public static IntakeSubsystem intake;
 
-    public static QuNeo quneo;
-    public static Server server;
     private OI oi;
 
     public static Compressor compressor;
 
-    //public static Pad forward, back, left, right;
+    public static SendableChooser<AbstractAutoCommand> autoSelector;
+    public static SendableChooser<AutonomousCommand.ThreeCubeEnding> threeCubeEnding;
 
     public Robot(IterativeRobot r) {
         super(r);
@@ -79,6 +80,18 @@ public class Robot extends RobotCore {
 
         Robot.drive.gyro.rezero();
 
+        autoSelector = new SendableChooser<>();
+        autoSelector.addDefault("3 Cube Switch Auto (Middle)", new AutonomousCommand());
+        autoSelector.addObject("Dump If Side (Left or Right)", new DriveForwardAuto());
+        SmartDashboard.putData("Auto Selector", autoSelector);
+
+
+        threeCubeEnding = new SendableChooser<>();
+        threeCubeEnding.addDefault("3 Cube End: Back Up", AutonomousCommand.ThreeCubeEnding.BACK_UP);
+        threeCubeEnding.addObject("3 Cube End: Attempt Cube #4", AutonomousCommand.ThreeCubeEnding.CUBE_4);
+        threeCubeEnding.addObject("3 Cube End: Go to Exchange", AutonomousCommand.ThreeCubeEnding.EXCHANGE);
+        SmartDashboard.putData("3 Cube Auto Ending", threeCubeEnding);
+
         if (MAIN_ROBOT) {
             Log.i("PIGXEL mode.");
         } else {
@@ -93,19 +106,17 @@ public class Robot extends RobotCore {
 
     @Override
     public void disabledPeriodic() {
-        Log.d("Front: " + arm.frontLimit.get() + ", back: " + arm.backLimit.get());
+        //Log.d("Front: " + arm.frontLimit.get() + ", back: " + arm.backLimit.get());
         //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
         //Log.d("Gyro: " + drive.gyro.getForPID());
-        Log.d("Arm: " + arm.getPosition());
+        //Log.d("Arm: " + arm.getPosition());
     }
 
     @Override
     public void autonomousInit() {
-        SmartDashboard.putBoolean("Start at Left", true);
-        SmartDashboard.putBoolean("Back up from switch", true);
-
         OI.runCommand(new ArmSafetyCommand());
-        OI.runCommand(new AutonomousCommand());
+        OI.runCommand(autoSelector.getSelected());
+        //OI.runCommand(new AutonomousCommand());
     }
 
     @Override
@@ -120,7 +131,7 @@ public class Robot extends RobotCore {
             Log.i("Not enabling teleop safety commend due to safety command still running");
         }
         if (!MAIN_ROBOT) {
-            OI.runCommand(new ClimberCommand());
+            //OI.runCommand(new ClimberCommand());
         }
 
         arm.armPID.enable();
@@ -129,41 +140,17 @@ public class Robot extends RobotCore {
 
     @Override
     public void teleopPeriodic() {
-        Log.d("Arm: " + arm.getPosition());
+        //Log.d("Arm: " + arm.getPosition());
 
         // Log.d("Left: " + Robot.drive.leftDriveEncoder.getRate() + ", Right: " + Robot.drive.rightDriveEncoder.getRate());
     }
 
     @Override
     public void testInit() {
-        if (!MAIN_ROBOT) {
-            climber.winch.testEachWait(0.5, 0.5);
-        } else {
-            drive.shift.set(true);
-            drive.leftDrive.testEachWait(0.5,0.5);
-            drive.rightDrive.testEachWait(0.5,0.5);
-        }
+        arm.arm.testEachWait(0.5, 0.2);
     }
 
     @Override
     public void testPeriodic() {
-        /*if (OI.driver.y.get()) {
-            drive.rotatePID.setTarget(0);
-        } else if (OI.driver.b.get()) {
-            drive.rotatePID.setTarget(90);
-        } else if (OI.driver.a.get()) {
-            drive.rotatePID.setTarget(180);
-        } else if (OI.driver.x.get()) {
-            drive.rotatePID.setTarget(270);
-        }
-        double out = drive.rotatePIDOutput.getPower();
-        //Log.d("Out: " + out);
-
-        //Robot.drive.leftDrive.setPower(1);
-        //Robot.drive.rightDrive.setPower(-1);
-
-        Robot.drive.shift.set(true);
-        Robot.drive.tankDrive(out, -out);
-        drive.rotatePID.logVerbose();*/
     }
 }

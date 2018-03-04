@@ -23,7 +23,7 @@ public class ArmSafetyCommand extends Command {
 
         if (timeStruggling != 0)
             Log.d("struggle time: " + (System.currentTimeMillis() - timeStruggling));
-        if (Robot.arm.armPID.isEnabled() && Math.abs(Robot.arm.armPID.getCurrentError()) > 120 && Math.abs(encSpeed) < 5) {
+        if (Robot.arm.armPID.isEnabled() && Math.abs(Robot.arm.armPID.getCurrentError()) > 140 && Math.abs(encSpeed) < 5) {
             if (timeStruggling == 0) timeStruggling = System.currentTimeMillis();
             if (System.currentTimeMillis() - timeStruggling > 1000) {
                 Robot.arm.setFloor(!Robot.arm.floor);

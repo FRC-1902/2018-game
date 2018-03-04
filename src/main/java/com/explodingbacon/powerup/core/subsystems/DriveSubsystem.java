@@ -7,6 +7,7 @@ import com.explodingbacon.bcnlib.actuators.MotorGroup;
 import com.explodingbacon.bcnlib.actuators.Solenoid;
 import com.explodingbacon.bcnlib.framework.PIDController;
 import com.explodingbacon.bcnlib.framework.Subsystem;
+import com.explodingbacon.bcnlib.sensors.AbstractEncoder;
 import com.explodingbacon.bcnlib.sensors.BNOGyro;
 import com.explodingbacon.bcnlib.sensors.Encoder;
 import com.explodingbacon.powerup.core.Map;
@@ -17,16 +18,16 @@ import java.util.List;
 public class DriveSubsystem extends Subsystem {
 
     public MotorGroup leftDrive, rightDrive;
-    public PIDController positionPIDRight;
-    public PIDController positionPIDLeft;
+    public PIDController positionPID;
     public PIDController rotatePID, rotateInPlacePID, rotateDrivingPID;
     public Encoder rightDriveEncoder;
     public Encoder leftDriveEncoder;
+    public AbstractEncoder driveEncoderAvg;
     public BNOGyro gyro;
 
     public Solenoid shift, light;
 
-    public FakeMotor rightPositionPIDOutput, leftPositionPIDOutput, rotatePIDOutput, rotateDrivingPIDOutput, rotateInPlacePIDOutput;
+    public FakeMotor positionPIDOutput, rotatePIDOutput, rotateDrivingPIDOutput, rotateInPlacePIDOutput;
 
     public DriveSubsystem() {
 
@@ -35,8 +36,7 @@ public class DriveSubsystem extends Subsystem {
         shift = new Solenoid(Map.SHIFT);
         light = new Solenoid(1);
 
-        rightPositionPIDOutput = new FakeMotor();
-        leftPositionPIDOutput = new FakeMotor();
+        positionPIDOutput = new FakeMotor();
         rotatePIDOutput = new FakeMotor();
         rotateDrivingPIDOutput = new FakeMotor();
         rotateInPlacePIDOutput = new FakeMotor();
@@ -68,9 +68,25 @@ public class DriveSubsystem extends Subsystem {
             leftDriveEncoder.setReversed(true);
         }
 
+        driveEncoderAvg = new AbstractEncoder() {
+            @Override
+            public double getRate() {
+                return (leftDriveEncoder.getRate() + rightDriveEncoder.getRate())/2;
+            }
 
-        //positionPIDRight = new PIDController(rightPositionPIDOutput, rightDriveEncoder, .1, .1, .1);
-        //positionPIDLeft = new PIDController(leftPositionPIDOutput, leftDriveEncoder, .1, .1, .1);
+            @Override
+            public int get() {
+                return (leftDriveEncoder.get() + rightDriveEncoder.get())/2;
+            }
+
+            @Override
+            public void reset() {
+                leftDriveEncoder.reset();
+                rightDriveEncoder.reset();
+            }
+        };
+
+        positionPID = new PIDController(positionPIDOutput,driveEncoderAvg, 0.002, 0, 0);
     }
 
     public double getRate() {

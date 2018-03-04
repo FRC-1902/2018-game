@@ -27,6 +27,7 @@ public class AutonomousCommand extends AbstractAutoCommand {
         Robot.drive.gyro.rezero();
         Robot.arm.armPID.enable();
         Robot.arm.setState(true, false);
+        ThreeCubeEnding ending = Robot.threeCubeEnding.getSelected();
         String s = DriverStation.getInstance().getGameSpecificMessage();
         if (s.charAt(0) == 'L') {
             Log.d("GO LEFT");
@@ -80,7 +81,7 @@ public class AutonomousCommand extends AbstractAutoCommand {
 
             //Eject cube 2
             outtake();
-            
+
             //turn for cube 3
             angle = left ? 90 : 360 - 90;
             Robot.arm.setState(true, true);
@@ -109,10 +110,12 @@ public class AutonomousCommand extends AbstractAutoCommand {
             //Eject cube 3
             outtake();
 
-            driveDistanceAtAngle(24, -1, 0);
-            Robot.arm.setState(true, true);
+            if (ending == ThreeCubeEnding.BACK_UP) {
+                driveDistanceAtAngle(24, -1, 0);
+                Robot.arm.setState(true, true);
+            }
 
-            //Robot.drive.tankDrive(0, 0);
+            Robot.drive.tankDrive(0, 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -127,5 +130,11 @@ public class AutonomousCommand extends AbstractAutoCommand {
     @Override
     public boolean isFinished() {
         return true;
+    }
+
+    public enum ThreeCubeEnding {
+        BACK_UP,
+        CUBE_4,
+        EXCHANGE
     }
 }

@@ -15,7 +15,7 @@ public class IntakeCommand extends Command {
 
     @Override
     public void onLoop() {
-        boolean intake = OI.intakeInButton.get(), outtake = OI.intakeOutButton.get();
+        boolean intake = OI.intakeInButton.get(), outtake = OI.intakeOutButton.get() || ArmCommand.forceOuttake, test = OI.manipulator.a.get();
 
         if (intake) {
             if (Robot.arm.floor) {
@@ -26,6 +26,8 @@ public class IntakeCommand extends Command {
         } else if (outtake) {
             double pow = Robot.arm.floor ? 1 : 0.7;
             Robot.intake.setIntake(pow, false);
+        } else if (test) {
+            Robot.intake.setIntake(1, -0.8, true);
         } else {
             double leftRate = Robot.drive.leftDriveEncoder.getRate();
             double rightRate = Robot.drive.rightDriveEncoder.getRate();
@@ -36,7 +38,7 @@ public class IntakeCommand extends Command {
                 speed = 0.3;
             }
             if (Robot.arm.armPID.getCurrentError() > 180) {
-                speed = 0.4;
+                speed = 0.5;
             }
             Robot.intake.setIntake(speed, true);
         }
