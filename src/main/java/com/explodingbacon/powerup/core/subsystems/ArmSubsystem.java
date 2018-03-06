@@ -42,12 +42,10 @@ public class ArmSubsystem extends Subsystem {
         arm = new MotorGroup(new Motor(VictorSP.class, Map.ARM_A), new Motor(VictorSP.class, Map.ARM_B));
         if (Robot.MAIN_ROBOT) {
             arm.setInverts(false, true);
-        } else {
-            //arm = new MotorGroup(new FakeMotor());
         }
 
         armEncoder = new AnalogSensor(Map.ARM_ENCODER);
-        armPID = new PIDController(arm, armEncoder, .001, 0, 0);
+        armPID = new PIDController(arm, armEncoder, .0014, 0, 0);
         armPID.setInputInverted(true);
 
         frontLimit = new DigitalInput(Map.ARM_LIMIT_FRONT);
@@ -69,14 +67,14 @@ public class ArmSubsystem extends Subsystem {
 
     public void initPresets(boolean frontRelative) {
         if (FLOOR_FRONT == null && !frontRelative) {
-            FLOOR_FRONT = Robot.MAIN_ROBOT ? 1392 : 635d;
+            FLOOR_FRONT = Robot.MAIN_ROBOT ? 1392 : 770d;
         }
 
         if (FLOOR_BACK == null)
-            FLOOR_BACK = FLOOR_FRONT + 2296;
+            FLOOR_BACK = FLOOR_FRONT + 2320;
 
         if (FLOOR_FRONT == null && frontRelative) {
-            FLOOR_FRONT = FLOOR_BACK - 2296;
+            FLOOR_FRONT = FLOOR_BACK - 2320;
         }
 
         SWITCH_BACK = FLOOR_BACK - 610;

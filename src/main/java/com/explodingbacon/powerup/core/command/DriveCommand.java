@@ -44,10 +44,11 @@ public class DriveCommand extends Command {
         }
 
         if (stopStart != 0 && System.currentTimeMillis() - stopStart <= 200) {
-            if (Math.abs(y) > 0.2) {
+            Log.d("Doin the slow");
+            if (Math.abs(y) > 0.1) {
                 y = 0.2 * Utils.sign(y);
             }
-            if (Math.abs(x) > 0.2) {
+            if (Math.abs(x) > 0.1) {
                 x = 0.2 * Utils.sign(x);
             }
         } else {

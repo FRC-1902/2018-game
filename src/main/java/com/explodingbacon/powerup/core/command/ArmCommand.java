@@ -73,11 +73,11 @@ public class ArmCommand extends Command {
         boolean reverse = Math.abs(OI.manipulator.getRightTrigger()) > 0.1;
         if (reverse && !didFlip) {
             front = !front;
-            if (Robot.MAIN_ROBOT ? !front : front) {
+            /*if (Robot.MAIN_ROBOT ? !front : front) {
                 flipOffset = -40;
             } else {
                 flipOffset = 40;
-            }
+            }*/
             pressedButton = true;
 
         }

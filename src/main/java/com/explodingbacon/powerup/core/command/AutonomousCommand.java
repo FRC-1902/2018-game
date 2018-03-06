@@ -28,16 +28,17 @@ public class AutonomousCommand extends AbstractAutoCommand {
         Robot.arm.armPID.enable();
         Robot.arm.setState(true, false);
         ThreeCubeEnding ending = Robot.threeCubeEnding.getSelected();
-        String s = DriverStation.getInstance().getGameSpecificMessage();
-        if (s.charAt(0) == 'L') {
-            Log.d("GO LEFT");
-        } else {
-            Log.d("GO RIGHT");
-        }
+
         try {
             Thread.sleep(300); //300
             double angle = 0;
-            boolean left = s.charAt(0) == 'L';
+
+            String gameData;
+            while ((gameData = DriverStation.getInstance().getGameSpecificMessage()).length() != 3) {
+                sleep(5);
+            }
+
+            boolean left = gameData.charAt(0) == 'L';
             //Robot.intake.setIntake(false);
 
             driveDistance(8, 0.5);

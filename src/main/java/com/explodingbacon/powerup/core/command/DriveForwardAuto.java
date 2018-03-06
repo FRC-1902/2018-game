@@ -14,7 +14,8 @@ public class DriveForwardAuto extends AbstractAutoCommand {
     PIDController rotatePID;
     boolean startAtLeft, backUp;
 
-    public DriveForwardAuto(){
+    public DriveForwardAuto(boolean startAtLeft){
+        this.startAtLeft = startAtLeft;
         pidOutput = Robot.drive.rotatePIDOutput;
         rotatePID = Robot.drive.rotatePID;
         passPID(rotatePID, pidOutput, Robot.drive.rotateInPlacePID, Robot.drive.rotateDrivingPIDOutput);
@@ -23,40 +24,29 @@ public class DriveForwardAuto extends AbstractAutoCommand {
     @Override
     public void onInit() {
         Robot.arm.armPID.enable();
-        Robot.arm.setState(true,true);
+        Robot.arm.setState(true,false);
         Robot.drive.shift.set(true);
         Robot.drive.gyro.rezero();
-        String s = DriverStation.getInstance().getGameSpecificMessage();
-        startAtLeft = SmartDashboard.getBoolean("Start at left.", true);
-        backUp = SmartDashboard.getBoolean("Back up from switch", true);
-
-        if (s.charAt(0) == 'L') {
-            Log.d("GO LEFT");
-        } else {
-            Log.d("GO RIGHT");
-        }
+        backUp = false;
 
         try {
-            sleep(500);
-            double angle = 0;
-            boolean left = s.charAt(0) == 'L';
+            sleep(1000);
+            String gameData;
+            while ((gameData = DriverStation.getInstance().getGameSpecificMessage()).length() != 3) {
+                sleep(5);
+            }
+            boolean left = gameData.charAt(0) == 'L';
 
-
-            driveDistance(130, 0.8);
-            sleep(100);
+            driveDistance(12, 0.8); //130 inches
+            sleep(1000);
             if (left == startAtLeft) {
-                Robot.intake.setIntake(-1, false);
-                //Robot.intake.intake(false, true);
-                sleep(100);
-                Robot.intake.setIntake(0, false);
-                //Robot.intake.intake(false, false);
+                outtake();
 
                 if (backUp) {
                     driveDistance(30, -0.8);
                     Robot.arm.setState(true, true);
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -74,6 +64,6 @@ public class DriveForwardAuto extends AbstractAutoCommand {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 }

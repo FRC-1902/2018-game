@@ -49,7 +49,7 @@ public class Robot extends RobotCore {
 
     public static Compressor compressor;
 
-    public static SendableChooser<AbstractAutoCommand> autoSelector;
+    public static SendableChooser<String> autoSelector;
     public static SendableChooser<AutonomousCommand.ThreeCubeEnding> threeCubeEnding;
 
     public Robot(IterativeRobot r) {
@@ -81,8 +81,9 @@ public class Robot extends RobotCore {
         Robot.drive.gyro.rezero();
 
         autoSelector = new SendableChooser<>();
-        autoSelector.addDefault("3 Cube Switch Auto (Middle)", new AutonomousCommand());
-        autoSelector.addObject("Dump If Side (Left or Right)", new DriveForwardAuto());
+        autoSelector.addDefault("3 Cube Switch Auto (Middle)", "middle");
+        autoSelector.addObject("Dump If Side (Left)", "left");
+        autoSelector.addObject("Dump If Side (Right)", "right");
         SmartDashboard.putData("Auto Selector", autoSelector);
 
 
@@ -90,7 +91,7 @@ public class Robot extends RobotCore {
         threeCubeEnding.addDefault("3 Cube End: Back Up", AutonomousCommand.ThreeCubeEnding.BACK_UP);
         threeCubeEnding.addObject("3 Cube End: Attempt Cube #4", AutonomousCommand.ThreeCubeEnding.CUBE_4);
         threeCubeEnding.addObject("3 Cube End: Go to Exchange", AutonomousCommand.ThreeCubeEnding.EXCHANGE);
-        SmartDashboard.putData("3 Cube Auto Ending", threeCubeEnding);
+        SmartDashboard.putData("3 Cube  Auto Ending", threeCubeEnding);
 
         if (MAIN_ROBOT) {
             Log.i("PIGXEL mode.");
@@ -109,14 +110,27 @@ public class Robot extends RobotCore {
         //Log.d("Front: " + arm.frontLimit.get() + ", back: " + arm.backLimit.get());
         //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
         //Log.d("Gyro: " + drive.gyro.getForPID());
-        //Log.d("Arm: " + arm.getPosition());
+        Log.d("Arm: " + arm.armEncoder.getForPID());
     }
 
     @Override
     public void autonomousInit() {
-        OI.runCommand(new ArmSafetyCommand());
-        OI.runCommand(autoSelector.getSelected());
-        //OI.runCommand(new AutonomousCommand());
+        if (!ArmSafetyCommand.ACTIVE) {
+            Log.i("init autonomous safety command");
+            OI.runCommand(new ArmSafetyCommand());
+        } else {
+            Log.i("Not enabling autonomous safety commend due to safety command still running");
+        }
+        String autoType = autoSelector.getSelected();
+        AbstractAutoCommand auto = null;
+        if (autoType.equals("middle")) {
+            auto = new AutonomousCommand();
+        } else if (autoType.equals("left")) {
+            auto = new DriveForwardAuto(true);
+        } else if (autoType.equals("right")) {
+            auto = new DriveForwardAuto(false);
+        }
+        if (auto != null) OI.runCommand(auto);
     }
 
     @Override
@@ -134,6 +148,9 @@ public class Robot extends RobotCore {
             //OI.runCommand(new ClimberCommand());
         }
 
+        //arm.armPID.reTune(SmartDashboard.getNumber("kP", 0),
+          //      SmartDashboard.getNumber("kI", 0), SmartDashboard.getNumber("kD", 0));
+
         arm.armPID.enable();
 
     }
@@ -147,10 +164,11 @@ public class Robot extends RobotCore {
 
     @Override
     public void testInit() {
-        arm.arm.testEachWait(0.5, 0.2);
+        compressor.setClosedLoopControl(true);
     }
 
     @Override
     public void testPeriodic() {
+        drive.shift.set(OI.driver.y.get());
     }
 }

@@ -34,10 +34,10 @@ public class IntakeCommand extends Command {
 
             double speed = 0;
 
-            if (Utils.sign(leftRate) != Utils.sign(rightRate) && Math.max(Math.abs(leftRate), Math.abs(rightRate)) > 100) {
+            if (Utils.sign(leftRate) != Utils.sign(rightRate) && Math.max(Math.abs(leftRate), Math.abs(rightRate)) > 120) {
                 speed = 0.3;
             }
-            if (Robot.arm.armPID.getCurrentError() > 180) {
+            if (Math.abs(Robot.arm.armPID.getCurrentError()) > 320) {
                 speed = 0.5;
             }
             Robot.intake.setIntake(speed, true);
