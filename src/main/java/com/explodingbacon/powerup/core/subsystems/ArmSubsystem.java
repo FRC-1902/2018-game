@@ -45,7 +45,7 @@ public class ArmSubsystem extends Subsystem {
         }
 
         armEncoder = new AnalogSensor(Map.ARM_ENCODER);
-        armPID = new PIDController(arm, armEncoder, .0014, 0, 0);
+        armPID = new PIDController(arm, armEncoder, .0014, 0, 0); //.0014
         armPID.setInputInverted(true);
 
         frontLimit = new DigitalInput(Map.ARM_LIMIT_FRONT);
@@ -67,14 +67,16 @@ public class ArmSubsystem extends Subsystem {
 
     public void initPresets(boolean frontRelative) {
         if (FLOOR_FRONT == null && !frontRelative) {
-            FLOOR_FRONT = Robot.MAIN_ROBOT ? 1392 : 770d;
+            FLOOR_FRONT = Robot.MAIN_ROBOT ? 1047 : 770d;
         }
 
+        float flipMetric = 2320;
+
         if (FLOOR_BACK == null)
-            FLOOR_BACK = FLOOR_FRONT + 2320;
+            FLOOR_BACK = FLOOR_FRONT + flipMetric;
 
         if (FLOOR_FRONT == null && frontRelative) {
-            FLOOR_FRONT = FLOOR_BACK - 2320;
+            FLOOR_FRONT = FLOOR_BACK - flipMetric;
         }
 
         SWITCH_BACK = FLOOR_BACK - 610;

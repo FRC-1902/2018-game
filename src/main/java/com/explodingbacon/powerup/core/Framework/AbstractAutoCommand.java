@@ -111,7 +111,7 @@ public abstract class AbstractAutoCommand extends Command {
     }
 
     public void intake() {
-        Robot.intake.setIntake(0.5, 1, true);
+        Robot.intake.setIntake(0.7, 1, true);
     }
 
     public void stopIntake() {

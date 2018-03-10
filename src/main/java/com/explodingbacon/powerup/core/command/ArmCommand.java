@@ -20,7 +20,7 @@ public class ArmCommand extends Command {
 
     @Override
     public void onLoop() {
-        if (Robot.arm.frontLimit.get()) { //if front limit switch == true
+        /*if (Robot.arm.frontLimit.get()) { //if front limit switch == true
             ArmSubsystem.FLOOR_FRONT = Robot.arm.getPosition();
             //ArmSubsystem.FLOOR_BACK = null;
             Robot.arm.initPresets();
@@ -33,7 +33,7 @@ public class ArmCommand extends Command {
             Robot.arm.initPresets();
             //Robot.arm.initPresets(true);
             Log.d("Zeroed back");
-        }
+        }*/
 
         if ((OI.driver.isLeftTriggerPressed() || OI.manipulator.isLeftTriggerPressed()) && !Robot.arm.ohHeckMode) {
             Robot.arm.ohHeck();

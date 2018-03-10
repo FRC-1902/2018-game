@@ -57,7 +57,7 @@ public class AutonomousCommand extends AbstractAutoCommand {
 
             //scored cube, going to get another one from 10 stack
 
-            final double backFromSwitch = 12 + (Robot.MAIN_ROBOT ? 0 : 0); //3
+            final double backFromSwitch = 15.5 + 2;
 
             driveDistanceAtAngle(backFromSwitch, -0.45, 0);
 
@@ -68,10 +68,10 @@ public class AutonomousCommand extends AbstractAutoCommand {
 
 
             intake();
-            driveDistance(48, 0.4);
+            driveDistance(48 +3, 0.4);
             Robot.intake.setIntake(0.3, true);
 
-            driveDistance(31, -0.6); //TODO: drive at 90/360-90
+            driveDistance(31 +3, -0.6);
 
             Robot.arm.setState(true, false);
             turnToAngle(left ? 5 : 360-8);
@@ -82,6 +82,11 @@ public class AutonomousCommand extends AbstractAutoCommand {
 
             //Eject cube 2
             outtake();
+
+            //backup for cube 3
+            final double backFromSwitch2 = 6;
+
+            driveDistanceAtAngle(backFromSwitch2, -0.45, 0);
 
             //turn for cube 3
             angle = left ? 90 : 360 - 90;
@@ -94,26 +99,28 @@ public class AutonomousCommand extends AbstractAutoCommand {
             //get cube 3
             intake();
 
-            driveDistance(27+5, 0.5); //TODO: drive at 90/360-90?
+            driveDistance(27+5 +7        + 4, 0.6); //was 0.5 speed
             Robot.intake.setIntake(0.4, true);
 
-            driveDistance(23+5, -0.6);
+            driveDistance(23+5 +7        + 4, -0.6);
 
             Robot.arm.setState(true, false);
+
+            driveDistanceAtAngle(backFromSwitch2, -0.45, 0);
 
             angle = left ? 5 : 360-5;
             turnToAngle(left ? 5 : angle);
 
             stopIntake();
 
-            driveDistanceAtAngle(8, 0.7, angle);
+            driveDistanceAtAngle(8, 0.7, angle); //TODO: too much?
 
             //Eject cube 3
             outtake();
 
             if (ending == ThreeCubeEnding.BACK_UP) {
                 driveDistanceAtAngle(24, -1, 0);
-                Robot.arm.setState(true, true);
+                //Robot.arm.setState(true, true);
             }
 
             Robot.drive.tankDrive(0, 0);

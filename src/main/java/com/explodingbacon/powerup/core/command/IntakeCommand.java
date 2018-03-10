@@ -19,7 +19,7 @@ public class IntakeCommand extends Command {
 
         if (intake) {
             if (Robot.arm.floor) {
-                Robot.intake.setIntake(0.5, 1, true);
+                Robot.intake.setIntake(0.7, 1, true); //.5, 1
             } else {
                 Robot.intake.setIntake(1, true);
             }

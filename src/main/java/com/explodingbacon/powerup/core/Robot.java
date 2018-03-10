@@ -38,7 +38,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends RobotCore {
 
-    public static boolean MAIN_ROBOT = false;
+    public static boolean MAIN_ROBOT = true;
 
     public static DriveSubsystem drive;
     public static ClimberSubsystem climber;
@@ -68,7 +68,7 @@ public class Robot extends RobotCore {
         intake = new IntakeSubsystem();
         arm = new ArmSubsystem();
         if (!MAIN_ROBOT) {
-            climber = new ClimberSubsystem();
+            //climber = new ClimberSubsystem();
         }
 
         SmartDashboard.putNumber("kP", 0.001);
@@ -93,6 +93,8 @@ public class Robot extends RobotCore {
         threeCubeEnding.addObject("3 Cube End: Go to Exchange", AutonomousCommand.ThreeCubeEnding.EXCHANGE);
         SmartDashboard.putData("3 Cube  Auto Ending", threeCubeEnding);
 
+        CameraServer.getInstance().startAutomaticCapture();
+
         if (MAIN_ROBOT) {
             Log.i("PIGXEL mode.");
         } else {
@@ -108,8 +110,8 @@ public class Robot extends RobotCore {
     @Override
     public void disabledPeriodic() {
         //Log.d("Front: " + arm.frontLimit.get() + ", back: " + arm.backLimit.get());
-        //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
-        //Log.d("Gyro: " + drive.gyro.getForPID());
+        Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
+        Log.d("Gyro: " + drive.gyro.getForPID());
         Log.d("Arm: " + arm.armEncoder.getForPID());
     }
 
@@ -144,15 +146,12 @@ public class Robot extends RobotCore {
         } else {
             Log.i("Not enabling teleop safety commend due to safety command still running");
         }
-        if (!MAIN_ROBOT) {
-            //OI.runCommand(new ClimberCommand());
-        }
 
         //arm.armPID.reTune(SmartDashboard.getNumber("kP", 0),
           //      SmartDashboard.getNumber("kI", 0), SmartDashboard.getNumber("kD", 0));
 
         arm.armPID.enable();
-
+       // arm.armPID.disable();
     }
 
     @Override
@@ -164,7 +163,13 @@ public class Robot extends RobotCore {
 
     @Override
     public void testInit() {
-        compressor.setClosedLoopControl(true);
+        arm.arm.testEachWait(0.5, 0.2);
+        try {
+            Thread.sleep(1000);
+            drive.leftDrive.testEachWait(0.5, 0.5);
+            Thread.sleep(1000);
+            drive.rightDrive.testEachWait(0.5, 0.5);
+        } catch (Exception e) {}
     }
 
     @Override
