@@ -25,7 +25,7 @@ public class Map {
     // PWM
 
     public static final int ARM_A = Robot.MAIN_ROBOT ? 0 : 0;
-    public static int ARM_B = Robot.MAIN_ROBOT ? 5 : 1;
+    public static int ARM_B = Robot.MAIN_ROBOT ? 2 : 1;
 
 
     public static final int CLIMBER_A = Robot.MAIN_ROBOT ? 2 : 2;

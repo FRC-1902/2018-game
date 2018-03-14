@@ -19,12 +19,12 @@ public class IntakeCommand extends Command {
 
         if (intake) {
             if (Robot.arm.floor) {
-                Robot.intake.setIntake(0.7, 1, true); //.5, 1
+                Robot.intake.setIntake(0.7, 1, true);
             } else {
                 Robot.intake.setIntake(1, true);
             }
         } else if (outtake) {
-            double pow = Robot.arm.floor ? 1 : 0.7;
+            double pow = Robot.arm.floor ? 1 : 0.6;
             Robot.intake.setIntake(pow, false);
         } else if (test) {
             Robot.intake.setIntake(1, -0.8, true);

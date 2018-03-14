@@ -39,8 +39,10 @@ public class IntakeSubsystem extends Subsystem {
 
     public void setIntake(double powTop, double powBot, boolean in) {
         double dir = in ? 1 : -1;
-        intakeMotorA.setPower((Robot.arm.front ? powTop : powBot) * dir);
-        intakeMotorB.setPower(-1 * (!Robot.arm.front ? powTop : powBot) * dir);
+        boolean front = Robot.arm.front;
+        if (Robot.MAIN_ROBOT) front = !front;
+        intakeMotorA.setPower((front ? powTop : powBot) * dir);
+        intakeMotorB.setPower(-1 * (!front ? powTop : powBot) * dir);
     }
 
 

@@ -163,9 +163,9 @@ public class Robot extends RobotCore {
 
     @Override
     public void testInit() {
-        arm.arm.testEachWait(0.5, 0.2);
+        //arm.arm.testEachWait(0.5, 0.2);
         try {
-            Thread.sleep(1000);
+            //Thread.sleep(1000);
             drive.leftDrive.testEachWait(0.5, 0.5);
             Thread.sleep(1000);
             drive.rightDrive.testEachWait(0.5, 0.5);

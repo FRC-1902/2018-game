@@ -68,7 +68,7 @@ public class AutonomousCommand extends AbstractAutoCommand {
 
 
             intake();
-            driveDistance(48 +3, 0.4);
+            driveDistance(48 +3, 0.7); //0.4 prev
             Robot.intake.setIntake(0.3, true);
 
             driveDistance(31 +3, -0.6);
@@ -84,7 +84,7 @@ public class AutonomousCommand extends AbstractAutoCommand {
             outtake();
 
             //backup for cube 3
-            final double backFromSwitch2 = 6;
+            final double backFromSwitch2 = 2;
 
             driveDistanceAtAngle(backFromSwitch2, -0.45, 0);
 
@@ -99,10 +99,10 @@ public class AutonomousCommand extends AbstractAutoCommand {
             //get cube 3
             intake();
 
-            driveDistance(27+5 +7        + 4, 0.6); //was 0.5 speed
+            driveDistance(27+5 +7        + 1, 0.7); //was 0.6 speed
             Robot.intake.setIntake(0.4, true);
 
-            driveDistance(23+5 +7        + 4, -0.6);
+            driveDistance(23+5 +7        + 1, -0.6);
 
             Robot.arm.setState(true, false);
 
