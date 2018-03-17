@@ -26,14 +26,14 @@ public class ArmSubsystem extends Subsystem {
 
     public PIDController armPID;
 
-    public static Double FLOOR_FRONT=null, SWITCH_FRONT, SWITCH_BACK, FLOOR_BACK=null;
+    public static Double FLOOR_FRONT=null, SWITCH_FRONT, SWITCH_BACK, FLOOR_BACK=null,
+    HECK, HUMAN_PLAYER_FRONT, HUMAN_PLAYER_BACK;
 
     public static final double MAX_OFFSET = 220;
 
     double target;
     public boolean front = true;
-    public boolean floor = true;
-    public boolean ohHeckMode = false;
+    public Preset preset = Preset.HECK;
     public double targetOff = 0;
 
 
@@ -46,7 +46,7 @@ public class ArmSubsystem extends Subsystem {
         }
 
         armEncoder = new AnalogSensor(Map.ARM_ENCODER);
-        armPID = new PIDController(arm, armEncoder, .0014, 0, 0); //.0014
+        armPID = new PIDController(arm, armEncoder, .0018, 0, 0); //.0014
         armPID.setInputInverted(true);
 
         frontLimit = new DigitalInput(Map.ARM_LIMIT_FRONT);
@@ -54,12 +54,9 @@ public class ArmSubsystem extends Subsystem {
         backLimit = new DigitalInput(Map.ARM_LIMIT_BACK);
         backLimit.setReversed(true);
 
-
         initPresets();
 
-        //armPID.enable();
-        setState(true, false);
-        armPID.setTarget(target);
+        ohHeck();
     }
 
     public void initPresets() {
@@ -68,7 +65,7 @@ public class ArmSubsystem extends Subsystem {
 
     public void initPresets(boolean frontRelative) {
         if (FLOOR_FRONT == null && !frontRelative) {
-            FLOOR_FRONT = Robot.MAIN_ROBOT ? 940 : 770d;
+            FLOOR_FRONT = Robot.MAIN_ROBOT ? 940 : 780d;
         }
 
         float flipMetric = 2320;
@@ -82,27 +79,46 @@ public class ArmSubsystem extends Subsystem {
 
         SWITCH_BACK = FLOOR_BACK - 610;
         SWITCH_FRONT = FLOOR_FRONT + 610;
+
+        HECK = (SWITCH_FRONT+SWITCH_BACK)/2;
+
+        double hp_off = 460;
+
+        HUMAN_PLAYER_FRONT = FLOOR_FRONT + hp_off;
+        HUMAN_PLAYER_BACK = FLOOR_BACK - hp_off;
     }
 
     public void setState(boolean front, boolean floor) {
+        setState(front, floor ? Preset.FLOOR : Preset.SWITCH);
+    }
+
+    public void setState(boolean front, Preset preset) {
         this.front = front;
-        this.floor = floor;
+        this.preset = preset;
 
         boolean workingFront = front;
         if (Robot.MAIN_ROBOT) workingFront = !workingFront;
 
         double pos;
         if (workingFront) {
-            if (this.floor) {
+            if (preset == Preset.FLOOR) {
                 pos = FLOOR_FRONT;
-            } else {
+            } else if (preset == Preset.SWITCH){
                 pos = SWITCH_FRONT;
+            } else if (preset == Preset.HUMAN_PLAYER) {
+                pos = HUMAN_PLAYER_FRONT;
+            } else {
+                pos = HECK;
             }
         } else {
-            if (this.floor) {
+            if (preset == Preset.FLOOR) {
                 pos = FLOOR_BACK;
-            } else {
+            } else if (preset == Preset.SWITCH){
                 pos = SWITCH_BACK;
+            } else if (preset == Preset.HUMAN_PLAYER) {
+                pos = HUMAN_PLAYER_BACK;
+            } else {
+                pos = HECK;
             }
         }
         if (target != pos) {
@@ -112,26 +128,16 @@ public class ArmSubsystem extends Subsystem {
     }
 
     public void ohHeck() {
-        target = (SWITCH_FRONT + SWITCH_BACK)/2;
-        armPID.setTarget(target);
-        ohHeckMode = true;
+        setState(front, Preset.HECK);
+    }
+
+    public void humanPlayer() {
+        setState(front, Preset.HUMAN_PLAYER);
     }
 
     public void setOffset(double offset) {
         targetOff = offset;
         armPID.setTarget(target+(Robot.MAIN_ROBOT ? -targetOff : targetOff));
-    }
-
-    public void setFloor(boolean floor) {
-        setState(front, floor);
-    }
-
-    public void setSide(boolean front) {
-        setState(front, floor);
-    }
-
-    public void flipSide() {
-        setSide(!front);
     }
 
     public double getPosition() {
@@ -168,5 +174,12 @@ public class ArmSubsystem extends Subsystem {
     @Override
     public List<Motor> getAllMotors() {
         return null;
+    }
+
+    public enum Preset {
+        FLOOR,
+        SWITCH,
+        HECK,
+        HUMAN_PLAYER
     }
 }

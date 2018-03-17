@@ -5,6 +5,7 @@ import com.explodingbacon.bcnlib.framework.Log;
 import com.explodingbacon.bcnlib.utils.Utils;
 import com.explodingbacon.powerup.core.OI;
 import com.explodingbacon.powerup.core.Robot;
+import com.explodingbacon.powerup.core.subsystems.ArmSubsystem;
 
 public class IntakeCommand extends Command {
 
@@ -18,13 +19,13 @@ public class IntakeCommand extends Command {
         boolean intake = OI.intakeInButton.get(), outtake = OI.intakeOutButton.get() || ArmCommand.forceOuttake, test = OI.manipulator.a.get();
 
         if (intake) {
-            if (Robot.arm.floor) {
+            if (Robot.arm.preset == ArmSubsystem.Preset.FLOOR) {
                 Robot.intake.setIntake(0.7, 1, true);
             } else {
                 Robot.intake.setIntake(1, true);
             }
         } else if (outtake) {
-            double pow = Robot.arm.floor ? 1 : 0.6;
+            double pow = Robot.arm.preset == ArmSubsystem.Preset.FLOOR ? 1 : 0.6;
             Robot.intake.setIntake(pow, false);
         } else if (test) {
             Robot.intake.setIntake(1, -0.8, true);
@@ -34,7 +35,7 @@ public class IntakeCommand extends Command {
 
             double speed = 0;
 
-            if (Utils.sign(leftRate) != Utils.sign(rightRate) && Math.max(Math.abs(leftRate), Math.abs(rightRate)) > 120) {
+            if (Utils.sign(leftRate) != Utils.sign(rightRate) && Math.max(Math.abs(leftRate), Math.abs(rightRate)) > 140) {
                 speed = 0.3;
             }
             if (Math.abs(Robot.arm.armPID.getCurrentError()) > 320) {

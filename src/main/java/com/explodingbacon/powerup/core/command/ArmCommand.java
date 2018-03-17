@@ -35,11 +35,18 @@ public class ArmCommand extends Command {
             Log.d("Zeroed back");
         }*/
 
-        if ((OI.driver.isLeftTriggerPressed() || OI.manipulator.isLeftTriggerPressed()) && !Robot.arm.ohHeckMode) {
-            Robot.arm.ohHeck();
+        boolean front = Robot.arm.front;
+        ArmSubsystem.Preset preset = Robot.arm.preset;
+
+
+        if ((OI.driver.isLeftTriggerPressed() || OI.manipulator.isLeftTriggerPressed())) {
+            preset = ArmSubsystem.Preset.HECK;
+        }
+        if (OI.manipulator.getDPad().isDown()) {
+            preset = ArmSubsystem.Preset.HUMAN_PLAYER;
         }
 
-        if (OI.driver.rightBumper.get() && Robot.arm.floor && false) {
+        /*if (OI.driver.rightBumper.get() && Robot.arm.floor && false) {
             Robot.arm.setState(!Robot.arm.front, !Robot.arm.floor);
             doSwitchThrow = true;
             Log.d("throw");
@@ -56,39 +63,22 @@ public class ArmCommand extends Command {
             outtakeStart = 0;
             forceOuttake = false;
             doSwitchThrow = false;
-        }
-
-        boolean pressedButton = false;
-        boolean floor = Robot.arm.floor, front = Robot.arm.front;
+        }*/
 
         if (OI.armPositionOne.get()) {
-            floor = false;
-            pressedButton = true;
+            preset = ArmSubsystem.Preset.SWITCH;
         } else if (OI.armPositionFour.get()) {
-            floor = true;
-            pressedButton = true;
+            preset = ArmSubsystem.Preset.FLOOR;
         }
-
 
         boolean reverse = Math.abs(OI.manipulator.getRightTrigger()) > 0.1;
         if (reverse && !didFlip) {
             front = !front;
-            /*if (Robot.MAIN_ROBOT ? !front : front) {
-                flipOffset = -40;
-            } else {
-                flipOffset = 40;
-            }*/
-            pressedButton = true;
-
         }
         didFlip = reverse;
 
-        if (!Robot.arm.ohHeckMode || pressedButton) {
-            Robot.arm.setState(front, floor);
-            Robot.arm.ohHeckMode = false;
-        }
+        Robot.arm.setState(front, preset);
 
-        if (pressedButton) doSwitchThrow = false;
 
         double offset = flipOffset;
 

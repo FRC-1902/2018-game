@@ -26,11 +26,7 @@ public class ArmSafetyCommand extends Command {
         if (Robot.arm.armPID.isEnabled() && Math.abs(Robot.arm.armPID.getCurrentError()) > 240 && Math.abs(encSpeed) < 5) {
             if (timeStruggling == 0) timeStruggling = System.currentTimeMillis();
             if (System.currentTimeMillis() - timeStruggling > 1000) {
-                if (Robot.arm.floor) {
-                    Robot.arm.setFloor(false);
-                } else {
-                    Robot.arm.ohHeck(); //TODO: test this is safe to call in this situation
-                }
+                Robot.arm.ohHeck();
                 timeStruggling = 0;
                 Log.e("CANCELED ARM MOVEMENT ");
             }

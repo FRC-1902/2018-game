@@ -44,7 +44,7 @@ public class DriveCommand extends Command {
         }
 
         if (stopStart != 0 && System.currentTimeMillis() - stopStart <= 200) {
-            Log.d("Doin the slow");
+            //Log.d("Doin the slow");
             double max = 0.15;
             if (Math.abs(y) > max) {
                 y = max * Utils.sign(y);

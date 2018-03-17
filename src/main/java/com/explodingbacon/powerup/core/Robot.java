@@ -30,15 +30,13 @@ import com.explodingbacon.powerup.core.subsystems.ArmSubsystem;
 import com.explodingbacon.powerup.core.subsystems.ClimberSubsystem;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
 import com.explodingbacon.powerup.core.subsystems.IntakeSubsystem;
-import com.sun.javafx.util.Utils;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends RobotCore {
 
-    public static boolean MAIN_ROBOT = true;
+    public static boolean MAIN_ROBOT = false;
 
     public static DriveSubsystem drive;
     public static ClimberSubsystem climber;
@@ -67,16 +65,10 @@ public class Robot extends RobotCore {
         drive = new DriveSubsystem();
         intake = new IntakeSubsystem();
         arm = new ArmSubsystem();
-        if (!MAIN_ROBOT) {
-            //climber = new ClimberSubsystem();
-        }
 
-        SmartDashboard.putNumber("kP", 0.001);
+        SmartDashboard.putNumber("kP", 0.0014);
         SmartDashboard.putNumber("kI", 0);
         SmartDashboard.putNumber("kD", 0);
-
-        //quneo = new QuNeo();
-        //server = new Server();
 
         Robot.drive.gyro.rezero();
 
@@ -110,8 +102,8 @@ public class Robot extends RobotCore {
     @Override
     public void disabledPeriodic() {
         //Log.d("Front: " + arm.frontLimit.get() + ", back: " + arm.backLimit.get());
-        Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
-        Log.d("Gyro: " + drive.gyro.getForPID());
+        //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
+        //Log.d("Gyro: " + drive.gyro.getForPID());
         Log.d("Arm: " + arm.armEncoder.getForPID());
     }
 
@@ -147,11 +139,10 @@ public class Robot extends RobotCore {
             Log.i("Not enabling teleop safety commend due to safety command still running");
         }
 
-        //arm.armPID.reTune(SmartDashboard.getNumber("kP", 0),
-          //      SmartDashboard.getNumber("kI", 0), SmartDashboard.getNumber("kD", 0));
+        //arm.armPID.reTune(SmartDashboard.getNumber("kP", 0), SmartDashboard.getNumber("kI", 0),
+          //      SmartDashboard.getNumber("kD", 0));
 
         arm.armPID.enable();
-       // arm.armPID.disable();
     }
 
     @Override
@@ -163,13 +154,7 @@ public class Robot extends RobotCore {
 
     @Override
     public void testInit() {
-        //arm.arm.testEachWait(0.5, 0.2);
-        try {
-            //Thread.sleep(1000);
-            drive.leftDrive.testEachWait(0.5, 0.5);
-            Thread.sleep(1000);
-            drive.rightDrive.testEachWait(0.5, 0.5);
-        } catch (Exception e) {}
+        arm.arm.testEachWait(0.5, 0.2);
     }
 
     @Override
