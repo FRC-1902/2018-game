@@ -102,8 +102,8 @@ public class Robot extends RobotCore {
     @Override
     public void disabledPeriodic() {
         //Log.d("Front: " + arm.frontLimit.get() + ", back: " + arm.backLimit.get());
-        //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
-        //Log.d("Gyro: " + drive.gyro.getForPID());
+        Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
+        Log.d("Gyro: " + drive.gyro.getForPID());
         Log.d("Arm: " + arm.armEncoder.getForPID());
     }
 
@@ -154,7 +154,9 @@ public class Robot extends RobotCore {
 
     @Override
     public void testInit() {
-        arm.arm.testEachWait(0.5, 0.2);
+        //arm.arm.testEachWait(0.5, 0.2);
+        drive.leftDrive.testEachWait(0.5, 0.5);
+        drive.rightDrive.testEachWait(0.5, 0.5);
     }
 
     @Override

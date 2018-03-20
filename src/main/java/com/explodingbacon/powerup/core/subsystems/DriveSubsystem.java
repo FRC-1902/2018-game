@@ -44,7 +44,8 @@ public class DriveSubsystem extends Subsystem {
         rotatePID = new PIDController(rotatePIDOutput, gyro, .0085,0.001,0);
         rotatePID.setRotational(true);
 
-        rotateInPlacePID = new PIDController(rotateInPlacePIDOutput, gyro, .0095,0.001,0);
+
+        rotateInPlacePID = new PIDController(rotateInPlacePIDOutput, gyro, .012,0.001,0); //.0105 > .0115
         rotateInPlacePID.setRotational(true);
 
         rotateDrivingPID = new PIDController(rotateDrivingPIDOutput, gyro, .0085,0,0);
