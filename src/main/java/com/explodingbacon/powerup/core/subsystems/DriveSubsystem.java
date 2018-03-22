@@ -25,7 +25,7 @@ public class DriveSubsystem extends Subsystem {
     public AbstractEncoder driveEncoderAvg;
     public BNOGyro gyro;
 
-    public Solenoid shift, light;
+    private Solenoid shift, light;
 
     public FakeMotor positionPIDOutput, rotatePIDOutput, rotateDrivingPIDOutput, rotateInPlacePIDOutput;
 
@@ -101,6 +101,17 @@ public class DriveSubsystem extends Subsystem {
     public void tankDrive(double left, double right) {
         leftDrive.setPower(left);
         rightDrive.setPower(right);
+    }
+
+    public void shift(boolean b) {
+        if (!Robot.MAIN_ROBOT) b = !b;
+        shift.set(b);
+    }
+
+    public boolean getShift() {
+        boolean b = shift.get();
+        if (!Robot.MAIN_ROBOT) b = !b;
+        return b;
     }
 
     public static double inchesTORotations(){

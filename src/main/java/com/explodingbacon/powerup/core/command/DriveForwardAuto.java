@@ -25,7 +25,7 @@ public class DriveForwardAuto extends AbstractAutoCommand {
     public void onInit() {
         Robot.arm.armPID.enable();
         Robot.arm.setState(true,false);
-        Robot.drive.shift.set(true);
+        Robot.drive.shift(true);
         Robot.drive.gyro.rezero();
         backUp = false;
 

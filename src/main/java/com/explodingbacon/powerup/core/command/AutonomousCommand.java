@@ -7,6 +7,7 @@ import com.explodingbacon.bcnlib.framework.PIDController;
 import com.explodingbacon.bcnlib.utils.Utils;
 import com.explodingbacon.powerup.core.Framework.AbstractAutoCommand;
 import com.explodingbacon.powerup.core.Robot;
+import com.explodingbacon.powerup.core.subsystems.ArmSubsystem;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -23,7 +24,7 @@ public class AutonomousCommand extends AbstractAutoCommand {
 
     @Override
     public void onInit() {
-        Robot.drive.shift.set(Robot.MAIN_ROBOT ? true : false);
+        Robot.drive.shift(true);
         Robot.drive.gyro.rezero();
         Robot.arm.armPID.enable();
         Robot.arm.setState(true, false);
@@ -46,10 +47,10 @@ public class AutonomousCommand extends AbstractAutoCommand {
 
 
             angle = left ? 360-55 : 30;
-            driveDistanceAtAngle(left ? 96-10-12 : 96, 1, angle);
+            driveDistanceAtAngle(left ? 74 : 96, 1, angle);
 
 
-            driveDistanceAtAngle(54 + 2 -(!left ? 23 : 0) + 8, 1, 15); //1 at 0 angle
+            driveDistanceAtAngle(64 -(!left ? 23 : 0), 1, 15); //1 at 0 angle
 
 
             //eject cube 1
@@ -100,7 +101,7 @@ public class AutonomousCommand extends AbstractAutoCommand {
             //get cube 3
             intake();
 
-            forward = 27+5;
+            forward = 32 - 3;
             driveDistanceAtAngle(forward, 0.6, angle); //.5
             Robot.intake.setIntake(0.4, true);
 
@@ -108,16 +109,17 @@ public class AutonomousCommand extends AbstractAutoCommand {
 
             Robot.arm.setState(true, false);
 
-            angle = left ? 15 : 360-15;
+            angle = left ? 5 : 360-5;//left ? 15 : 360-15;
             turnToAngle(angle);
             stopIntake();
 
-            driveDistanceAtAngle(backFromSwitch2+3, 1, angle); //TODO: too much?
+            driveDistanceAtAngle(backFromSwitch2+5, 1, angle); //TODO: too much?
 
             //Eject cube 3
             outtake();
 
             if (ending == ThreeCubeEnding.BACK_UP) {
+                Robot.arm.setState(true, ArmSubsystem.Preset.HECK);
                 driveDistanceAtAngle(24, -1, 0);
                 //Robot.arm.setState(true, true);
             }

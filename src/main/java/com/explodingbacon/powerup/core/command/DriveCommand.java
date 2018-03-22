@@ -32,10 +32,10 @@ public class DriveCommand extends Command {
         //Robot.drive.tankDrive(y + x, y - x);
 
         boolean driverShift = OI.driver.isRightTriggerPressed();
-        if(!Robot.MAIN_ROBOT) driverShift = !driverShift;
-        if (driverShift == Robot.drive.shift.get()) { //actually unequal
+        //if(!Robot.MAIN_ROBOT) driverShift = !driverShift;
+        if (driverShift == Robot.drive.getShift()) { //actually unequal
             Log.d("Driver shifting");
-            Robot.drive.shift.set(!driverShift);
+            Robot.drive.shift(!driverShift);
             if (driverShift) {
                 stopStart = System.currentTimeMillis();
             } else {

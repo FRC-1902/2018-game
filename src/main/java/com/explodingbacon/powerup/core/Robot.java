@@ -161,6 +161,6 @@ public class Robot extends RobotCore {
 
     @Override
     public void testPeriodic() {
-        drive.shift.set(OI.driver.y.get());
+        drive.shift(OI.driver.y.get());
     }
 }
