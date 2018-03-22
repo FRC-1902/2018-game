@@ -24,7 +24,8 @@ public class AutonomousCommand extends AbstractAutoCommand {
 
     @Override
     public void onInit() {
-        Robot.drive.shift(true);
+        //Robot.drive.shift(true);
+        Robot.drive.shift(false);
         Robot.drive.gyro.rezero();
         Robot.arm.armPID.enable();
         Robot.arm.setState(true, false);
@@ -42,16 +43,20 @@ public class AutonomousCommand extends AbstractAutoCommand {
             boolean left = gameData.charAt(0) == 'L';
             //Robot.intake.setIntake(false);
 
-            driveDistance(8, 0.5);
+            //driveDistance(8, 0.5);
+            driveDistance(2, 0.5);
             sleep(200);
 
 
+            //angle = left ? 360-55 : 30;
             angle = left ? 360-55 : 30;
-            driveDistanceAtAngle(left ? 74 : 96, 1, angle);
+            //driveDistanceAtAngle(left ? 74 : 96, 1, angle);
+            driveDistanceAtAngle(left ? 74-6-6-12 : 96, 1, angle);
 
+            //driveDistanceAtAngle(64 -(!left ? 23 : 0), 1, 15); //1 at 0 angle
+            driveDistanceAtAngle(64 - 4 -(!left ? 23 : 0), 1, 0); //1 at 0 angle
 
-            driveDistanceAtAngle(64 -(!left ? 23 : 0), 1, 15); //1 at 0 angle
-
+            Robot.drive.shift(true);
 
             //eject cube 1
             outtake();
@@ -113,7 +118,7 @@ public class AutonomousCommand extends AbstractAutoCommand {
             turnToAngle(angle);
             stopIntake();
 
-            driveDistanceAtAngle(backFromSwitch2+5, 1, angle); //TODO: too much?
+            driveDistanceAtAngle(backFromSwitch2+9, 1, angle); //TODO: too much?
 
             //Eject cube 3
             outtake();
