@@ -38,8 +38,11 @@ public class IntakeCommand extends Command {
             if (Utils.sign(leftRate) != Utils.sign(rightRate) && Math.max(Math.abs(leftRate), Math.abs(rightRate)) > 140) {
                 speed = 0.3;
             }
-            if (Math.abs(Robot.arm.armPID.getCurrentError()) > 320) {
-                speed = 0.5;
+            if (Robot.arm.preset == ArmSubsystem.Preset.FLOOR && Math.abs(DriveCommand.currentY) >= 0.5 && ((DriveCommand.currentY > 0 && !Robot.arm.front) || (DriveCommand.currentY < 0 && Robot.arm.front))) {
+                speed = 0.3;
+            }
+            if (Math.abs(Robot.arm.armPID.getCurrentError()) > 220) {
+                speed = 0.6;
             }
             Robot.intake.setIntake(speed, true);
         }

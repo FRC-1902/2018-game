@@ -65,7 +65,7 @@ public class ArmSubsystem extends Subsystem {
 
     public void initPresets(boolean frontRelative) {
         if (FLOOR_FRONT == null && !frontRelative) {
-            FLOOR_FRONT = Robot.MAIN_ROBOT ? 940 : 766d;
+            FLOOR_FRONT = Robot.MAIN_ROBOT ? 940 : 1240d;
         }
 
         float flipMetric = 2320;
@@ -82,7 +82,7 @@ public class ArmSubsystem extends Subsystem {
 
         HECK = (SWITCH_FRONT+SWITCH_BACK)/2;
 
-        double hp_off = 460;
+        double hp_off = 460+40;
 
         HUMAN_PLAYER_FRONT = FLOOR_FRONT + hp_off;
         HUMAN_PLAYER_BACK = FLOOR_BACK - hp_off;

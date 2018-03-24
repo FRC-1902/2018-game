@@ -154,9 +154,15 @@ public class Robot extends RobotCore {
 
     @Override
     public void testInit() {
+        arm.arm.getMotors().get(1).setPower(1);
+        try {
+            Thread.sleep(250);
+        } catch (Exception e) {}
+        arm.arm.getMotors().get(1).setPower(0);
+
         //arm.arm.testEachWait(0.5, 0.2);
-        drive.leftDrive.testEachWait(0.5, 0.5);
-        drive.rightDrive.testEachWait(0.5, 0.5);
+        //drive.leftDrive.testEachWait(0.5, 0.5);
+        //drive.rightDrive.testEachWait(0.5, 0.5);
     }
 
     @Override

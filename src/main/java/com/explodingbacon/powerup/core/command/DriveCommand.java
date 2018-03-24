@@ -16,6 +16,8 @@ public class DriveCommand extends Command {
     long stopStart = 0;
     long noShift = 0;
 
+    public static double currentY = 0;
+
     @Override
     public void onLoop() {
         double y = Utils.deadzone(OI.driver.getY(), 0.1);
@@ -23,6 +25,7 @@ public class DriveCommand extends Command {
 
         y=-y;
 
+        currentY = y;
         double nonScaledY = y;
 
         x = Math.pow(x, 2) * Utils.sign(x);
