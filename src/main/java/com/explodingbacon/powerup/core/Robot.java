@@ -73,7 +73,8 @@ public class Robot extends RobotCore {
         Robot.drive.gyro.rezero();
 
         autoSelector = new SendableChooser<>();
-        autoSelector.addDefault("3 Cube Switch Auto (Middle)", "middle");
+        autoSelector.addDefault("LOW Gear 3 Cube Switch Auto (Middle)", "middle_low");
+        autoSelector.addObject("HIGH Gear 3 Cube Switch Auto (Middle)", "middle_high");
         autoSelector.addObject("Dump If Side (Left)", "left");
         autoSelector.addObject("Dump If Side (Right)", "right");
         SmartDashboard.putData("Auto Selector", autoSelector);
@@ -117,7 +118,9 @@ public class Robot extends RobotCore {
         }
         String autoType = autoSelector.getSelected();
         AbstractAutoCommand auto = null;
-        if (autoType.equals("middle")) {
+        if (autoType.equals("middle_low")) {
+            auto = new LowGearAutoCommand();
+        } else if (autoType.equals("middle_high")) {
             auto = new AutonomousCommand();
         } else if (autoType.equals("left")) {
             auto = new DriveForwardAuto(true);

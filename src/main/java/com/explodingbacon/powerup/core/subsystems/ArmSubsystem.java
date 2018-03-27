@@ -1,16 +1,12 @@
 package com.explodingbacon.powerup.core.subsystems;
 
-import com.explodingbacon.bcnlib.actuators.FakeMotor;
 import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.actuators.MotorGroup;
-import com.explodingbacon.bcnlib.framework.Log;
 import com.explodingbacon.bcnlib.framework.PIDController;
 import com.explodingbacon.bcnlib.framework.Subsystem;
 import com.explodingbacon.bcnlib.sensors.DigitalInput;
-import com.explodingbacon.bcnlib.sensors.Encoder;
 import com.explodingbacon.powerup.core.AnalogSensor;
 import com.explodingbacon.powerup.core.Map;
-import com.explodingbacon.powerup.core.OI;
 import com.explodingbacon.powerup.core.Robot;
 import edu.wpi.first.wpilibj.VictorSP;
 
@@ -33,7 +29,7 @@ public class ArmSubsystem extends Subsystem {
 
     double target;
     public boolean front = true;
-    public Preset preset = Preset.HECK;
+    public Preset preset;
     public double targetOff = 0;
 
 
@@ -100,10 +96,11 @@ public class ArmSubsystem extends Subsystem {
         if (Robot.MAIN_ROBOT) workingFront = !workingFront;
 
         double pos;
+
         if (workingFront) {
             if (preset == Preset.FLOOR) {
                 pos = FLOOR_FRONT;
-            } else if (preset == Preset.SWITCH){
+            } else if (preset == Preset.SWITCH) {
                 pos = SWITCH_FRONT;
             } else if (preset == Preset.HUMAN_PLAYER) {
                 pos = HUMAN_PLAYER_FRONT;
@@ -113,13 +110,16 @@ public class ArmSubsystem extends Subsystem {
         } else {
             if (preset == Preset.FLOOR) {
                 pos = FLOOR_BACK;
-            } else if (preset == Preset.SWITCH){
+            } else if (preset == Preset.SWITCH) {
                 pos = SWITCH_BACK;
             } else if (preset == Preset.HUMAN_PLAYER) {
                 pos = HUMAN_PLAYER_BACK;
             } else {
                 pos = HECK;
             }
+        }
+        if (preset == Preset.HOLD) {
+            pos = target;
         }
         if (target != pos) {
             target = pos;
@@ -158,7 +158,8 @@ public class ArmSubsystem extends Subsystem {
 
     @Override
     public void enabledInit() {
-
+        target = armEncoder.getForPID();
+        setState(front, Preset.HOLD);
     }
 
     @Override
@@ -180,6 +181,7 @@ public class ArmSubsystem extends Subsystem {
         FLOOR,
         SWITCH,
         HECK,
-        HUMAN_PLAYER
+        HUMAN_PLAYER,
+        HOLD
     }
 }

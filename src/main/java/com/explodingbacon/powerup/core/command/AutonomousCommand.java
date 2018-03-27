@@ -1,14 +1,11 @@
 package com.explodingbacon.powerup.core.command;
 
 import com.explodingbacon.bcnlib.actuators.Motor;
-import com.explodingbacon.bcnlib.framework.Command;
 import com.explodingbacon.bcnlib.framework.Log;
 import com.explodingbacon.bcnlib.framework.PIDController;
-import com.explodingbacon.bcnlib.utils.Utils;
 import com.explodingbacon.powerup.core.Framework.AbstractAutoCommand;
 import com.explodingbacon.powerup.core.Robot;
 import com.explodingbacon.powerup.core.subsystems.ArmSubsystem;
-import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class AutonomousCommand extends AbstractAutoCommand {
@@ -39,6 +36,7 @@ public class AutonomousCommand extends AbstractAutoCommand {
             while ((gameData = DriverStation.getInstance().getGameSpecificMessage()).length() != 3) {
                 sleep(5);
             }
+            Log.i("GAME DATA: " + gameData);
 
             boolean left = gameData.charAt(0) == 'L';
             //Robot.intake.setIntake(false);
