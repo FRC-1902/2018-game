@@ -66,6 +66,8 @@ public class Robot extends RobotCore {
         intake = new IntakeSubsystem();
         arm = new ArmSubsystem();
 
+        SmartDashboard.putNumber("Autonomous Cubes", 3);
+
         SmartDashboard.putNumber("kP", 0.0014);
         SmartDashboard.putNumber("kI", 0);
         SmartDashboard.putNumber("kD", 0);
