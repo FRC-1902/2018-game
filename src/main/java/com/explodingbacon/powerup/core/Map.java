@@ -19,8 +19,8 @@ public class Map {
 
     //PWM real bot, CAN Practice
 
-    public static final int INTAKE_TOP = Robot.MAIN_ROBOT ? 1 : 1;
-    public static final int INTAKE_BOTTOM = Robot.MAIN_ROBOT ? 3 : 2;
+    public static final int INTAKE_TOP = Robot.MAIN_ROBOT ? 3 : 1;
+    public static final int INTAKE_BOTTOM = Robot.MAIN_ROBOT ? 1 : 2;
 
     // PWM
 

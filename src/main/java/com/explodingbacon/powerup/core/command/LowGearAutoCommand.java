@@ -54,7 +54,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
             driveDistanceAtAngle(left ? 74 : 96-8  - 5 - 12, 1, angle);
 
 
-            driveDistanceAtAngle(left ? 64 : 64-23  +5  + 5 + 5, 1, left ? 15 : 360-15); //1 at 0 angle
+            driveDistanceAtAngle(left ? 64+8  +4 : 64-23  +5  + 5 + 5, 1, left ? 5 : 360-5);
 
             //eject cube 1
             outtake();

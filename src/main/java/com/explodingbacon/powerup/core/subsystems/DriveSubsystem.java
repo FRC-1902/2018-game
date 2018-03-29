@@ -104,13 +104,13 @@ public class DriveSubsystem extends Subsystem {
     }
 
     public void shift(boolean b) {
-        if (!Robot.MAIN_ROBOT) b = !b;
+        b = !b;
         shift.set(b);
     }
 
     public boolean getShift() {
         boolean b = shift.get();
-        if (!Robot.MAIN_ROBOT) b = !b;
+        b = !b;
         return b;
     }
 

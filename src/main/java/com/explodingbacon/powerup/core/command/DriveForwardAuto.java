@@ -30,15 +30,15 @@ public class DriveForwardAuto extends AbstractAutoCommand {
         backUp = false;
 
         try {
-            sleep(1000);
+            //sleep(1000);
             String gameData;
             while ((gameData = DriverStation.getInstance().getGameSpecificMessage()).length() != 3) {
                 sleep(5);
             }
             boolean left = gameData.charAt(0) == 'L';
 
-            driveDistance(12, 0.8); //130 inches
-            sleep(1000);
+            driveDistance((14*12)-12, 0.8);
+            sleep(500);
             if (left == startAtLeft) {
                 outtake();
 

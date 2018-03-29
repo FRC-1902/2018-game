@@ -23,8 +23,8 @@ public class IntakeSubsystem extends Subsystem {
         intakeMotorA = new Motor(intakeMotorClass, Map.INTAKE_TOP);
         intakeMotorB = new Motor(intakeMotorClass, Map.INTAKE_BOTTOM);
         if (Robot.MAIN_ROBOT) {
-            intakeMotorA.setReversed(true);
-            intakeMotorB.setReversed(true);
+            intakeMotorA.setReversed(false);
+            intakeMotorB.setReversed(false);
         }
         else {
             intakeMotorA.setReversed(true);

@@ -20,15 +20,16 @@ public class IntakeCommand extends Command {
 
         if (intake) {
             if (Robot.arm.preset == ArmSubsystem.Preset.FLOOR) {
-                Robot.intake.setIntake(0.7, 1, true);
+                Robot.intake.setIntake(0.7, 1, true); //0.7, 1
             } else {
                 Robot.intake.setIntake(1, true);
             }
         } else if (outtake) {
-            double pow = Robot.arm.preset == ArmSubsystem.Preset.FLOOR ? 1 : 1; //0.6
+            double pow = Robot.arm.preset == ArmSubsystem.Preset.FLOOR ? 1 : 0.6; //0.6
             Robot.intake.setIntake(pow, false);
         } else if (test) {
             Robot.intake.setIntake(1, -0.8, true);
+            
         } else {
             double leftRate = Robot.drive.leftDriveEncoder.getRate();
             double rightRate = Robot.drive.rightDriveEncoder.getRate();
