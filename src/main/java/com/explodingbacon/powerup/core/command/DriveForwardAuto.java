@@ -40,7 +40,7 @@ public class DriveForwardAuto extends AbstractAutoCommand {
             driveDistance((14*12)-12, 0.8);
             sleep(500);
             if (left == startAtLeft) {
-                outtake();
+                //outtake();
 
                 if (backUp) {
                     driveDistance(30, -0.8);
