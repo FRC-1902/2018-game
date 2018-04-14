@@ -36,7 +36,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends RobotCore {
 
-    public static boolean MAIN_ROBOT = true;
+    public static boolean MAIN_ROBOT = false;
 
     public static DriveSubsystem drive;
     public static ClimberSubsystem climber;
@@ -48,7 +48,7 @@ public class Robot extends RobotCore {
     public static Compressor compressor;
 
     public static SendableChooser<String> autoSelector;
-    public static SendableChooser<AutonomousCommand.ThreeCubeEnding> threeCubeEnding;
+    public static SendableChooser<LowGearAutoCommand.ThreeCubeEnding> threeCubeEnding;
 
     public Robot(IterativeRobot r) {
         super(r);
@@ -76,16 +76,15 @@ public class Robot extends RobotCore {
 
         autoSelector = new SendableChooser<>();
         autoSelector.addDefault("LOW Gear 3 Cube Switch Auto (Middle)", "middle_low");
-        autoSelector.addObject("HIGH Gear 3 Cube Switch Auto (Middle)", "middle_high");
         autoSelector.addObject("Dump If Side (Left)", "left");
         autoSelector.addObject("Dump If Side (Right)", "right");
         SmartDashboard.putData("Auto Selector", autoSelector);
 
 
         threeCubeEnding = new SendableChooser<>();
-        threeCubeEnding.addDefault("3 Cube End: Back Up", AutonomousCommand.ThreeCubeEnding.BACK_UP);
-        threeCubeEnding.addObject("3 Cube End: Attempt Cube #4", AutonomousCommand.ThreeCubeEnding.CUBE_4);
-        threeCubeEnding.addObject("3 Cube End: Go to Exchange", AutonomousCommand.ThreeCubeEnding.EXCHANGE);
+        threeCubeEnding.addDefault("3 Cube End: Back Up", LowGearAutoCommand.ThreeCubeEnding.BACK_UP);
+        threeCubeEnding.addObject("3 Cube End: Attempt Cube #4", LowGearAutoCommand.ThreeCubeEnding.CUBE_4);
+        threeCubeEnding.addObject("3 Cube End: Go to Exchange", LowGearAutoCommand.ThreeCubeEnding.EXCHANGE);
         SmartDashboard.putData("3 Cube  Auto Ending", threeCubeEnding);
 
         CameraServer.getInstance().startAutomaticCapture();
@@ -122,8 +121,6 @@ public class Robot extends RobotCore {
         AbstractAutoCommand auto = null;
         if (autoType.equals("middle_low")) {
             auto = new LowGearAutoCommand();
-        } else if (autoType.equals("middle_high")) {
-            auto = new AutonomousCommand();
         } else if (autoType.equals("left")) {
             auto = new DriveForwardAuto(true);
         } else if (autoType.equals("right")) {
@@ -147,7 +144,9 @@ public class Robot extends RobotCore {
         //arm.armPID.reTune(SmartDashboard.getNumber("kP", 0), SmartDashboard.getNumber("kI", 0),
           //      SmartDashboard.getNumber("kD", 0));
 
-        arm.armPID.enable();
+        //arm.armPID.enable();
+
+        arm.armPID.disable();
     }
 
     @Override

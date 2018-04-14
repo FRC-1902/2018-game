@@ -29,7 +29,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
         Robot.drive.gyro.rezero();
         Robot.arm.armPID.enable();
         Robot.arm.setState(true, false);
-        AutonomousCommand.ThreeCubeEnding ending = Robot.threeCubeEnding.getSelected();
+        ThreeCubeEnding ending = Robot.threeCubeEnding.getSelected();
         double cubes = SmartDashboard.getNumber("Autonomous Cubes", 3);
 
         try {
@@ -87,7 +87,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
 
                 stopIntake();
 
-                driveDistanceAtAngle(backFromSwitch + 5      + 3, 1, angle);
+                driveDistanceAtAngle(backFromSwitch + 5      + 3, 1, angle); //TODO: slow down
 
                 //Eject cube 2
                 outtake();
@@ -125,7 +125,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
                 outtake();
             }
 
-            if (ending == AutonomousCommand.ThreeCubeEnding.BACK_UP) {
+            if (ending == ThreeCubeEnding.BACK_UP) {
                 Robot.arm.setState(true, ArmSubsystem.Preset.HECK);
                 driveDistanceAtAngle(24, -1, 0);
                 //Robot.arm.setState(true, true);
@@ -146,5 +146,11 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
     @Override
     public boolean isFinished() {
         return true;
+    }
+
+    public enum ThreeCubeEnding {
+        BACK_UP,
+        CUBE_4,
+        EXCHANGE
     }
 }
