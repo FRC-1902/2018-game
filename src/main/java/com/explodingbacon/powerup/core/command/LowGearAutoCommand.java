@@ -44,17 +44,14 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
             Log.i("GAME DATA: " + gameData);
 
             boolean left = gameData.charAt(0) == 'L';
-            //Robot.intake.setIntake(false);
 
             driveDistance(8, 0.5);
-            //sleep(200);
-
 
             angle = left ? 360-55 : 30;
-            driveDistanceAtAngle(left ? 74 : 96-8  - 5 - 12, 1, angle);
+            driveDistanceAtAngle(left ? 74 : 71, 1, angle);
 
 
-            driveDistanceAtAngle(left ? 64+8  +4    +2 : 64-23  +5  + 5 + 5     + 2                     +2, 1, 0);
+            driveDistanceAtAngle(left ? 78 : 60, 1, 0);
 
             //eject cube 1
             outtake();
@@ -62,7 +59,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
             if (cubes > 1) {
                 //scored cube, going for #2
 
-                final double backFromSwitch = 17.5 + 2 + 8       + 2   + 2  + 2                    +2;
+                final double backFromSwitch = 35.5;
 
                 driveDistanceAtAngle(backFromSwitch, -0.6, 0);
 
@@ -74,7 +71,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
 
                 intake();
 
-                forward = 48 + 3 - 6     + (left ? 0 : 6);
+                forward = 45 + (left ? 0 : 6);
                 driveDistanceAtAngle(forward, 0.5, angle);
                 Robot.intake.setIntake(0.6, true);
 
@@ -87,7 +84,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
 
                 stopIntake();
 
-                driveDistanceAtAngle(backFromSwitch + 5      + 3, 1, angle); //TODO: slow down
+                driveDistanceAtAngle(backFromSwitch + 8, 1, angle); //TODO: slow down
 
                 //Eject cube 2
                 outtake();
@@ -95,7 +92,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
 
             if (cubes > 2) {
                 //backup for cube 3
-                final double backFromSwitch2 = 10 + 3    - 4        + 2                    +2;
+                final double backFromSwitch2 = 13;
 
                 driveDistanceAtAngle(backFromSwitch2, -0.45, 0);
 
@@ -107,11 +104,11 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
                 //get cube 3
                 intake();
 
-                forward = 32 - 3+3+5       + 6;
+                forward = 43;
                 driveDistanceAtAngle(forward, 0.6, angle); //.5
                 Robot.intake.setIntake(0.4, true);
 
-                driveDistanceAtAngle(forward - 2         - (left ? 0 : 2), -0.65, angle);
+                driveDistanceAtAngle(forward - 2 - (left ? 0 : 2), -0.65, angle);
 
                 Robot.arm.setState(true, false);
 
@@ -119,7 +116,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
                 turnToAngle(angle);
                 stopIntake();
 
-                driveDistanceAtAngle(backFromSwitch2 + 7 + 4 + 4 + 4, 1, angle); //TODO: too much?
+                driveDistanceAtAngle(backFromSwitch2 + 7 + 12, 1, angle); //TODO: too much?
 
                 //Eject cube 3
                 outtake();
