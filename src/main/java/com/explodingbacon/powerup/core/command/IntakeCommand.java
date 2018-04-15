@@ -25,7 +25,7 @@ public class IntakeCommand extends Command {
                 Robot.intake.setIntake(1, true);
             }
         } else if (outtake) {
-            double pow = Robot.arm.preset == ArmSubsystem.Preset.FLOOR ? 1 : 0.6; //0.6
+            double pow = Robot.arm.preset == ArmSubsystem.Preset.FLOOR ? 1 : 0.55;
             Robot.intake.setIntake(pow, false);
         } else if (test) {
             Robot.intake.setIntake(1, -0.8, true);

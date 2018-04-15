@@ -119,7 +119,7 @@ public abstract class AbstractAutoCommand extends Command {
     }
 
     public void outtake() {
-        Robot.intake.setIntake(0.5, false); //0.4
+        Robot.intake.setIntake(0.4, false); //0.4
         sleep(350);
         stopIntake();
     }

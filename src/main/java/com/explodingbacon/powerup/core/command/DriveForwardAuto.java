@@ -1,12 +1,10 @@
 package com.explodingbacon.powerup.core.command;
 
 import com.explodingbacon.bcnlib.actuators.Motor;
-import com.explodingbacon.bcnlib.framework.Log;
 import com.explodingbacon.bcnlib.framework.PIDController;
 import com.explodingbacon.powerup.core.Framework.AbstractAutoCommand;
 import com.explodingbacon.powerup.core.Robot;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveForwardAuto extends AbstractAutoCommand {
 

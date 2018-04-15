@@ -61,7 +61,7 @@ public class ArmSubsystem extends Subsystem {
 
     public void initPresets(boolean frontRelative) {
         if (FLOOR_FRONT == null && !frontRelative) {
-            FLOOR_FRONT = Robot.MAIN_ROBOT ? 626 : 1240d;
+            FLOOR_FRONT = Robot.MAIN_ROBOT ? 626 : 873d;
         }
 
         float flipMetric = 2320;
@@ -148,14 +148,6 @@ public class ArmSubsystem extends Subsystem {
         return armEncoder.getForPID() - FLOOR_FRONT;
     }
 
-
-    public void moveDirectionA() {
-        arm.setPower(1.0);
-    }
-    public void moveDirectionB() {
-        arm.setPower(-1.0);
-    }
-
     @Override
     public void enabledInit() {
         target = armEncoder.getForPID();
@@ -163,14 +155,10 @@ public class ArmSubsystem extends Subsystem {
     }
 
     @Override
-    public void disabledInit() {
-
-    }
+    public void disabledInit() {}
 
     @Override
-    public void stop() {
-
-    }
+    public void stop() {}
 
     @Override
     public List<Motor> getAllMotors() {

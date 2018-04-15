@@ -9,8 +9,7 @@ public class ArmSafetyCommand extends Command {
     public static boolean ACTIVE = false;
 
     @Override
-    public void onInit() {
-    }
+    public void onInit() {}
 
     long timeStruggling = 0;
     double encoderPrev = 0;

@@ -30,6 +30,7 @@ import com.explodingbacon.powerup.core.subsystems.ArmSubsystem;
 import com.explodingbacon.powerup.core.subsystems.ClimberSubsystem;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
 import com.explodingbacon.powerup.core.subsystems.IntakeSubsystem;
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -46,6 +47,8 @@ public class Robot extends RobotCore {
     private OI oi;
 
     public static Compressor compressor;
+
+    public static UsbCamera camera;
 
     public static SendableChooser<String> autoSelector;
     public static SendableChooser<LowGearAutoCommand.ThreeCubeEnding> threeCubeEnding;
@@ -87,7 +90,8 @@ public class Robot extends RobotCore {
         threeCubeEnding.addObject("3 Cube End: Go to Exchange", LowGearAutoCommand.ThreeCubeEnding.EXCHANGE);
         SmartDashboard.putData("3 Cube  Auto Ending", threeCubeEnding);
 
-        CameraServer.getInstance().startAutomaticCapture();
+        camera = CameraServer.getInstance().startAutomaticCapture();
+        camera.setFPS(15);
 
         if (MAIN_ROBOT) {
             Log.i("PIGXEL mode.");
@@ -144,9 +148,9 @@ public class Robot extends RobotCore {
         //arm.armPID.reTune(SmartDashboard.getNumber("kP", 0), SmartDashboard.getNumber("kI", 0),
           //      SmartDashboard.getNumber("kD", 0));
 
-        //arm.armPID.enable();
+        arm.armPID.enable();
 
-        arm.armPID.disable();
+        //arm.armPID.disable();
     }
 
     @Override
@@ -158,9 +162,16 @@ public class Robot extends RobotCore {
 
     @Override
     public void testInit() {
-        arm.arm.testEachWait(0.5, 0.2);
-        drive.leftDrive.testEachWait(0.5, 0.5);
-        drive.rightDrive.testEachWait(0.5, 0.5);
+        /*arm.arm.getMotors().get(0).setPower(0.5);
+        try {
+            Thread.sleep(1000);
+        } catch ( Exception e) {
+
+        }
+        arm.arm.getMotors().get(0).setPower(0);
+        */arm.arm.testEachWait(0.5, 0.2);
+        //drive.leftDrive.testEachWait(0.5, 0.5);
+        //drive.rightDrive.testEachWait(0.5, 0.5);
     }
 
     @Override

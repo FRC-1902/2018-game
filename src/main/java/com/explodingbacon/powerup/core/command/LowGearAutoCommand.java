@@ -31,9 +31,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
         Robot.arm.setState(true, false);
         ThreeCubeEnding ending = Robot.threeCubeEnding.getSelected();
         double cubes = SmartDashboard.getNumber("Autonomous Cubes", 3);
-
         try {
-            //sleep(300); //300
             double angle = 0;
             double forward = 0;
 
@@ -84,7 +82,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
 
                 stopIntake();
 
-                driveDistanceAtAngle(backFromSwitch + 8, 1, angle); //TODO: slow down
+                driveDistanceAtAngle(backFromSwitch + 8, 0.7, angle); //TODO: slow down from 1
 
                 //Eject cube 2
                 outtake();
