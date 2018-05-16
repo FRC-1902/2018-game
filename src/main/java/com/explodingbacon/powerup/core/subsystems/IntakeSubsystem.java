@@ -24,7 +24,7 @@ public class IntakeSubsystem extends Subsystem {
         intakeMotorB = new Motor(intakeMotorClass, Map.INTAKE_BOTTOM);
         if (Robot.MAIN_ROBOT) {
             intakeMotorA.setReversed(false);
-            intakeMotorB.setReversed(false);
+            intakeMotorB.setReversed(true); //false
         }
         else {
             intakeMotorA.setReversed(true);
@@ -40,7 +40,6 @@ public class IntakeSubsystem extends Subsystem {
     public void setIntake(double powTop, double powBot, boolean in) {
         double dir = in ? 1 : -1;
         boolean front = Robot.arm.front;
-        if (Robot.MAIN_ROBOT) front = !front;
         intakeMotorA.setPower((front ? powTop : powBot) * dir);
         intakeMotorB.setPower(-1 * (!front ? powTop : powBot) * dir);
     }

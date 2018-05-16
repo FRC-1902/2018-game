@@ -20,6 +20,8 @@ repositories {
 
 dependencies {
     compile project(':BCNLib')
+    compile name: 'Pathfinder-Java-1.8'
+
 }
 
 remotes {

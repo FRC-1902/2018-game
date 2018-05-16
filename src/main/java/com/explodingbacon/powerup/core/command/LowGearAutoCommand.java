@@ -69,7 +69,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
 
                 intake();
 
-                forward = 45 + (left ? 0 : 6);
+                forward = 45 + 6 + (left ? 0 : 6);
                 driveDistanceAtAngle(forward, 0.5, angle);
                 Robot.intake.setIntake(0.6, true);
 
@@ -90,7 +90,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
 
             if (cubes > 2) {
                 //backup for cube 3
-                final double backFromSwitch2 = 13;
+                final double backFromSwitch2 = 13    + 4 + 3 + 3 + 3;
 
                 driveDistanceAtAngle(backFromSwitch2, -0.45, 0);
 
@@ -102,7 +102,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
                 //get cube 3
                 intake();
 
-                forward = 43;
+                forward = 43 + 6   + 3;
                 driveDistanceAtAngle(forward, 0.6, angle); //.5
                 Robot.intake.setIntake(0.4, true);
 

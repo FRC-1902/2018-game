@@ -22,10 +22,12 @@ Sebastian V
 
 package com.explodingbacon.powerup.core;
 
+import com.explodingbacon.bcnlib.framework.Command;
 import com.explodingbacon.bcnlib.framework.Log;
 import com.explodingbacon.bcnlib.framework.RobotCore;
 import com.explodingbacon.powerup.core.Framework.AbstractAutoCommand;
 import com.explodingbacon.powerup.core.command.*;
+import com.explodingbacon.powerup.core.positioning.RobotStateGenerator;
 import com.explodingbacon.powerup.core.subsystems.ArmSubsystem;
 import com.explodingbacon.powerup.core.subsystems.ClimberSubsystem;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
@@ -37,7 +39,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends RobotCore {
 
-    public static boolean MAIN_ROBOT = false;
+    public static boolean MAIN_ROBOT = true;
 
     public static DriveSubsystem drive;
     public static ClimberSubsystem climber;
@@ -52,6 +54,8 @@ public class Robot extends RobotCore {
 
     public static SendableChooser<String> autoSelector;
     public static SendableChooser<LowGearAutoCommand.ThreeCubeEnding> threeCubeEnding;
+
+    public Command testauto;
 
     public Robot(IterativeRobot r) {
         super(r);
@@ -93,6 +97,8 @@ public class Robot extends RobotCore {
         camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setFPS(15);
 
+        testauto = new auto254();
+
         if (MAIN_ROBOT) {
             Log.i("PIGXEL mode.");
         } else {
@@ -108,9 +114,9 @@ public class Robot extends RobotCore {
     @Override
     public void disabledPeriodic() {
         //Log.d("Front: " + arm.frontLimit.get() + ", back: " + arm.backLimit.get());
-        Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
+       //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
         Log.d("Gyro: " + drive.gyro.getForPID());
-        Log.d("Arm: " + arm.armEncoder.getForPID());
+        //Log.d("Arm: " + arm.armEncoder.getForPID());
     }
 
     @Override
@@ -121,6 +127,7 @@ public class Robot extends RobotCore {
         } else {
             Log.i("Not enabling autonomous safety commend due to safety command still running");
         }
+        /*
         String autoType = autoSelector.getSelected();
         AbstractAutoCommand auto = null;
         if (autoType.equals("middle_low")) {
@@ -130,7 +137,11 @@ public class Robot extends RobotCore {
         } else if (autoType.equals("right")) {
             auto = new DriveForwardAuto(false);
         }
-        if (auto != null) OI.runCommand(auto);
+        if (auto != null) OI.runCommand(auto);*/
+        RobotStateGenerator.getInstance().start();
+
+
+        OI.runCommand(testauto);
     }
 
     @Override

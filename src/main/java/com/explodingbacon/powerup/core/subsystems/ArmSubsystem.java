@@ -37,7 +37,7 @@ public class ArmSubsystem extends Subsystem {
 
         arm = new MotorGroup(new Motor(VictorSP.class, Map.ARM_A), new Motor(VictorSP.class, Map.ARM_B));
         if (Robot.MAIN_ROBOT) {
-            arm.setInverts(false, true);
+            arm.setInverts(true, true); //false, true
             arm.setReversed(true);
         }
 
@@ -61,7 +61,7 @@ public class ArmSubsystem extends Subsystem {
 
     public void initPresets(boolean frontRelative) {
         if (FLOOR_FRONT == null && !frontRelative) {
-            FLOOR_FRONT = Robot.MAIN_ROBOT ? 626 : 873d;
+            FLOOR_FRONT = Robot.MAIN_ROBOT ? 776 : 873d;
         }
 
         float flipMetric = 2320;
