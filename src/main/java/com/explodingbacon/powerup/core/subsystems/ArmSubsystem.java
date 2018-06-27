@@ -61,7 +61,7 @@ public class ArmSubsystem extends Subsystem {
 
     public void initPresets(boolean frontRelative) {
         if (FLOOR_FRONT == null && !frontRelative) {
-            FLOOR_FRONT = Robot.MAIN_ROBOT ? 776 : 873d;
+            FLOOR_FRONT = Robot.MAIN_ROBOT ? 763 : 873d;
         }
 
         float flipMetric = 2320;

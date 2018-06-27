@@ -115,8 +115,8 @@ public class Robot extends RobotCore {
     public void disabledPeriodic() {
         //Log.d("Front: " + arm.frontLimit.get() + ", back: " + arm.backLimit.get());
        //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
-        Log.d("Gyro: " + drive.gyro.getForPID());
-        //Log.d("Arm: " + arm.armEncoder.getForPID());
+        //Log.d("Gyro: " + drive.gyro.getForPID());
+        Log.d("Arm: " + arm.armEncoder.getForPID());
     }
 
     @Override
