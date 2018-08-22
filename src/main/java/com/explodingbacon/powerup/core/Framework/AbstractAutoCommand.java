@@ -9,6 +9,7 @@ import com.explodingbacon.powerup.core.Robot;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
 
 public abstract class AbstractAutoCommand extends Command {
+
     PIDController rotatePID, rotateInPlace;
     Motor pidOutput, rotateInPlaceOutput;
 
@@ -32,8 +33,7 @@ public abstract class AbstractAutoCommand extends Command {
                 Robot.drive.tankDrive(rotateInPlaceOutput.getPower(), -rotateInPlaceOutput.getPower());
                 try {
                     Thread.sleep(5);
-                } catch (Exception e) {
-                }
+                } catch (Exception e) {}
             }
             rotateInPlace.disable();
         }

@@ -12,6 +12,7 @@ import com.explodingbacon.bcnlib.sensors.BNOGyro;
 import com.explodingbacon.bcnlib.sensors.Encoder;
 import com.explodingbacon.powerup.core.Map;
 import com.explodingbacon.powerup.core.Robot;
+import edu.wpi.first.wpilibj.Ultrasonic;
 
 import java.util.List;
 
@@ -88,6 +89,9 @@ public class DriveSubsystem extends Subsystem {
         };
 
         positionPID = new PIDController(positionPIDOutput,driveEncoderAvg, 0.002, 0, 0);
+
+
+        positionPID.setTarget(leftDriveEncoder.get() + inchesToClicks(100));
     }
 
     public double getRate() {

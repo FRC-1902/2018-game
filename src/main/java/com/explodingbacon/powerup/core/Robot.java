@@ -26,7 +26,7 @@ import com.explodingbacon.bcnlib.framework.Command;
 import com.explodingbacon.bcnlib.framework.Log;
 import com.explodingbacon.bcnlib.framework.RobotCore;
 import com.explodingbacon.powerup.core.Framework.AbstractAutoCommand;
-import com.explodingbacon.powerup.core.command.*;
+import com.explodingbacon.powerup.core.commands.*;
 import com.explodingbacon.powerup.core.positioning.RobotStateGenerator;
 import com.explodingbacon.powerup.core.subsystems.ArmSubsystem;
 import com.explodingbacon.powerup.core.subsystems.ClimberSubsystem;
@@ -122,12 +122,12 @@ public class Robot extends RobotCore {
     @Override
     public void autonomousInit() {
         if (!ArmSafetyCommand.ACTIVE) {
-            Log.i("init autonomous safety command");
+            Log.i("init autonomous safety commands");
             OI.runCommand(new ArmSafetyCommand());
         } else {
-            Log.i("Not enabling autonomous safety commend due to safety command still running");
+            Log.i("Not enabling autonomous safety commend due to safety commands still running");
         }
-        /*
+
         String autoType = autoSelector.getSelected();
         AbstractAutoCommand auto = null;
         if (autoType.equals("middle_low")) {
@@ -137,7 +137,7 @@ public class Robot extends RobotCore {
         } else if (autoType.equals("right")) {
             auto = new DriveForwardAuto(false);
         }
-        if (auto != null) OI.runCommand(auto);*/
+        if (auto != null) OI.runCommand(auto);
         RobotStateGenerator.getInstance().start();
 
 
@@ -150,10 +150,10 @@ public class Robot extends RobotCore {
         OI.runCommand(new IntakeCommand());
         OI.runCommand(new ArmCommand());
         if (!ArmSafetyCommand.ACTIVE) {
-            Log.i("init teleop safety command");
+            Log.i("init teleop safety commands");
             OI.runCommand(new ArmSafetyCommand());
         } else {
-            Log.i("Not enabling teleop safety commend due to safety command still running");
+            Log.i("Not enabling teleop safety commend due to safety commands still running");
         }
 
         //arm.armPID.reTune(SmartDashboard.getNumber("kP", 0), SmartDashboard.getNumber("kI", 0),
@@ -166,8 +166,7 @@ public class Robot extends RobotCore {
 
     @Override
     public void teleopPeriodic() {
-        //Log.d("Arm: " + arm.getPosition());
-
+        Log.d("Arm: " + arm.getPosition());
         // Log.d("Left: " + Robot.drive.leftDriveEncoder.getRate() + ", Right: " + Robot.drive.rightDriveEncoder.getRate());
     }
 

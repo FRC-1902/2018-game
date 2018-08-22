@@ -1,10 +1,8 @@
 package com.explodingbacon.powerup.core.positioning;
 
-import com.explodingbacon.bcnlib.utils.CodeThread;
 import com.explodingbacon.powerup.core.Robot;
 import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.Timer;
-import team254.utils.DriveSignal;
 import team254.utils.RigidTransform2d;
 import team254.utils.Rotation2d;
 

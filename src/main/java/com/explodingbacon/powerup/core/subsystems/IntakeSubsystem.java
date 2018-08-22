@@ -1,5 +1,6 @@
 package com.explodingbacon.powerup.core.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.explodingbacon.bcnlib.actuators.Motor;
 import com.explodingbacon.bcnlib.framework.Log;
@@ -22,6 +23,7 @@ public class IntakeSubsystem extends Subsystem {
         Class intakeMotorClass = Robot.MAIN_ROBOT ? VictorSP.class : WPI_VictorSPX.class;
         intakeMotorA = new Motor(intakeMotorClass, Map.INTAKE_TOP);
         intakeMotorB = new Motor(intakeMotorClass, Map.INTAKE_BOTTOM);
+
         if (Robot.MAIN_ROBOT) {
             intakeMotorA.setReversed(false);
             intakeMotorB.setReversed(true); //false

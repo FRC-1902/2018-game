@@ -3,7 +3,6 @@ package com.explodingbacon.powerup.core.positioning;
 import com.explodingbacon.bcnlib.actuators.FakeMotor;
 import com.explodingbacon.bcnlib.framework.PIDController;
 import com.explodingbacon.powerup.core.Robot;
-import com.explodingbacon.powerup.core.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 import team254.utils.AdaptivePurePursuitController;
 import team254.utils.DriveSignal;
@@ -42,7 +41,7 @@ public class PursuitControl {
             RigidTransform2d.Delta command = pathFollower.update(robot_pose, Timer.getFPGATimestamp());
             Kinematics.DriveVelocity setpoint = Kinematics.inverseKinematics(command);
 
-            // Scale the command to respect the max velocity limits
+            // Scale the commands to respect the max velocity limits
             double max_vel = 0;
             max_vel = Math.max(max_vel, Math.abs(setpoint.left));
             max_vel = Math.max(max_vel, Math.abs(setpoint.right));

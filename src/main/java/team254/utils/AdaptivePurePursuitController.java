@@ -61,7 +61,7 @@ public class AdaptivePurePursuitController {
         if (mReversed) {
             speed *= -1;
         }
-        // Ensure we don't accelerate too fast from the previous command
+        // Ensure we don't accelerate too fast from the previous commands
         double dt = now - mLastTime;
         if (mLastCommand == null) {
             mLastCommand = new RigidTransform2d.Delta(0, 0, 0);

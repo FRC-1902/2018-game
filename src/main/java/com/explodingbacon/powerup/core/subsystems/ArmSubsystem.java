@@ -9,7 +9,6 @@ import com.explodingbacon.powerup.core.AnalogSensor;
 import com.explodingbacon.powerup.core.Map;
 import com.explodingbacon.powerup.core.Robot;
 import edu.wpi.first.wpilibj.VictorSP;
-
 import java.util.List;
 
 public class ArmSubsystem extends Subsystem {
@@ -32,7 +31,6 @@ public class ArmSubsystem extends Subsystem {
     public Preset preset;
     public double targetOff = 0;
 
-
     public ArmSubsystem() {
 
         arm = new MotorGroup(new Motor(VictorSP.class, Map.ARM_A), new Motor(VictorSP.class, Map.ARM_B));
@@ -44,6 +42,9 @@ public class ArmSubsystem extends Subsystem {
         armEncoder = new AnalogSensor(Map.ARM_ENCODER);
         armPID = new PIDController(arm, armEncoder, .0018, 0, 0); //.0014
         armPID.setInputInverted(true);
+        armPID.setFinishedTolerance(2);
+
+
 
         frontLimit = new DigitalInput(Map.ARM_LIMIT_FRONT);
         frontLimit.setReversed(true);
@@ -61,10 +62,10 @@ public class ArmSubsystem extends Subsystem {
 
     public void initPresets(boolean frontRelative) {
         if (FLOOR_FRONT == null && !frontRelative) {
-            FLOOR_FRONT = Robot.MAIN_ROBOT ? 763 : 873d;
+            FLOOR_FRONT = Robot.MAIN_ROBOT ? 1082 : 873d;
         }
 
-        float flipMetric = 2320;
+        float flipMetric = 2443;
 
         if (FLOOR_BACK == null)
             FLOOR_BACK = FLOOR_FRONT + flipMetric;

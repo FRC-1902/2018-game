@@ -1,4 +1,4 @@
-package com.explodingbacon.powerup.test;
+package com.explodingbacon.powerup;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.explodingbacon.bcnlib.actuators.Motor;

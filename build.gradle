@@ -26,7 +26,7 @@ dependencies {
 
 remotes {
     roboRIO {
-        host = 'roboRIO-' + team + '-FRC.local'
+        host = '10.19.2.2'//'roboRIO-' + team + '-FRC.local'
         user = 'admin'
         password = ''
     }

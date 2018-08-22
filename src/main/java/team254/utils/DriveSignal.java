@@ -1,7 +1,7 @@
 package team254.utils;
 
 /**
- * A drivetrain command consisting of the left, right motor settings and whether
+ * A drivetrain commands consisting of the left, right motor settings and whether
  * the brake mode is enabled.
  */
 public class DriveSignal {

@@ -1,4 +1,4 @@
-package com.explodingbacon.powerup.core.command;
+package com.explodingbacon.powerup.core.commands;
 
 import com.explodingbacon.bcnlib.framework.Command;
 import com.explodingbacon.bcnlib.framework.Log;

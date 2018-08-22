@@ -1,4 +1,4 @@
-package com.explodingbacon.powerup.test;
+package com.explodingbacon.powerup;
 
 import com.explodingbacon.bcnlib.framework.AbstractRobot;
 import com.explodingbacon.bcnlib.framework.RobotCore;

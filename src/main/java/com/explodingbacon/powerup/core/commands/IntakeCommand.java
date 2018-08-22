@@ -1,7 +1,6 @@
-package com.explodingbacon.powerup.core.command;
+package com.explodingbacon.powerup.core.commands;
 
 import com.explodingbacon.bcnlib.framework.Command;
-import com.explodingbacon.bcnlib.framework.Log;
 import com.explodingbacon.bcnlib.utils.Utils;
 import com.explodingbacon.powerup.core.OI;
 import com.explodingbacon.powerup.core.Robot;
