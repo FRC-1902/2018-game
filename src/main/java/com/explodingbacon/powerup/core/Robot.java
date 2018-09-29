@@ -39,7 +39,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends RobotCore {
 
-    public static boolean MAIN_ROBOT = true;
+    public static boolean MAIN_ROBOT = false;
 
     public static DriveSubsystem drive;
     public static ClimberSubsystem climber;
@@ -97,7 +97,7 @@ public class Robot extends RobotCore {
         camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setFPS(15);
 
-        testauto = new auto254();
+        //testauto = new auto254();
 
         if (MAIN_ROBOT) {
             Log.i("PIGXEL mode.");
@@ -114,9 +114,12 @@ public class Robot extends RobotCore {
     @Override
     public void disabledPeriodic() {
         //Log.d("Front: " + arm.frontLimit.get() + ", back: " + arm.backLimit.get());
-       //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());
+        //Log.d("Left: " + Robot.drive.leftDriveEncoder.get() + ", Right: " + Robot.drive.rightDriveEncoder.get());//
         //Log.d("Gyro: " + drive.gyro.getForPID());
+        //arm.armEncoder.getForPID();
         Log.d("Arm: " + arm.armEncoder.getForPID());
+        //Log.d("ArmRaw: " + ((LoopingAnalogSensor)arm.armEncoder).getRaw());
+        //Log.d("magnet: " + arm.frontLimit.get());
     }
 
     @Override
@@ -138,10 +141,7 @@ public class Robot extends RobotCore {
             auto = new DriveForwardAuto(false);
         }
         if (auto != null) OI.runCommand(auto);
-        RobotStateGenerator.getInstance().start();
-
-
-        OI.runCommand(testauto);
+        //RobotStateGenerator.getInstance().start();
     }
 
     @Override

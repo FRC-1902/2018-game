@@ -38,7 +38,7 @@ public class ArmCommand extends Command {
         ArmSubsystem.Preset preset = Robot.arm.preset;
 
 
-        if ((OI.driver.isLeftTriggerPressed() || OI.manipulator.isLeftTriggerPressed())) {
+        if ((OI.driver.isLeftTriggerPressed() || OI.manipulator.leftTrigger.get())) {
             preset = ArmSubsystem.Preset.HECK;
         }
         if (OI.manipulator.getDPad().isDown()) {
@@ -70,11 +70,22 @@ public class ArmCommand extends Command {
             preset = ArmSubsystem.Preset.FLOOR;
         }
 
-        boolean reverse = Math.abs(OI.manipulator.getRightTrigger()) > 0.1;
+        boolean reverse = OI.manipulator.rightTrigger.get();
         if (reverse && !didFlip) {
             front = !front;
         }
         didFlip = reverse;
+
+        double leftRate = Robot.drive.leftDriveEncoder.getRate();
+        double rightRate = Robot.drive.rightDriveEncoder.getRate();
+
+        double maxAbs = Math.max(Math.abs(leftRate), Math.abs(rightRate));
+
+        //System.out.println("Rate: " + maxAbs);
+
+        /*if (Utils.sign(leftRate) == Utils.sign(rightRate) && maxAbs > 900) {
+            preset = ArmSubsystem.Preset.HECK;
+        }*/
 
         Robot.arm.setState(front, preset);
 
@@ -82,10 +93,14 @@ public class ArmCommand extends Command {
         double offset = flipOffset;
 
         double pow = Utils.deadzone(OI.manipulator.getY2(), 0.1);
+        double pow2 = Utils.deadzone(OI.manipulator.getY(), 0.1);
         pow =- pow;
+        pow2 =- pow2;
         if (pow != 0) {
             offset += (ArmSubsystem.MAX_OFFSET * pow) * (Robot.arm.front ? 1 : -1);
-        }
+        }/* else if (pow2 != 0) {
+            offset += (ArmSubsystem.MAX_MANUAL * pow2) * (Robot.arm.front ? 1 : -1);
+        }*/
 
         Robot.arm.setOffset(offset);
     }

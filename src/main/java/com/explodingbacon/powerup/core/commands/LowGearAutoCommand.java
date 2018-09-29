@@ -51,7 +51,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
             //eject cube 1
             outtake();
 
-            if (cubes > 1) {
+            if (cubes > 1 && Robot.MAIN_ROBOT) {
                 //scored cube, going for #2
 
                 final double backFromSwitch = 35.5;
@@ -85,7 +85,7 @@ public class LowGearAutoCommand extends AbstractAutoCommand {
                 outtake();
             }
 
-            if (cubes > 2) {
+            if (cubes > 2 && Robot.MAIN_ROBOT) {
                 //backup for cube 3
                 final double backFromSwitch2 = 13    + 4 + 3 + 3 + 3;
 

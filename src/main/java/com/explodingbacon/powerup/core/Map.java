@@ -4,8 +4,8 @@ public class Map {
 
     //SOLENOIDS
 
-    public static final int SHIFT = Robot.MAIN_ROBOT ? 0 : 0;
-    public static final int CLIMBER = Robot.MAIN_ROBOT ? -1 : -1;
+    public static final int SHIFT = Robot.MAIN_ROBOT ? 0 : 7;
+    public static final int INTAKE_GRASP = Robot.MAIN_ROBOT ? -1 : 0;
 
     //CAN
 
@@ -27,6 +27,7 @@ public class Map {
     public static final int ARM_A = Robot.MAIN_ROBOT ? 0 : 0;
     public static int ARM_B = Robot.MAIN_ROBOT ? 2 : 1;
 
+    public static final int WRIST = Robot.MAIN_ROBOT ? -1 : 9;
 
     public static final int CLIMBER_A = Robot.MAIN_ROBOT ? 2 : 2;
     public static final int CLIMBER_B = Robot.MAIN_ROBOT ? 3 : 3;
@@ -39,6 +40,9 @@ public class Map {
 
     public static final int DRIVE_LEFT_ENCODER_A = Robot.MAIN_ROBOT ? 0 : 0;
     public static final int DRIVE_LEFT_ENCODER_B = Robot.MAIN_ROBOT ? 1 : 1;
+
+    public static final int WRIST_ENCODER_A = 6;
+    public static final int WRIST_ENCODER_B = 7;
 
     public static final int ARM_LIMIT_FRONT = Robot.MAIN_ROBOT ? 5 : 4;
     public static final int ARM_LIMIT_BACK = Robot.MAIN_ROBOT ? 4 : 5;

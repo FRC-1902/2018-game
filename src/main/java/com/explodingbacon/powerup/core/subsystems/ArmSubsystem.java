@@ -6,6 +6,7 @@ import com.explodingbacon.bcnlib.framework.PIDController;
 import com.explodingbacon.bcnlib.framework.Subsystem;
 import com.explodingbacon.bcnlib.sensors.DigitalInput;
 import com.explodingbacon.powerup.core.AnalogSensor;
+import com.explodingbacon.powerup.core.LoopingAnalogSensor;
 import com.explodingbacon.powerup.core.Map;
 import com.explodingbacon.powerup.core.Robot;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -17,7 +18,7 @@ public class ArmSubsystem extends Subsystem {
 
     public AnalogSensor armEncoder;
 
-    public DigitalInput frontLimit, backLimit;
+    public DigitalInput frontLimit, backLimit, magnet;
 
     public PIDController armPID;
 
@@ -25,6 +26,8 @@ public class ArmSubsystem extends Subsystem {
     HECK, HUMAN_PLAYER_FRONT, HUMAN_PLAYER_BACK;
 
     public static final double MAX_OFFSET = 220;
+    public static final double MAX_MANUAL = 2800/2;
+
 
     double target;
     public boolean front = true;
@@ -37,9 +40,18 @@ public class ArmSubsystem extends Subsystem {
         if (Robot.MAIN_ROBOT) {
             arm.setInverts(true, true); //false, true
             arm.setReversed(true);
+        } else {
+            arm.setInverts(false, true);
         }
 
-        armEncoder = new AnalogSensor(Map.ARM_ENCODER);
+        if (Robot.MAIN_ROBOT) {
+            armEncoder = new AnalogSensor(Map.ARM_ENCODER);
+        } else {
+            LoopingAnalogSensor fancyArmEncoder = new LoopingAnalogSensor(Map.ARM_ENCODER);
+            fancyArmEncoder.setScalar(0.25);//1/4);
+            fancyArmEncoder.reset();
+            armEncoder = fancyArmEncoder;
+        }
         armPID = new PIDController(arm, armEncoder, .0018, 0, 0); //.0014
         armPID.setInputInverted(true);
         armPID.setFinishedTolerance(2);
@@ -62,7 +74,7 @@ public class ArmSubsystem extends Subsystem {
 
     public void initPresets(boolean frontRelative) {
         if (FLOOR_FRONT == null && !frontRelative) {
-            FLOOR_FRONT = Robot.MAIN_ROBOT ? 1082 : 873d;
+            FLOOR_FRONT = Robot.MAIN_ROBOT ? 1054 : 0.0;
         }
 
         float flipMetric = 2443;

@@ -8,7 +8,7 @@ import com.explodingbacon.bcnlib.framework.AbstractOI;
 public class OI extends AbstractOI {
 
     public static XboxController driver;
-    public static XboxController manipulator;
+    public static LogitechController manipulator;
     public static Button positionHoldButton;
     public static Button climberOutButton;
     public static Button climberUpButton;
@@ -24,7 +24,7 @@ public class OI extends AbstractOI {
 
     public OI() {
         driver = new XboxController(0);
-        manipulator = new XboxController(1);
+        manipulator = new LogitechController(1);
 
         positionHoldButton = driver.y;
 
@@ -33,13 +33,13 @@ public class OI extends AbstractOI {
         climberPistonButton = driver.a;
         climberWinchButton = driver.y;
 
-        armPositionOne = manipulator.y;
-        armPositionTwo = manipulator.x;
-        armPositionThree = manipulator.a;
-        armPositionFour = manipulator.b;
+        armPositionOne = manipulator.four;
+        armPositionTwo = manipulator.one;
+        armPositionThree = manipulator.two;
+        armPositionFour = manipulator.three;
 
         intakeInButton = manipulator.rightBumper;
         intakeOutButton = manipulator.leftBumper;
-        intakePassiveButton = manipulator.x;
+        intakePassiveButton = manipulator.one;
     }
 }
